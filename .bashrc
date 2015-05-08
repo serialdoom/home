@@ -75,10 +75,8 @@ export LS_COLORS
 export LESS='-R'
 export LESSOPEN='|~/.lessfilter %s'
 
-
-AUTOCOMPLETE="mercurial-autocomplete.sh tmux_autocomplete.sh p4_autocomplete.sh"
-for f in $AUTOCOMPLETE; do
-    [ -f $HOME/bin/bash/$f ]    && source $HOME/bin/bash/$f
+for f in bin/autocomplete.d/*; do
+    source $HOME/bin/bash/$f
 done
 
 PROMPT_COMMAND=prompt
