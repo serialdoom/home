@@ -193,7 +193,7 @@ function! SessionRestore()
     let r_name = $HOME . "/.vim_sessions/" . substitute(getcwd(), "\/", "_", "g") . ".vim"
     exe "source " . r_name
 endfunction
-command! -nargs=* RS call RestoreSession()
+command! -nargs=* RS call SessionRestore()
 
 "
 " Wrap visual selection in an #if 0/#endif tag.
