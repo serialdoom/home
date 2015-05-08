@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-FILE=/home/mc42/.fortunes
+FILE=~/.fortunes
 
 
 if [[ ! -f $FILE ]]; then
