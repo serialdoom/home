@@ -124,9 +124,9 @@ nmap <silent> <c-k> :VersDiff -cvs<cr>
 nmap <silent> <c-l> :VersDiff -c<cr>
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
-map <leader>t :CtrlP<cr>
-map <leader>b :CtrlPBuffer<cr>
-let g:ctrlp_map = '<c-g>'
+map \t :CtrlPCurWD<cr>
+map \b :CtrlPBuffer<cr>
+"let g:ctrlp_map = '<c-g>'
 let g:ctrlp_custom_ignore = {
     \ 'dir':  '\v[\/](\.(git|hg|svn|pdiff)|output)$',
     \ 'file': '\v\.(exe|so|dll)$',
