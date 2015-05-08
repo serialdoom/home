@@ -55,3 +55,6 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 let mapleader = ","
+
+map <leader>t :CtrlP<cr>
+map <leader>b :CtrlPBuffer<cr>
