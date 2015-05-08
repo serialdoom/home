@@ -1,0 +1,8 @@
+/output/
+/.pdiff/
+cscope.out
+make.out
+make.log
+make_last.log
+tags
+/.backups/
