@@ -94,6 +94,7 @@ set rnu
 set expandtab "use spaces instead of tabs
 set tabstop=4
 set shiftwidth=4
+let g:netrw_sort_sequence = '[\/]$,\<core\%(\.\d\+\)\=\>,\.h$,\.c$,\.cpp$,\~\=\*$,*,\.o$,\.obj$,\.info$,\.swp$,\.bak$,\.clean$,\.rej,\.orig,\~$'
 
 set cursorline
 set cursorcolumn
