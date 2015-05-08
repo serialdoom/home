@@ -126,6 +126,7 @@ nmap <silent> <c-l> :VersDiff -c<cr>
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 map <leader>t :CtrlP<cr>
 map <leader>b :CtrlPBuffer<cr>
+let g:ctrlp_map = '<c-g>'
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
 nmap _a :Ack! <cword><cr>
