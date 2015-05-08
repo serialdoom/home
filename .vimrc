@@ -29,7 +29,6 @@ Plugin 'git@github.com:vim-scripts/DirDiff.vim.git'
 Plugin 'git@github.com:mileszs/ack.vim.git'
 Plugin 'git@github.com:serialdoom/comments.vim.git'
 Plugin 'git@github.com:kien/ctrlp.vim.git'
-Plugin 'git@github.com:serialdoom/savevers.vim.git'
 Plugin 'git@github.com:MarcWeber/vim-addon-mw-utils.git'
 Plugin 'git@github.com:tomtom/tlib_vim.git'
 Plugin 'git@github.com:serialdoom/vim-snipmate.git'
@@ -85,10 +84,6 @@ set hlsearch
 set autoindent
 "enable syntax.. Doh
 syntax enable
-set backup 
-set patchmode=.clean 
-" where jesus saves.
-let savevers_dirs=".backup/vim/"
 set wildignore +=*.d,*.o,*.dox,*.a,*.clean,*.bin,*.elf,*.i,*.back
 set rnu
 set expandtab "use spaces instead of tabs
@@ -107,8 +102,8 @@ hi Search ctermbg=134 ctermfg=0
 
 nmap ed :e %:h<cr>
 nmap <Space> <PageDown>
+nmap :! q:?
 nmap <leader>pe :!p4 edit %<cr>
-map :! q:?
 
 autocmd WinEnter * setlocal cursorline
 autocmd WinEnter * setlocal cursorcolumn
@@ -117,7 +112,7 @@ autocmd WinLeave * setlocal nocursorline
 autocmd WinLeave * setlocal nocursorcolumn
 autocmd WinLeave * setlocal cc=0
 autocmd VimLeave * :call SessionCreate()
-autocmd BufWritePre * :if &readonly | !p4 edit %
+autocmd BufWritePre * call SaveWithTS()
 
 nmap <silent> <c-h> :VersDiff -<cr> 
 nmap <silent> <c-j> :VersDiff +<cr> 
@@ -234,4 +229,9 @@ function! FunctionCommentOut()
     exe "normal %"
     exe "normal k"
     exe "normal ,if"
+endfunction
+
+function! SaveWithTS()
+    let backup_path = "~/.backup/vim/" . substitute(expand("%:p"), "/", "__", "g") . strftime("___%Y-%m-%d_%H-%M-%S") . "." . expand("%:e")
+    exe ":write! " . backup_path
 endfunction
