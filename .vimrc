@@ -123,6 +123,7 @@ nmap <silent> <c-j> :VersDiff +<cr>
 nmap <silent> <c-k> :VersDiff -cvs<cr> 
 nmap <silent> <c-l> :VersDiff -c<cr>
 
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 map <leader>t :CtrlP<cr>
 map <leader>b :CtrlPBuffer<cr>
 
