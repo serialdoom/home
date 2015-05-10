@@ -1,6 +1,8 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" initial checkout
+"    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -29,7 +31,6 @@ Plugin 'git@github.com:vim-scripts/DirDiff.vim.git'
 Plugin 'git@github.com:mileszs/ack.vim.git'
 Plugin 'git@github.com:serialdoom/comments.vim.git'
 Plugin 'git@github.com:kien/ctrlp.vim.git'
-Plugin 'git@github.com:serialdoom/savevers.vim.git'
 Plugin 'git@github.com:MarcWeber/vim-addon-mw-utils.git'
 Plugin 'git@github.com:tomtom/tlib_vim.git'
 Plugin 'git@github.com:serialdoom/vim-snipmate.git'
