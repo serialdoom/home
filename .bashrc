@@ -22,6 +22,8 @@ fi
 export PATH="~/bin:/home/$USER/tmp/install/bin:/home/$USER/tmp/p4v/bin:$PATH:/tools/bin:/home/mc42/tmp/jdk1.8.0_40/bin"
 export LD_LIBRARY_PATH="$HOME/tmp/install/lib:$LD_LIBRARY_PATH" # tmux requires this
 export TMPDIR=/tmp/$USER;
+export MY_REPO_DIR=$HOME/tmp/install/repos/
+export MY_INSTALL_DIR=$HOME/tmp/install/
 HISTTIMEFORMAT="%d/%m/%y %T "
 
 [ -d $TMPDIR ] || mkdir $TMPDIR;
@@ -277,3 +279,16 @@ function ex {
             ;;                                                                  
     esac;                                                                       
 }  
+
+function ag_install {
+    if [[ ! -x $MY_INSTALL_DIR/bin/ag ]]; then
+        [ -d $MY_REPO_DIR ] || mkdir -p $MY_REPO_DIR
+        cd $MY_REPO_DIR
+        pwd
+        [ -d the_silver_searcher ] || git clone git@github.com:ggreer/the_silver_searcher.git
+        cd the_silver_searcher/
+        ./build.sh --prefix $MY_INSTALL_DIR
+        make install
+    fi
+}
+
