@@ -137,7 +137,7 @@ nmap _M :Ack! --make <cword><cr>
 
 let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
-let VCSCommandVCSTypePreference='hg'
+let VCSCommandVCSTypePreference='p4'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
