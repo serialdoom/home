@@ -284,7 +284,6 @@ function ag_install {
     if [[ ! -x $MY_INSTALL_DIR/bin/ag ]]; then
         [ -d $MY_REPO_DIR ] || mkdir -p $MY_REPO_DIR
         cd $MY_REPO_DIR
-        pwd
         [ -d the_silver_searcher ] || git clone git@github.com:ggreer/the_silver_searcher.git
         cd the_silver_searcher/
         ./build.sh --prefix $MY_INSTALL_DIR
