@@ -138,6 +138,8 @@ nmap _x :Ack! --xml <cword><cr>
 nmap _C :Ack! --cc --xml <cword><cr>
 nmap _M :Ack! --make <cword><cr>
 
+nmap + :ts <cword><cr>
+
 let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
 let VCSCommandVCSTypePreference='p4'
