@@ -138,7 +138,7 @@ nmap _x :Ack! --xml <cword><cr>
 nmap _C :Ack! --cc --xml <cword><cr>
 nmap _M :Ack! --make <cword><cr>
 
-nmap + :ts <cword><cr>
+nmap + :ts <C-R>=expand("<cword>")<cr><cr>
 
 let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
