@@ -115,6 +115,7 @@ autocmd WinLeave * setlocal nocursorcolumn
 autocmd WinLeave * setlocal cc=0
 autocmd VimLeave * :call SessionCreate()
 autocmd BufWritePre * call SaveWithTS()
+autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
 
 nmap <silent> <c-h> :VersDiff -<cr> 
 nmap <silent> <c-j> :VersDiff +<cr> 
