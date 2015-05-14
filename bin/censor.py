@@ -14,7 +14,7 @@ parser.add_argument("-p", "--profile",
         dest="profile",
         default="default",
         help="Profile to use")
-args, unknown = parser.parse_known_args()
+args, unknown_args = parser.parse_known_args()
 
 hash_table = {}
 translations = open("translations.txt", "w")
@@ -22,7 +22,7 @@ config = ConfigParser.RawConfigParser()
 config.readfp(open(os.path.expanduser('~/.censor.cfg')))
 print "Censoring with profile", args.profile, "\n", config.items(args.profile)
 
-for arg in unknown:
+for arg in unknown_args:
     print "Checking file", arg
     with open(arg, "r") as f:
         with open(arg + ".txt", "w") as out:
