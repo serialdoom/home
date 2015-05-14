@@ -8,6 +8,7 @@ import ConfigParser
 import os
 import argparse
 
+cfg_name = os.path.expanduser("~/.censor.cfg")
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--profile",
         action="store",
@@ -19,7 +20,16 @@ args, unknown_args = parser.parse_known_args()
 hash_table = {}
 translations = open("translations.txt", "w")
 config = ConfigParser.RawConfigParser()
-config.readfp(open(os.path.expanduser('~/.censor.cfg')))
+try:
+    config.readfp(open(cfg_name))
+except IOError:
+    print "Config file", cfg_name, "not found."
+    print "A default is created but you'll need to add some stuff to it"
+    with open(cfg_name, "w") as f:
+        f.write("[default]\n(peos.*) =\n#(soumada\w*) =\n")
+        f.write("# Remember to surround your regexs with parenthesis\n\n")
+        f.write("#or create your own_profile with\n#[own_profile]\n# and use with \"-p own_profile\"\n")
+    sys.exit(1)
 print "Censoring with profile", args.profile, "\n", config.items(args.profile)
 
 for arg in unknown_args:
