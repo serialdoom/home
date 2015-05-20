@@ -86,10 +86,6 @@ set hlsearch
 set autoindent
 "enable syntax.. Doh
 syntax enable
-set backup 
-set patchmode=.clean 
-" where jesus saves.
-let savevers_dirs=".backup/vim/"
 set wildignore +=*.d,*.o,*.dox,*.a,*.clean,*.bin,*.elf,*.i,*.back
 set rnu
 set expandtab "use spaces instead of tabs
@@ -108,8 +104,8 @@ hi Search ctermbg=134 ctermfg=0
 
 nmap ed :e %:h<cr>
 nmap <Space> <PageDown>
+nmap :! q:?
 nmap <leader>pe :!p4 edit %<cr>
-map :! q:?
 
 autocmd WinEnter * setlocal cursorline
 autocmd WinEnter * setlocal cursorcolumn
@@ -118,7 +114,7 @@ autocmd WinLeave * setlocal nocursorline
 autocmd WinLeave * setlocal nocursorcolumn
 autocmd WinLeave * setlocal cc=0
 autocmd VimLeave * :call SessionCreate()
-autocmd BufWritePre * :if &readonly | !p4 edit %
+autocmd BufWritePre * call SaveWithTS()
 
 nmap <silent> <c-h> :VersDiff -<cr> 
 nmap <silent> <c-j> :VersDiff +<cr> 
@@ -143,7 +139,7 @@ nmap _M :Ack! --make <cword><cr>
 
 let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
-let VCSCommandVCSTypePreference='hg'
+let VCSCommandVCSTypePreference='p4'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -194,7 +190,7 @@ function! SessionRestore()
     let r_name = $HOME . "/.vim_sessions/" . substitute(getcwd(), "\/", "_", "g") . ".vim"
     exe "source " . r_name
 endfunction
-command! -nargs=* RS call RestoreSession()
+command! -nargs=* RS call SessionRestore()
 
 "
 " Wrap visual selection in an #if 0/#endif tag.
@@ -235,4 +231,9 @@ function! FunctionCommentOut()
     exe "normal %"
     exe "normal k"
     exe "normal ,if"
+endfunction
+
+function! SaveWithTS()
+    let backup_path = "~/.backup/vim/" . substitute(expand("%:p"), "/", "__", "g") . strftime("___%Y-%m-%d_%H-%M-%S") . "." . expand("%:e")
+    exe ":write! " . backup_path
 endfunction

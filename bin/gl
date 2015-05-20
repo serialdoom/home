@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+git rev-parse --git-dir &> /dev/null
+if [[  "$?" -eq 0 ]]; then
+    git log --graph --oneline --decorate --date=relative --all --pretty=format:"%C(yellow)%h%C(reset) %ar %C(green)(%cn)%C(reset) %C(red)%x09%d%C(reset) %w(80, 1, 20) %s%n" --color
+else
+    hg glog | less -R
+fi
