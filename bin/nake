@@ -93,7 +93,8 @@ def cmd_generator(config_name, directory_name, config, args, cnt):
     if args.make_silent:
         base_make += "-s "
     base_make += "-C " + directory_name + " "
-    base_make += "CONFIG=" + config_name + " "
+    if config_name != "":
+        base_make += "CONFIG=" + config_name + " "
     if not args.grid:
         j = 16
     else:
@@ -102,8 +103,11 @@ def cmd_generator(config_name, directory_name, config, args, cnt):
     
     base_make += " ".join(args.make_target)
     if args.grid:
-        grid_prefix = config.get("grid", "prefix")
-        base_make = grid_prefix + " " + base_make
+        try:
+            grid_prefix = config.get("grid", "prefix")
+            base_make = grid_prefix + " " + base_make
+        except ConfigParser.NoSectionError:
+            print "Warning, grid section is not defined"
 
     base_make = "set -o pipefail && " + base_make
     base_make += " 2>&1 | tee {a} make.log".format(a = "-a" if cnt != 0 else "")
@@ -113,6 +117,7 @@ def cmd_generator(config_name, directory_name, config, args, cnt):
     elif args.rm > 0:
         base_make = "rm -rf output/" + config_name + "; " + base_make
 
+    #base_make = "bash -c \"" + base_make + "\""
     return base_make
     
 
@@ -229,6 +234,8 @@ if __name__ == "__main__":
 
     cnt = 0
     result = "" # keep results for multiple builds
+    if len(confs) == 0:
+        confs.append("")
     for cfg in confs:
         for dyr in dirs:
             cmd = cmd_generator(cfg, dyr, config, args, cnt)
