@@ -1,0 +1,260 @@
+#!/usr/bin/env python
+# vim: set ft=python
+
+
+"""
+
+    Sample config file
+
+[grid]
+# this is prefixing every make command if grid is enabled.
+prefix = qrsh -V -cwd -b y -noshell -pe std 8 -q single
+
+[file]
+#path for makefile to search for valid targets. Valid targets
+# are matching this regex
+# ^\w*:
+maketarget_file = makefile
+#format for configs. This will be checked if its a file
+valid_config_file = configs.{arg}
+# command to check if arg belongs to a unit test makefile
+makefile_prog_test = ag -G makefile -l "TEST_.*{arg}"
+
+[build_dirs] # auto updated
+test/unit_test/ = None
+
+[build_confs] # auto updated
+crescendo_rom = None
+
+"""
+
+import os, sys, re, subprocess
+from subprocess import Popen, PIPE
+import argparse
+from os import walk
+import ConfigParser
+import tempfile
+
+try:
+    from termcolor import colored
+    colors_on = True
+except ImportError:
+    print "Info, colors are not supported. Try \"https://pypi.python.org/pypi/termcolor\""
+    colors_on = False
+
+cfg_name = ".nake.cfg"
+
+def result_construct(result, config, cmd):
+    return "{r:10s} {conf:10s} {c}\n".format(
+        r = result,
+        conf = config,
+        c = cmd)
+
+def is_unittest(cmd):
+    fyle = tempfile.NamedTemporaryFile()
+    print fyle.name
+    try:
+        subprocess.check_call(cmd, stdout=fyle, shell=True);
+    except subprocess.CalledProcessError:
+        return False
+    fyle.seek(0, 0)
+    build_dir = os.path.dirname(fyle.readline())
+    if os.path.isdir(build_dir):
+        return True, build_dir
+    return False
+
+def is_maketarget(fname, arg):
+    with open(fname) as f:
+        content = f.readlines()
+    for line in content:
+        if re.search("^" + arg + ":", line):
+            return True
+    return False
+
+def add_if_posible(config, name, force=False):
+    if force:
+        try:
+            config.remove_section(name)
+        except:
+            pass
+    try:
+        config.add_section(name)
+    except ConfigParser.DuplicateSectionError:
+        pass;
+    except:
+        raise
+    return [x[0] for x in config.items(name)]
+
+def cmd_generator(config_name, directory_name, config, args, cnt):
+    base_make = "make "
+
+    if args.make_keep_going:
+        base_make += "-k "
+    if args.make_silent:
+        base_make += "-s "
+    base_make += "-C " + directory_name + " "
+    base_make += "CONFIG=" + config_name + " "
+    if not args.grid:
+        j = 16
+    else:
+        j = str(args.j)
+    base_make += "-j" + str(args.j) + " "
+    
+    base_make += " ".join(args.make_target)
+    if args.grid:
+        grid_prefix = config.get("grid", "prefix")
+        base_make = grid_prefix + " " + base_make
+
+    base_make = "set -o pipefail && " + base_make
+    base_make += " 2>&1 | tee {a} make.log".format(a = "-a" if cnt != 0 else "")
+
+    if args.rm > 1:
+        base_make = "rm -rf output; " + base_make
+    elif args.rm > 0:
+        base_make = "rm -rf output/" + config_name + "; " + base_make
+
+    return base_make
+    
+
+################################################################################
+################################################################################
+################################################################################
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-a", "--all",
+            action="store",
+            dest="all_configs",
+            nargs = "*",
+            default=None,
+            help="Build all configs for the given project")
+    parser.add_argument("-n", "--dry-run",
+            action="store_true",
+            dest="dry",
+            default = False,
+            help="Dry run")
+    parser.add_argument("-r", "--rm",
+            action="count",
+            dest="rm",
+            default=0,
+            help="Remove output dir before building")
+    parser.add_argument("-K",
+            action = "store_true",
+            dest = "keep_going",
+            default = False,
+            help = "Keep going if there is a failure (and print a nice report at the end")
+    parser.add_argument("-D",
+            action = "store",
+            nargs ="*",
+            dest = "make_args",
+            default = "",
+            help = "Pass extra arguments in the make. Define arguments without the dash")
+    parser.add_argument("--no-color",
+            action = "store_false",
+            dest = "colors",
+            default = colors_on,
+            help = "Disable the color usage in stdout")
+    parser.add_argument("-s", "--silent",
+            action = "store_true",
+            dest = "make_silent",
+            default = False,
+            help = "Pass -s argument to make")
+    parser.add_argument("-k", "--keep-going",
+            action = "store_true",
+            dest = "make_keep_going",
+            default = False,
+            help = "Pass -k argument to make")
+    parser.add_argument("--no-grid",
+            action = "store_false",
+            dest = "grid",
+            default = True,
+            help = "Disable grid")
+    parser.add_argument("-j", "--jobs",
+            action = "store",
+            dest = "j",
+            default = 128,
+            help = "Number of multiple jobs to run in parallel (passed to make command")
+    parser.add_argument("--make_target",
+            action = "append",
+            dest = "make_target",
+            default = [],
+            help = "Make targets as in \"clean\" or \"dox\"")
+    args, unknown = parser.parse_known_args()
+
+    dirs = []
+    config = ConfigParser.ConfigParser()
+    try:
+        config.readfp(open(cfg_name))
+    except IOError:
+        print "Config file not accesible"
+        pass # config not available
+    confs = add_if_posible(config, "build_confs")
+    cfg_dirs = add_if_posible(config, "build_dirs")
+    dirs = []
+    confs_added = False
+
+    for arg in unknown:
+        #print "Now at argv [", arg, "]", os.path.join("build", "config", "config." + arg)
+        if os.path.isdir(arg):
+            dirs.append(arg)
+        elif os.path.isfile(config.get("file", "valid_config_file").format(arg = arg)):
+            if not confs_added:
+                confs = []
+                confs_added = True # confs added, need to overwrite the section
+            confs.append(arg)
+        elif os.path.isdir(os.path.dirname(arg)) \
+                and os.path.isfile(os.path.join(os.path.dirname(arg), "makefile")):
+            dirs.append(os.path.dirname(arg))
+        elif is_maketarget(config.get("file", "maketarget_file"), arg):
+            args.make_target.append(arg)
+        else:
+            ut_cmd = config.get("file", "makefile_prog_test").format(arg = arg)
+            (is_ut, new_directory) = is_unittest(ut_cmd)
+            if is_ut:
+                dirs.append(new_directory)
+    if len(dirs) == 0:
+        dirs = cfg_dirs
+
+    add_if_posible(config, "build_dirs", force=True)
+    for c in dirs:
+        config.set("build_dirs", c)
+
+    if confs_added:
+        add_if_posible(config, "build_confs", force=True)
+        for c in confs:
+            config.set("build_confs", c)
+
+    with open(cfg_name, 'wb') as configfile:
+            config.write(configfile)
+
+    cnt = 0
+    result = "" # keep results for multiple builds
+    for cfg in confs:
+        for dyr in dirs:
+            cmd = cmd_generator(cfg, dyr, config, args, cnt)
+            cnt += 1
+            print cmd
+            if not args.dry:
+                conf = cfg
+                try:
+                    subprocess.check_call(cmd, shell=True);
+                    res = "SUCCESS"
+                    if args.colors:
+                        res = colored(res, 'green')
+                        conf = colored(conf, attrs=['bold'])
+                    result += result_construct(res, conf, cmd)
+                except subprocess.CalledProcessError:
+                    res = "FAILURE"
+                    if args.colors:
+                        res = colored(res, "red")
+                        conf = colored(conf, attrs=['bold'])
+                    result += result_construct(res, conf, cmd)
+                    if not args.keep_going:
+                        print result
+                        exit(1)
+        if result is not "":
+            print result
+        if "FAILURE" in result:
+            exit(1)
+    exit(0)
+
