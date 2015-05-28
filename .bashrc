@@ -189,7 +189,7 @@ function get_hostname_color {
 }
 
 function set_prompt {
-    local PROMPT_DATE="\[\e[00;32m\]\d\[\e[0m\]\[\e[00;37m\] \[\e[0m\]\[\e[00;32m\]\@\[\e[0m\]"
+    local PROMPT_DATE="\[\033[38;5;10m\]\d\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;10m\]\t\[$(tput sgr0)\]"
     local PROMPT_USER_NAME="$(get_username_color)"
     local PROMPT_AT="\[\e[00;37m\]@\[\e[0m\]"
     local PROMPT_HOST="$(get_hostname_color)"
