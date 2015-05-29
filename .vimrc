@@ -144,7 +144,7 @@ nmap + :ts <C-R>=expand("<cword>")<cr><cr>
 let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
 let VCSCommandVCSTypePreference='p4'
-
+let g:DirDiffExcludes = "*.pyc"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
