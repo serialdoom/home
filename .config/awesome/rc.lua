@@ -41,7 +41,7 @@ beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "x-terminal-emulator"
-editor = os.getenv("EDITOR") or "editor"
+editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -49,7 +49,7 @@ editor_cmd = terminal .. " -e " .. editor
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
+modkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
@@ -74,7 +74,7 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5 }, s, layouts[1])
 end
 -- }}}
 
@@ -197,8 +197,8 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-    awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
+    awful.key({ modkey,           }, "a",   awful.tag.viewprev       ),
+    awful.key({ modkey,           }, "d",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey,           }, "j",
@@ -375,3 +375,17 @@ end)
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+-- Keyboard map indicator and changer
+-- kbdcfg = {}
+-- kbdcfg.cmd = "setxkbmap"
+-- kbdcfg.layout = { { "uk", "" , "Foo" }, { "us", "dvorak" , "Bar" } } 
+-- kbdcfg.current = 1  -- us is our default layout
+-- kbdcfg.widget = wibox.widget.textbox()
+-- kbdcfg.widget:set_text(" " .. kbdcfg.layout[kbdcfg.current][3] .. " ")
+-- kbdcfg.switch = function ()
+--   kbdcfg.current = kbdcfg.current % #(kbdcfg.layout) + 1
+--   local t = kbdcfg.layout[kbdcfg.current]
+--   kbdcfg.widget:set_text(" " .. t[3] .. " ")
+--   os.execute( kbdcfg.cmd .. " " .. t[1] .. " " .. t[2] )
+-- end
