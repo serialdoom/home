@@ -39,5 +39,5 @@ service nginx stop
 service nginx start
 
 tmux new-session -d -s dstat_daemon
-tmux new-window -t dstat_daemon:1 -n 'dstat' '/usr/local/dstat/dstat -ualmr --json /usr/share/nginx/html/dstat/stats.json'
+tmux new-window -t dstat_daemon:1 -n 'dstat' '/usr/local/dstat/dstat -ualmr --freespace  --json /usr/share/nginx/html/dstat/stats.json'
 
