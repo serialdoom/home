@@ -88,6 +88,7 @@ set autoindent
 syntax enable
 set wildignore +=*.d,*.o,*.dox,*.a,*.clean,*.bin,*.elf,*.i,*.back
 set rnu
+set nu
 set expandtab "use spaces instead of tabs
 set tabstop=4
 set shiftwidth=4
@@ -138,6 +139,7 @@ nmap _c :Ack! --cc <cword><cr>
 nmap _x :Ack! --xml <cword><cr>
 nmap _C :Ack! --cc --xml <cword><cr>
 nmap _M :Ack! --make <cword><cr>
+nmap _p :Ack! --python <cword><cr>
 
 nmap + :ts <C-R>=expand("<cword>")<cr><cr>
 
