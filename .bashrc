@@ -70,7 +70,6 @@ alias tjen='tmux -2 attach-session -t jenkins'
 alias hcim='hg commit -m "branch merge"'
 alias ff='find . -type f -printf "%T@ %p\n" | sort -n | tail -5 | cut -f2- -d" "'
 alias fff='find . -type f -printf "%T@ %p\n" | sort -n | tail -10 | cut -f2- -d" "'
-alias ag='$(which ag) --pager="less -XF"'
 
 
 LS_COLORS='di=0;35' ;
@@ -292,15 +291,61 @@ function mongodb_install {
     sudo apt-get install -y mongodb-org
 }
 
-function ag_install {
-    if [[ ! -x $MY_INSTALL_DIR/bin/ag ]]; then
-        [ -d $MY_REPO_DIR ] || mkdir -p $MY_REPO_DIR
-        cd $MY_REPO_DIR
-        [ -d the_silver_searcher ] || git clone git@github.com:ggreer/the_silver_searcher.git
-        cd the_silver_searcher/
-        ./build.sh --prefix $MY_INSTALL_DIR
-        make install
+function conf_make_install {
+    # $1 directory to do all that
+    pushd "$1"
+    ./configure --prefix $MY_INSTALL_DIR
+    make -j
+    make install
+    popd
+}
+
+function new_repo {
+    # $1 repo name
+    # $2 folder name
+    [ -d $MY_REPO_DIR ] || mkdir -p $MY_REPO_DIR
+    cd $MY_REPO_DIR
+    if [[ ! -d "$2" ]]; then
+        case "$1" in
+            git*) git clone "$1";;
+            ftp*) curl -s -U $(proxy_username):$(proxy_password) "$1" > $(basename "$1")
+                  tar xf $(basename "$1");;
+            *) echo "Dont know what do do with [$1]";;
+        esac
     fi
+    pwd
+    cd "$2"
+}
+
+function proxy_username {
+    echo $(grep -oP "USER.*" ~/.proxy | cut -d '=' -f2)
+}
+function proxy_password {
+    echo $(grep -oP "PASSWORD.*" ~/.proxy | cut -d '=' -f2)
+}
+
+function ag {
+    if [[ -x $MY_INSTALL_DIR/bin/ag ]]; then
+        $(which ag) $* --pager="less -XF"
+        return
+    fi
+    new_repo git@github.com:ggreer/the_silver_searcher.git the_silver_searcher
+    pcregrep # depends on 
+    (
+        export PKG_CONFIG_PATH=$MY_INSTALL_DIR/lib/pkgconfig 
+        conf_make_install . 
+    )
+    #./build.sh --prefix $MY_INSTALL_DIR
+    #make install
+}
+
+function pcregrep {
+    [ -x $MY_INSTALL_DIR/bin/pcregrep ] && return;
+    pushd .
+    local pcre=$(curl -U $(proxy_username):$(proxy_password) "http://www.linuxfromscratch.org/blfs/view/svn/general/pcre.html" -s | grep -oP "ftp.*tar.bz2" | head -1)
+    new_repo $pcre $(basename $pcre .tar.bz2)
+    conf_make_install .
+    popd
 }
 
 function github_setup {
