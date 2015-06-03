@@ -88,6 +88,7 @@ set autoindent
 syntax enable
 set wildignore +=*.d,*.o,*.dox,*.a,*.clean,*.bin,*.elf,*.i,*.back
 set rnu
+set nu
 set expandtab "use spaces instead of tabs
 set tabstop=4
 set shiftwidth=4
@@ -107,17 +108,22 @@ nmap <Space> <PageDown>
 nmap :! q:?
 nmap <leader>pe :!p4 edit %<cr>
 
-autocmd WinEnter * setlocal cursorline
-autocmd WinEnter * setlocal cursorcolumn
-autocmd WinEnter * setlocal cc=80
-autocmd WinLeave * setlocal nocursorline
-autocmd WinLeave * setlocal nocursorcolumn
-autocmd WinLeave * setlocal cc=0
-autocmd VimLeave * :call SessionCreate()
-autocmd BufWritePre * call SaveWithTS()
-autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
-autocmd WinEnter *.mkf set ft=make
+if has("autocmd")
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    autocmd WinEnter * setlocal cursorline
+    autocmd WinEnter * setlocal cursorcolumn
+    autocmd WinEnter * setlocal cc=80
+    autocmd WinLeave * setlocal nocursorline
+    autocmd WinLeave * setlocal nocursorcolumn
+    autocmd WinLeave * setlocal cc=0
+    autocmd VimLeave * :call SessionCreate()
+    autocmd BufWritePre * call SaveWithTS()
+    autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
+    autocmd WinEnter *.mkf set ft=make
+endif
 
+nmap <leader>n :cnext<cr>
+nmap <leader>m :cprev<cr>
 nmap <silent> <c-h> :VersDiff -<cr> 
 nmap <silent> <c-j> :VersDiff +<cr> 
 nmap <silent> <c-k> :VersDiff -cvs<cr> 
@@ -138,12 +144,14 @@ nmap _c :Ack! --cc <cword><cr>
 nmap _x :Ack! --xml <cword><cr>
 nmap _C :Ack! --cc --xml <cword><cr>
 nmap _M :Ack! --make <cword><cr>
+nmap _p :Ack! --python <cword><cr>
 
 nmap + :ts <C-R>=expand("<cword>")<cr><cr>
 
 let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
 let VCSCommandVCSTypePreference='p4'
+let g:DirDiffExcludes = "*.pyc"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -154,7 +162,8 @@ if has("user_commands")
     command! -bang -nargs=? -complete=file W w<bang> <args>
     command! -bang -nargs=? -complete=file Wq wq<bang> <args>
     command! -bang -nargs=? -complete=file WQ wq<bang> <args>
-    command! -bang -nargs=? -complete=file Set set<bang> <args>
+    cabbrev Set set
+    cabbrev ack Ack
     " map the damn :W so that you dont type it twice. Or even 3 times. Fucking noob.
     command! -bang Wqa wqa<bang>
     command! -bang Wa wa<bang>
