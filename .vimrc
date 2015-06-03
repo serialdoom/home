@@ -108,16 +108,19 @@ nmap <Space> <PageDown>
 nmap :! q:?
 nmap <leader>pe :!p4 edit %<cr>
 
-autocmd WinEnter * setlocal cursorline
-autocmd WinEnter * setlocal cursorcolumn
-autocmd WinEnter * setlocal cc=80
-autocmd WinLeave * setlocal nocursorline
-autocmd WinLeave * setlocal nocursorcolumn
-autocmd WinLeave * setlocal cc=0
-autocmd VimLeave * :call SessionCreate()
-autocmd BufWritePre * call SaveWithTS()
-autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
-autocmd WinEnter *.mkf set ft=make
+if has("autocmd")
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    autocmd WinEnter * setlocal cursorline
+    autocmd WinEnter * setlocal cursorcolumn
+    autocmd WinEnter * setlocal cc=80
+    autocmd WinLeave * setlocal nocursorline
+    autocmd WinLeave * setlocal nocursorcolumn
+    autocmd WinLeave * setlocal cc=0
+    autocmd VimLeave * :call SessionCreate()
+    autocmd BufWritePre * call SaveWithTS()
+    autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
+    autocmd WinEnter *.mkf set ft=make
+endif
 
 nmap <leader>n :cnext<cr>
 nmap <leader>m :cprev<cr>
@@ -149,6 +152,7 @@ let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
 let VCSCommandVCSTypePreference='p4'
 let g:DirDiffExcludes = "*.pyc"
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
