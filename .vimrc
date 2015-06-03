@@ -119,6 +119,8 @@ autocmd BufWritePre * call SaveWithTS()
 autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
 autocmd WinEnter *.mkf set ft=make
 
+nmap <leader>n :cnext<cr>
+nmap <leader>m :cprev<cr>
 nmap <silent> <c-h> :VersDiff -<cr> 
 nmap <silent> <c-j> :VersDiff +<cr> 
 nmap <silent> <c-k> :VersDiff -cvs<cr> 
