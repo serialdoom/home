@@ -337,7 +337,10 @@ function proxy_password {
 }
 
 function tmux {
-    [ -x $MY_INSTALL_DIR/bin/tmux ] && $(which tmux) $* && return;
+    if [[ -x $MY_INSTALL_DIR/bin/tmux ]]; then
+        $(which tmux) $*
+        return;
+    fi
     new_repo git@github.com:ThomasAdam/tmux.git tmux
     libevent
     sh autogen.sh
