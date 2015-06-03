@@ -291,13 +291,22 @@ function mongodb_install {
     sudo apt-get install -y mongodb-org
 }
 
+function execute_cmd {
+    echo "$*"
+    eval "$*"
+    if [[ $? -ne 0 ]]; then
+        echo "****** ERROR **********"
+        return
+    fi
+}
+
 function conf_make_install {
     # $1 directory to do all that
     pushd "$1"
-    ./configure --prefix $MY_INSTALL_DIR
-    make -j
-    make install
-    popd
+    execute_cmd "./configure --prefix $MY_INSTALL_DIR $CONF_MAKE_INSTALL_CONFIGURE_FLAGS &> configure.log"
+    execute_cmd "make -j &> make.log"
+    execute_cmd "make install &> make_install.log"
+    popd > /dev/null
 }
 
 function new_repo {
@@ -309,6 +318,9 @@ function new_repo {
         case "$1" in
             git*) git clone "$1";;
             ftp*) curl -s -U $(proxy_username):$(proxy_password) "$1" > $(basename "$1")
+                  tar xf $(basename "$1");;
+            http*)
+                  curl -L -s -U $(proxy_username):$(proxy_password) "$1" > $(basename "$1");
                   tar xf $(basename "$1");;
             *) echo "Dont know what do do with [$1]";;
         esac
@@ -324,27 +336,49 @@ function proxy_password {
     echo $(grep -oP "PASSWORD.*" ~/.proxy | cut -d '=' -f2)
 }
 
+function tmux {
+    [ -x $MY_INSTALL_DIR/bin/tmux ] && $(which tmux) $* && return;
+    new_repo git@github.com:ThomasAdam/tmux.git tmux
+    libevent
+    sh autogen.sh
+    (
+        export CONF_MAKE_INSTALL_CONFIGURE_FLAGS="CFLAGS=\"-I$MY_INSTALL_DIR/include/\" LDFLAGS=\"-L$MY_INSTALL_DIR/lib\""
+        #export LD_LIBRARY_PRELOAD="$MY_INSTALL_DIR/lib"
+        conf_make_install .
+    )
+}
+
+function libevent {
+    [ -f $MY_INSTALL_DIR/lib/libevent.a ] && return
+    pushd . > /dev/null
+    local lib_url=$(curl -U mc42:tsoutsouni.42 "http://libevent.org/" -s | grep -o "http.*stable.tar.gz\"" | head -1 | tr -d '"')
+    echo "new_repo $lib_url $(basename $lib_url .tar.gz)"
+    new_repo $lib_url $(basename $lib_url .tar.gz)
+    conf_make_install .
+    rm -rf libevent.*stable.tar.gz
+    popd > /dev/null
+}
+    
 function ag {
     if [[ -x $MY_INSTALL_DIR/bin/ag ]]; then
         $(which ag) $* --pager="less -XF"
         return
     fi
     new_repo git@github.com:ggreer/the_silver_searcher.git the_silver_searcher
-    pcregrep # depends on 
+    pcre # depends on 
     (
-        export PKG_CONFIG_PATH=$MY_INSTALL_DIR/lib/pkgconfig 
-        conf_make_install . 
+        execute_cmd "PKG_CONFIG_PATH=$MY_INSTALL_DIR/lib/pkgconfig ./build.sh --prefix $MY_INSTALL_DIR &> build.log"
+        execute_cmd "make install &> make_install.log"
     )
-    #./build.sh --prefix $MY_INSTALL_DIR
-    #make install
 }
 
-function pcregrep {
+function pcre {
     [ -x $MY_INSTALL_DIR/bin/pcregrep ] && return;
     pushd .
     local pcre=$(curl -U $(proxy_username):$(proxy_password) "http://www.linuxfromscratch.org/blfs/view/svn/general/pcre.html" -s | grep -oP "ftp.*tar.bz2" | head -1)
     new_repo $pcre $(basename $pcre .tar.bz2)
     conf_make_install .
+    rm -rf pcre*tar.bz2
     popd
 }
 
