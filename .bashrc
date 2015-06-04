@@ -407,7 +407,10 @@ function github_setup {
 }
 
 function pcalc {
-    [ -x $(which pcalc) ] && $(which pcalc) $*
+    if [[ -x $(which pcalc) ]]; then
+        $(which pcalc) $*
+        return;
+    fi
     [ -d $MY_REPO_DIR ] || mkdir -p $MY_REPO_DIR
     cd $MY_REPO_DIR;
     [ -d pcalc ] || git clone git@github.com:serialdoom/pcalc.git
