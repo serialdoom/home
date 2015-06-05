@@ -135,7 +135,7 @@ map \b :CtrlPBuffer<cr>
 "let g:ctrlp_map = '<c-g>'
 let g:ctrlp_custom_ignore = {
     \ 'dir':  '\v[\/](\.(git|hg|svn|pdiff)|output)$',
-    \ 'file': '\v\.(exe|so|dll)$',
+    \ 'file': '\v\.(exe|so|dll|pyc)$',
     \ }
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
