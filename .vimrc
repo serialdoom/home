@@ -109,6 +109,7 @@ nmap :! q:?
 nmap <leader>pe :!p4 edit %<cr>
 map <c-j> :call Start_ts_diff_next(+1)<cr>
 map <c-k> :call Start_ts_diff_next(-1)<cr>
+map <c-l> :unlet g:save_with_ts_flist <bar> diffoff <bar> q <bar> diffoff<cr>
 
 if has("autocmd")
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -252,11 +253,6 @@ function! SaveWithTS()
     "exe ":q"
 endfunction
 
-function! Start_ts_diff_window_setup()
-    exe ":set readonly"
-    exe "cabbrev " . expand("<abuf>") . " q unlet g:save_with_ts_flist <bar> diffoff <bar> q <bar> diffoff"
-endfunction
-
 function! StartTSDiff()
     let g:save_with_ts_current_file = expand("%:p")
     if !exists("g:save_with_ts_flist")
@@ -264,8 +260,7 @@ function! StartTSDiff()
         exe ":diffthis"
         let g:save_with_ts_flist = split(system("ls " . Calculate_ts_base_path(g:save_with_ts_current_file) . "*"), "\n")
         let g:save_with_ts_cnt = len(g:save_with_ts_flist) - 1
-        exe ":rightb vs " . g:save_with_ts_flist[g:save_with_ts_cnt]
-        call Start_ts_diff_window_setup()
+        exe ":rightb vs view" . g:save_with_ts_flist[g:save_with_ts_cnt]
         exe ":diffthis"
     elseif g:save_with_ts_current_file == g:save_with_ts_flist[g:save_with_ts_cnt]
         "we just need to change version
@@ -284,8 +279,7 @@ function! Start_ts_diff_next(offset)
     endif
     let g:save_with_ts_cnt = g:save_with_ts_cnt + a:offset
     exe ":diffoff"
-    exe ":e " . g:save_with_ts_flist[g:save_with_ts_cnt]
+    exe ":view " . g:save_with_ts_flist[g:save_with_ts_cnt]
     exe ":diffthis"
-    call Start_ts_diff_window_setup()
 endfunction
 
