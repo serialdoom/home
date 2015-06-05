@@ -122,13 +122,6 @@ if has("autocmd")
     autocmd WinEnter *.mkf set ft=make
 endif
 
-nmap <leader>n :cnext<cr>
-nmap <leader>m :cprev<cr>
-nmap <silent> <c-h> :VersDiff -<cr> 
-nmap <silent> <c-j> :VersDiff +<cr> 
-nmap <silent> <c-k> :VersDiff -cvs<cr> 
-nmap <silent> <c-l> :VersDiff -c<cr>
-
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 map \t :CtrlPCurWD<cr>
 map \b :CtrlPBuffer<cr>
@@ -152,6 +145,9 @@ let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
 let VCSCommandVCSTypePreference='p4'
 let g:DirDiffExcludes = "*.pyc"
+
+nmap <leader>n :cnext<cr>
+nmap <leader>m :cprev<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
