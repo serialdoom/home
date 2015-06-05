@@ -354,7 +354,7 @@ function tmux {
 function libevent {
     [ -f $MY_INSTALL_DIR/lib/libevent.a ] && return
     pushd . > /dev/null
-    local lib_url=$(curl -U mc42:tsoutsouni.42 "http://libevent.org/" -s | grep -o "http.*stable.tar.gz\"" | head -1 | tr -d '"')
+    local lib_url=$(curl -U $(proxy_username):$(proxy_password) "http://libevent.org/" -s | grep -o "http.*stable.tar.gz\"" | head -1 | tr -d '"')
     echo "new_repo $lib_url $(basename $lib_url .tar.gz)"
     new_repo $lib_url $(basename $lib_url .tar.gz)
     conf_make_install .
