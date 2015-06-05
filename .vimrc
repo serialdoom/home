@@ -107,6 +107,8 @@ nmap ed :e %:h<cr>
 nmap <Space> <PageDown>
 nmap :! q:?
 nmap <leader>pe :!p4 edit %<cr>
+map <c-j> :call Start_ts_diff_next(+1)<cr>
+map <c-k> :call Start_ts_diff_next(-1)<cr>
 
 if has("autocmd")
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -122,10 +124,8 @@ if has("autocmd")
     autocmd WinEnter *.mkf set ft=make
 endif
 
-set runtimepath^=~/.vim/bundle/ctrlp.vim
 map \t :CtrlPCurWD<cr>
 map \b :CtrlPBuffer<cr>
-"let g:ctrlp_map = '<c-g>'
 let g:ctrlp_custom_ignore = {
     \ 'dir':  '\v[\/](\.(git|hg|svn|pdiff)|output)$',
     \ 'file': '\v\.(exe|so|dll|pyc)$',
@@ -242,7 +242,50 @@ function! FunctionCommentOut()
     exe "normal ,if"
 endfunction
 
-function! SaveWithTS()
-    let backup_path = "~/.backup/vim/" . substitute(expand("%:p"), "/", "__", "g") . strftime("___%Y-%m-%d_%H-%M-%S") . "." . expand("%:e")
-    exe ":write! " . backup_path
+function! Calculate_ts_base_path(path)
+    return "~/.backup/vim/" . substitute(a:path, "/", "__", "g")
 endfunction
+
+function! SaveWithTS()
+    let backup_path = Calculate_ts_base_path(expand("%:p")) . strftime("___%Y-%m-%d_%H-%M-%S") . "." . expand("%:e")
+    exe ":write " . backup_path
+    "exe ":q"
+endfunction
+
+function! Start_ts_diff_window_setup()
+    exe ":set readonly"
+    exe "cabbrev " . expand("<abuf>") . " q unlet g:save_with_ts_flist <bar> diffoff <bar> q <bar> diffoff"
+endfunction
+
+function! StartTSDiff()
+    let g:save_with_ts_current_file = expand("%:p")
+    if !exists("g:save_with_ts_flist")
+        "first time
+        exe ":diffthis"
+        let g:save_with_ts_flist = split(system("ls " . Calculate_ts_base_path(g:save_with_ts_current_file) . "*"), "\n")
+        let g:save_with_ts_cnt = len(g:save_with_ts_flist) - 1
+        exe ":rightb vs " . g:save_with_ts_flist[g:save_with_ts_cnt]
+        call Start_ts_diff_window_setup()
+        exe ":diffthis"
+    elseif g:save_with_ts_current_file == g:save_with_ts_flist[g:save_with_ts_cnt]
+        "we just need to change version
+        echo "changing version"
+        Start_ts_diff_next(-1)
+    endif
+endfunction
+
+function! Start_ts_diff_next(offset)
+    if !exists("g:save_with_ts_current_file") || !exists("g:save_with_ts_flist")
+        call StartTSDiff()
+    endif
+    if g:save_with_ts_cnt + a:offset < 0 || g:save_with_ts_cnt + a:offset > len(g:save_with_ts_flist) - 1
+        echo "reached the end/start of the available versions (" .  g:save_with_ts_cnt . ")"
+        return
+    endif
+    let g:save_with_ts_cnt = g:save_with_ts_cnt + a:offset
+    exe ":diffoff"
+    exe ":e " . g:save_with_ts_flist[g:save_with_ts_cnt]
+    exe ":diffthis"
+    call Start_ts_diff_window_setup()
+endfunction
+
