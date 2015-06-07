@@ -13,13 +13,14 @@ done
 export EDITOR="vim -X"
 
 ## python path
-if [[ -d ~/tmp_install_$(hostname) ]]; then
-    export PATH="~/tmp_install_$(hostname):$PATH";
-else
-    export PATH="/home/$USER/tmp/install_*/bin:$PATH";
+if [[ -d "~/tmp/install_$(hostname)" ]]; then
+    export PATH="~/tmp/install_$(hostname):$PATH";
+#else
+    #export PATH="/home/$USER/tmp/install_*/bin:$PATH";
 fi
 
 export PATH="~/bin:/home/$USER/tmp/install/bin:/home/$USER/tmp/p4v/bin:$PATH:/tools/bin:/home/mc42/tmp/jdk1.8.0_40/bin"
+export PATH=$(echo -n $PATH | awk -v RS=: -v ORS=: '!arr[$0]++') # remove duplicates
 export LD_LIBRARY_PATH="$HOME/tmp/install/lib:$LD_LIBRARY_PATH" # tmux requires this
 export TMPDIR=/tmp/$USER;
 export MY_REPO_DIR=$HOME/tmp/install/repos/
