@@ -78,9 +78,11 @@ export LS_COLORS
 export LESS='-R'
 export LESSOPEN='|~/.lessfilter %s'
 
-for f in $HOME/bin/autocomplete.d/*; do
-    source $f
-done
+if [[ -d $HOME/bin/autocomplete.d ]]; then
+    for f in $HOME/bin/autocomplete.d/*; do
+        source $f
+    done
+fi
 
 PROMPT_COMMAND=prompt
 
