@@ -161,6 +161,7 @@ if has("user_commands")
     command! -bang -nargs=? -complete=file WQ wq<bang> <args>
     cabbrev Set set
     cabbrev ack Ack
+    cabbrev acl Ack
     " map the damn :W so that you dont type it twice. Or even 3 times. Fucking noob.
     command! -bang Wqa wqa<bang>
     command! -bang Wa wa<bang>
