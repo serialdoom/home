@@ -1,3 +1,5 @@
+[[ ! -f /home/mc42/bin/bash/man_tmux.txt  ]] && return
+
 TMUX_COMPLETE="$TMPDIR/tmux_complete_options"
 if [[ ! -f $TMUX_COMPLETE ]]; then
 	cat /home/mc42/bin/bash/man_tmux.txt | strings | grep "[[:alpha:]]+-[[:alpha:]]+" -oP | sort -u > $TMUX_COMPLETE
