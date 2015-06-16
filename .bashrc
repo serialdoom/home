@@ -30,6 +30,7 @@ HISTTIMEFORMAT="%d/%m/%y %T "
 [ -d $TMPDIR ] || mkdir $TMPDIR;
 chmod 700 $TMPDIR
 
+alias home='git --work-tree=$HOME --git-dir=$HOME/.home'
 alias v='vim -X'
 alias le='less -R --ignore-case'
 alias ls='ls --color=auto'

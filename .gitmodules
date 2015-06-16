@@ -1,3 +1,0 @@
-[submodule ".repo/docopts"]
-	path = .repo/docopts
-	url = git@github.com:docopt/docopts.git
