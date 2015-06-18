@@ -170,6 +170,7 @@ if has("user_commands")
     command! -bang QA qa<bang>
     command! -bang Qa qa<bang>
     command! -bang Set set<bang>
+    command! -bang Vs vs<bang>
 endif
 
 
