@@ -7,8 +7,10 @@
 #   python -c "import site; print site.getsitepackages()"
 # 3. then, install with
 #   PYTHONPATH=/usr/lib/python2.7/dist-packages python setup.py install --user
-# 4. and then run with
-#   .local/bin/geeknote 
+# 4. Run and login with
+#   .local/bin/geeknote login
+# 5. Run and create with
+#   .local/bin/geeknote create blah blah
 
 GEEKNOTE=.local/bin/geeknote 
 TMP_FILE=/tmp/$(whoami)/$(basename $0).$(date '+%s')
