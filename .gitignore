@@ -1,0 +1,13 @@
+*
+!.agignore
+!.bash_profile
+!.bashrc
+!bin
+!.gitconfig
+!.gitignore
+!.gitmodules
+!.lessfilter
+!.pdbrc
+!.tmux.conf
+!.vim
+!.vimrc

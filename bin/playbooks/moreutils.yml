@@ -1,0 +1,21 @@
+#install moreutils to local host
+#ansible-playbook -v -i "localhost," -c local  moreutils.yml
+---
+
+
+
+- name: Instaslling moreutils
+  hosts: all
+
+  vars:
+     my_repo_dir: "{{ lookup('env','MY_REPO_DIR') }}"
+     moreutils: "{{ my_repo_dir + 'moreutils' }}"
+     install: "{{ lookup('env', 'MY_INSTALL_DIR') + '/bin' }}"
+
+  tasks:
+
+  - name: cloning repo
+    action: git repo=git@github.com:madx/moreutils.git dest={{ moreutils }}
+  - file: src={{ moreutils + '/' }}/{{ item.path }} dest={{install + '/'}}/{{ item.dest }} state=link
+    with_items:
+            - { path: 'ts', dest: 'ts' }

@@ -170,6 +170,7 @@ if has("user_commands")
     command! -bang QA qa<bang>
     command! -bang Qa qa<bang>
     command! -bang Set set<bang>
+    command! -bang Vs vs<bang>
 endif
 
 
@@ -251,6 +252,7 @@ endfunction
 function! SaveWithTS()
     let backup_path = Calculate_ts_base_path(expand("%:p")) . strftime("___%Y-%m-%d_%H-%M-%S") . "." . expand("%:e")
     exe ":write " . backup_path
+    exe ":bw " . backup_path
     "exe ":q"
 endfunction
 
@@ -280,7 +282,9 @@ function! Start_ts_diff_next(offset)
     endif
     let g:save_with_ts_cnt = g:save_with_ts_cnt + a:offset
     exe ":diffoff"
+    let current_file = expand("%p")
     exe ":view " . g:save_with_ts_flist[g:save_with_ts_cnt]
     exe ":diffthis"
+    exe ":bwipe " . current_file
 endfunction
 
