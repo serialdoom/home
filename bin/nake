@@ -110,7 +110,19 @@ def cmd_generator(config_name, directory_name, config, args, cnt):
             print "Warning, grid section is not defined"
 
     base_make = "set -o pipefail && " + base_make
-    base_make += " 2>&1 | tee {a} make.log".format(a = "-a" if cnt != 0 else "")
+    base_make += " 2>&1 "
+    try:
+        subprocess.check_call("which ts &> /dev/null", shell=True)
+        base_make += "| ts '%Y%m%dH%H%M%.S' "
+    except subprocess.CalledProcessError:
+        pass
+    if args.count > 1:
+        if cnt == 0:
+            base_make += ">>make.log 2>&1"
+        else:
+            base_make += ">make.log 2>&1"
+    else:
+        base_make += "| tee {a} make.log".format(a = "-a" if cnt != 0 else "")
 
     if args.rm > 1:
         base_make = "rm -rf output; " + base_make
@@ -184,6 +196,11 @@ if __name__ == "__main__":
             dest = "make_target",
             default = [],
             help = "Make targets as in \"clean\" or \"dox\"")
+    parser.add_argument("-c", "--count",
+            action="store",
+            dest="count",
+            default=1,
+            help="Repeat the build for COUNT times.")
     args, unknown = parser.parse_known_args()
 
     dirs = []
@@ -236,32 +253,34 @@ if __name__ == "__main__":
     result = "" # keep results for multiple builds
     if len(confs) == 0:
         confs.append("")
-    for cfg in confs:
-        for dyr in dirs:
-            cmd = cmd_generator(cfg, dyr, config, args, cnt)
-            cnt += 1
-            print cmd
-            if not args.dry:
-                conf = cfg
-                try:
-                    subprocess.check_call(cmd, shell=True);
-                    res = "SUCCESS"
-                    if args.colors:
-                        res = colored(res, 'green')
-                        conf = colored(conf, attrs=['bold'])
-                    result += result_construct(res, conf, cmd)
-                except subprocess.CalledProcessError:
-                    res = "FAILURE"
-                    if args.colors:
-                        res = colored(res, "red")
-                        conf = colored(conf, attrs=['bold'])
-                    result += result_construct(res, conf, cmd)
-                    if not args.keep_going:
-                        print result
-                        exit(1)
-        if result is not "":
-            print result
-        if "FAILURE" in result:
-            exit(1)
+
+    for i in range(int(args.count)):
+        for cfg in confs:
+            for dyr in dirs:
+                cmd = cmd_generator(cfg, dyr, config, args, cnt)
+                cnt += 1
+                print cmd
+                if not args.dry:
+                    conf = cfg
+                    try:
+                        subprocess.check_call(cmd, shell=True);
+                        res = "SUCCESS"
+                        if args.colors:
+                            res = colored(res, 'green')
+                            conf = colored(conf, attrs=['bold'])
+                        result += result_construct(res, conf, cmd)
+                    except subprocess.CalledProcessError:
+                        res = "FAILURE"
+                        if args.colors:
+                            res = colored(res, "red")
+                            conf = colored(conf, attrs=['bold'])
+                        result += result_construct(res, conf, cmd)
+                        if not args.keep_going:
+                            print result
+                            exit(1)
+            if result is not "":
+                print result
+            if "FAILURE" in result:
+                exit(1)
     exit(0)
 
