@@ -367,7 +367,8 @@ function libevent {
 }
     
 function ag {
-    if [[ -x $MY_INSTALL_DIR/bin/ag ]]; then
+    which ag &> /dev/null
+    if [[ "$?" -eq 0 ]]; then
         $(which ag) "$*" --pager="less -XF"
         return
     fi
