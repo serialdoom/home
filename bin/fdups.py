@@ -63,7 +63,7 @@ p = Pool(int(args.j))
 for f in unknown:
     for root, dirs, files in os.walk(f):
         for fyle in files:
-            if re.search(args.match, fyle):
+            if args.match is None or re.search(args.match, fyle):
                 p.apply_async(calculate_md5,
                         args = (os.path.join(root, fyle), ),
                         callback = register_sum)
