@@ -73,6 +73,7 @@ alias hcim='hg commit -m "branch merge"'
 alias ff='find . -type f -printf "%T@ %p\n" | sort -n | tail -5 | cut -f2- -d" "'
 alias fff='find . -type f -printf "%T@ %p\n" | sort -n | tail -10 | cut -f2- -d" "'
 alias mplayer-audio-sync='mplayer -lavdopts threads=4 00006.MTS'
+alias ansible-local='ansible-playbook -v -i "localhost," -c local'
 
 
 LS_COLORS='di=0;35' ;
