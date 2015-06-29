@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import argparse
 import hashlib
 import os
@@ -44,7 +44,7 @@ parser.add_argument("-a", "--all",
 parser.add_argument("-j",
         action="store",
         dest="j",
-        default=12,
+        default=32,
         help="Use that many parallel threads")
 parser.add_argument("--match",
         action="store",
@@ -59,6 +59,15 @@ dict_sema = BoundedSemaphore()
 md5_hash = shelve.open(".fdups_fdups.db")
 fnames_checked = shelve.open(".fdups_flist.db")
 
+# make sure all the files/folders exist
+for f in fnames_checked:
+    if not os.path.isfile(f):
+        fnames_checked[f] = None
+for f in md5_hash:
+    for fyle in md5_hash[f]:
+        if not os.path.isfile(fyle):
+            md5_hash[f].remove(fyle)
+
 p = Pool(int(args.j))
 for f in unknown:
     for root, dirs, files in os.walk(f):
@@ -72,9 +81,9 @@ p.close()
 p.join()
 
 for key in md5_hash.keys():
-    print key, md5_hash[key]
-    #if len(md5_hash[key]) > 1:
-        #print hey, md5_hash[key]
+    #print(key, md5_hash[key])
+    if len(md5_hash[key]) > 1:
+        print(key, md5_hash[key])
 
 fnames_checked.close()
 md5_hash.close()
