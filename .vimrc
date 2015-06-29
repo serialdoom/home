@@ -87,8 +87,6 @@ set autoindent
 "enable syntax.. Doh
 syntax enable
 set wildignore +=*.d,*.o,*.dox,*.a,*.clean,*.bin,*.elf,*.i,*.back
-set rnu
-set nu
 set expandtab "use spaces instead of tabs
 set tabstop=4
 set shiftwidth=4
@@ -123,6 +121,10 @@ if has("autocmd")
     autocmd BufWritePre * call SaveWithTS()
     autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
     autocmd BufEnter *.mkf :set ft=make
+    autocmd WinLeave * :setlocal rnu!
+    autocmd WinEnter * :setlocal rnu
+
+
 endif
 
 map \t :CtrlPCurWD<cr>
