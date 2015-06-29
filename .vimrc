@@ -122,7 +122,7 @@ if has("autocmd")
     autocmd VimLeave * :call SessionCreate()
     autocmd BufWritePre * call SaveWithTS()
     autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
-    autocmd WinEnter *.mkf set ft=make
+    autocmd BufEnter *.mkf :set ft=make
 endif
 
 map \t :CtrlPCurWD<cr>
