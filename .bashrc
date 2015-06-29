@@ -72,6 +72,8 @@ alias tjen='tmux -2 attach-session -t jenkins'
 alias hcim='hg commit -m "branch merge"'
 alias ff='find . -type f -printf "%T@ %p\n" | sort -n | tail -5 | cut -f2- -d" "'
 alias fff='find . -type f -printf "%T@ %p\n" | sort -n | tail -10 | cut -f2- -d" "'
+alias mplayer-audio-sync='mplayer -lavdopts threads=4 00006.MTS'
+alias ansible-local='ansible-playbook -v -i "localhost," -c local'
 
 
 LS_COLORS='di=0;35' ;
@@ -341,7 +343,8 @@ function proxy_password {
 }
 
 function tmux {
-    if [[ -x $MY_INSTALL_DIR/bin/tmux ]]; then
+    which tmux &> /dev/null
+    if [[ "$?" -eq 0 ]]; then
         $(which tmux) $*
         return;
     fi
