@@ -137,9 +137,8 @@ function hgp {
     echo "cp $outfile $HGP_BACKUP_DIR;"
 }
 
-HISTORY_TMP=/home/$USER/.backup/.history-$(hostname).txt
 function save_last_command {
-    [ -f $HISTORY_TMP ] && history | tail -1 >> $HISTORY_TMP
+    echo -e $$\\t$USER\\t$HOSTNAME\\tscreen $WINDOW\\t`date +%D%t%T%t%Y%t%s`\\t$PWD"$(history 1)" >> ~/.bash_eternal_history
 }
 
 function get_username_color {
