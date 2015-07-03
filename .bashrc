@@ -214,9 +214,6 @@ function prompt {
     set_prompt $?
     save_last_command
 }
-function get_load {
-    CPU_LOAD=$(uptime | tr -s ' ' | cut -d ' ' -f12 | tr -d ',');
-}
 
 function c () {
     [ ! $1 ] && cd ~ && ls && return 0;
@@ -248,96 +245,3 @@ function backup {
     fi
 }
 
-function ex {                                                                      
-    [ ! "$1" ] && echo "Provide an arcive name to extract";                        
-    case "$1" in                                                                   
-        *.zip)                                                                     
-            mkdir -p $(basename "$1" .zip);                                        
-            cd $(basename "$1" .zip);                                              
-            cp "../$1" ./                                                          
-            unzip "$1";                                                            
-            ;;                                                                     
-        *tar.bz2)                                                                  
-            tar xvfj $1;                                                           
-            ;;                                                                     
-        *tar.gz|*.tgz)                                                             
-            tar xvfz $1;                                                           
-            ;;                                                                                                                                                                                        
-        *tar)                                                                   
-            tar xvf $1;                                                         
-            ;;                                                                  
-        *tar.lzma)                                                              
-            unlzma "$1";                                                        
-            tar xvf $(echo "$1" | perl -p -i -e "s/\.lzma$//");                 
-            ;;                                                                  
-        *gz)                                                                    
-            gunzip "$1";                                                        
-            ;;                                                                  
-        *rar)                                                                   
-            local name=$(basename "$1" .rar);                                   
-            mkdir -p $name;                                                     
-            cd $name;                                                           
-            cp "../$1" ./;                                                      
-            rar e "$1";                                                         
-            ;;                                                                  
-        *)                                                                      
-            echo "I just dont know what do to with this $1";                    
-            ;;                                                                  
-    esac;                                                                       
-}  
-
-function puppet-service {
-    for f in $(service --status-all | grep -oP "pe-.*"); do sudo service $f $1; done
-}
-
-function mongodb_install {
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-    echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
-    sudo apt-get update
-    sudo apt-get install -y mongodb-org
-}
-
-function execute_cmd {
-    echo "$*"
-    eval "$*"
-    if [[ $? -ne 0 ]]; then
-        echo "****** ERROR **********"
-        return
-    fi
-}
-
-function conf_make_install {
-    # $1 directory to do all that
-    pushd "$1"
-    execute_cmd "./configure --prefix $MY_INSTALL_DIR $CONF_MAKE_INSTALL_CONFIGURE_FLAGS &> configure.log"
-    execute_cmd "make -j &> make.log"
-    execute_cmd "make install &> make_install.log"
-    popd > /dev/null
-}
-
-function new_repo {
-    # $1 repo name
-    # $2 folder name
-    [ -d $MY_REPO_DIR ] || mkdir -p $MY_REPO_DIR
-    cd $MY_REPO_DIR
-    if [[ ! -d "$2" ]]; then
-        case "$1" in
-            git*) git clone "$1";;
-            ftp*) curl -s -U $(proxy_username):$(proxy_password) "$1" > $(basename "$1")
-                  tar xf $(basename "$1");;
-            http*)
-                  curl -L -s -U $(proxy_username):$(proxy_password) "$1" > $(basename "$1");
-                  tar xf $(basename "$1");;
-            *) echo "Dont know what do do with [$1]";;
-        esac
-    fi
-    pwd
-    cd "$2"
-}
-
-function proxy_username {
-    echo $(grep -oP "USER.*" ~/.proxy | cut -d '=' -f2)
-}
-function proxy_password {
-    echo $(grep -oP "PASSWORD.*" ~/.proxy | cut -d '=' -f2)
-}
