@@ -1,12 +1,12 @@
 # install pcalc
 ---
 
-  - name: Clone pcalc
+  - name: pcalc | Clone
     git: repo=git@github.com:serialdoom/pcalc.git dest=~/.repo/pcalc
   - name: apt-get for pcalc
     apt: pkg={{ item }} state=installed
     with_items: [bison, flex, make]
     sudo: yes
-  - name: Build pcalc
+  - name: Pcalc | Build
     shell: make chdir=~/.repo/pcalc/
   - file: src=~/.repo/pcalc/pcalc dest=~/bin/pcalc state=link
