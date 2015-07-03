@@ -16,7 +16,7 @@
     register: github_private_keys
   - name: Generate github keys
     shell: ssh-keygen -t rsa -b 8192 -f ~/.ssh/github -N ''
-    when: github_private_keys.stat.exists == "FALSE"
+    when: github_private_keys.stat.exists == false
   - name: Cat github pub key
     shell: cat ~/.ssh/github.pub
   - pause: prompt="Manually add the github key to github"
