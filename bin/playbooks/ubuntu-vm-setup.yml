@@ -40,10 +40,9 @@
     synchronize: src=/tmp/home/ dest=/home/mc42/
     when: home_git_folder.stat.exists == false
   - name: Create directories
-    file: path=/home/mc42/.backup state=directory
-    file: path=/home/mc42/.backup/vim state=directory
-    file: path=/home/mc42/tmp state=directory
-    file: path=/home/mc42/.repo state=directory
+    file: path=/home/mc42/{{ item }} state=directory
+    with_items: [.backup, .backup/vim, tmp, .repo]
+
 
 
   - name: Vim bundle
