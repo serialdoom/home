@@ -5,7 +5,7 @@
     tags: dotfiles
 
  ## new repo
-  - name: New dotfiles clonning
+  - name: dotfiles | Creating new checkout
     git: repo=git@github.com:serialdoom/home.git dest=/tmp/home accept_hostkey=yes
     when: home_git_folder.stat.exists == false
   - name: Rsync git to home
@@ -14,12 +14,12 @@
     tags: dotfiles
 
  ## update existing repo
-  - name: dotfiles updating
+  - name: dotfiles | Updating
     git: repo=git@github.com:serialdoom/home.git dest=~/
     when: home_git_folder.stat.exists == true
     tags: dotfiles
 
-  - name: Create directories
+  - name: dotfiles | Creating directories
     file: path=/home/mc42/{{ item }} state=directory
     with_items: [.backup, .backup/vim, tmp, .repo]
     tags: dotfiles
