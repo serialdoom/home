@@ -1,5 +1,4 @@
-#sudo apt-get install ansible -y && wget https://raw.githubusercontent.com/serialdoom/home/master/bin/playbooks/ubuntu-vm-setup.yml && ansible-playbook -v -i "localhost," -c local  ubuntu-vm-setup.yml --ask-sudo-pass
----
+# sudo apt-get install ansible unzip -y && wget https://github.com/serialdoom/home/archive/master.zip && unzip master.zip && ansible-playbook -v -i "localhost," -c local  $(find ./ -name ubuntu-vm-setup.yml) --ask-sudo-pass; rm -rf home-master* master.zip*---
 
 - name: Installing core stuff
   hosts: all
