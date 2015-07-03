@@ -70,5 +70,5 @@
     with_items: [bison, flex, make]
     sudo: yes
   - name: Build pcalc
-    shell: make -j chdir=~/.repo/pcalc/
+    shell: make chdir=~/.repo/pcalc/
   - file: src=~/.repo/pcalc/pcalc dest=~/bin/pcalc state=link
