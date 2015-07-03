@@ -38,7 +38,7 @@
     register: home_git_folder
   - name: Rsync git to home
     synchronize: src=/tmp/home/ dest=/home/mc42/
-    when: home_git_folder.stat.isdir == false
+    when: home_git_folder.stat.exists == false
   - name: Create directories
     file: path=/home/mc42/.backup state=directory
     file: path=/home/mc42/.backup/vim state=directory
