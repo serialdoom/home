@@ -33,7 +33,7 @@
 
 
   - name: Clone dotfiles
-    git: repo=https://github.com/serialdoom/home.git dest=/tmp/home
+    git: repo=git@github.com:serialdoom/home.git dest=/tmp/home
   - stat: path=/home/mc42/.git
     register: home_git_folder
   - name: Rsync git to home
