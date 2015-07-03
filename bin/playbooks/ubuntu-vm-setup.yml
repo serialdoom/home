@@ -1,4 +1,4 @@
-#ansible-playbook -v -i "localhost," -c local  ubuntu-vm-setup.yml
+#ansible-playbook -v -i "localhost," -c local  ubuntu-vm-setup.yml --ask-sudo-pass
 ---
 
 - name: Installing core stuff
