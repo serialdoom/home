@@ -1,0 +1,61 @@
+#ansible-playbook -v -i "localhost," -c local  ubuntu-vm-setup.yml
+---
+
+- name: Installing core stuff
+  hosts: all
+
+  tasks:
+
+  - name: install default packages
+    apt: pkg={{ item }} state=installed
+    with_items: [binutils, git, tmux]
+    sudo: yes
+
+
+  - stat: path=/home/mc42/.ssh/github
+    register: github_private_keys
+  - name: Generate github keys
+    shell: ssh-keygen -t rsa -b 8192 -f ~/.ssh/github -N ''
+    when: github_private_keys.stat.exists == "FALSE"
+  - name: Cat github pub key
+    shell: cat ~/.ssh/github.pub
+  - pause: prompt="Manually add the github key to github"
+  - template: src=~/bin/playbooks/templates/ssh_config dest=~/.ssh/config mode=0600
+
+
+  - name: Clone dotfiles
+    git: repo=https://github.com/serialdoom/home.git dest=/tmp/home
+  - name: Rsync git to home
+    synchronize: src=/tmp/home dest=/home/mc42/
+  - name: Create directories
+    file: path=/home/mc42/.backup state=directory
+    file: path=/home/mc42/tmp state=directory
+    file: path=/home/mc42/.repo state=directory
+
+
+  - name: Vim bundle
+    git: repo=https://github.com/gmarik/Vundle.vim.git dest=~/.vim/bundle/Vundle.vim
+  - name: Install vim plugins
+    shell: vim +PluginInstall +qall
+
+
+  - name: Clone ag
+    git: repo=git@github.com:ggreer/the_silver_searcher.git dest=~/.repo/the_silver_searcher accept_hostkey=yes
+  - name: apt-get for ag
+    apt: pkg={{ item }} state=installed
+    with_items: [pkg-config, liblzma-dev, make, gcc, automake, libpcre3, libpcre3-dev]
+    sudo: yes
+  - name: Compule ag
+    shell: ./build.sh chdir=~/.repo/the_silver_searcher/
+  - file: src=~/.repo/the_silver_searcher/ag dest=~/bin/ag state=link
+
+
+  - name: Clone pcalc
+    git: repo=git@github.com:serialdoom/pcalc.git dest=~/.repo/pcalc
+  - name: apt-get for pcalc
+    apt: pkg={{ item }} state=installed
+    with_items: [bison, flex, make]
+    sudo: yes
+  - name: Build pcalc
+    shell: make -j chdir=~/.repo/pcalc/
+  - file: src=~/.repo/pcalc/pcalc dest=~/bin/pcalc state=link
