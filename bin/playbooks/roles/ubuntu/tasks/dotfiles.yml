@@ -1,15 +1,15 @@
 ---
 
-  - stat: path=/home/mc42/.git
+  - stat: path=~/.git
     register: home_git_folder
     tags: dotfiles
 
  ## new repo
   - name: dotfiles | Creating new checkout
-    git: repo=git@github.com:serialdoom/home.git dest=/tmp/home accept_hostkey=yes
+    git: repo=git@github.com:serialdoom/home.git dest={{ home_checkout }} accept_hostkey=yes
     when: home_git_folder.stat.exists == false
   - name: Rsync git to home
-    synchronize: src=/tmp/home/ dest=/home/mc42/
+    synchronize: src={{ home_checkout }} dest=~/
     when: home_git_folder.stat.exists == false
     tags: dotfiles
 
@@ -20,7 +20,7 @@
     tags: dotfiles
 
   - name: dotfiles | Creating directories
-    file: path=/home/mc42/{{ item }} state=directory
+    file: path=~/{{ item }} state=directory
     with_items: [.backup, .backup/vim, tmp, .repo]
     tags: dotfiles
 

@@ -1,9 +1,9 @@
 # setup github keys
 ---
 
-  - stat: path=/home/mc42/.ssh/github
+  - stat: path=~/.ssh/github
     register: github_private_keys
-  - stat: path=/home/mc42/.ssh/config
+  - stat: path=~/.ssh/config
     register: ssh_config_file
   - name: Generate github keys
     shell: ssh-keygen -t rsa -b 8192 -f ~/.ssh/github -N ''
@@ -14,8 +14,5 @@
     when: github_private_keys.stat.exists == false
   - stat: path=~/bin/playbooks/templates/ssh_config
     register: ssh_config_template
-  - file: path=/home/mc42/bin/playbooks/templates state=directory
-  - get_url: url=https://raw.githubusercontent.com/serialdoom/home/master/bin/playbooks/templates/ssh_config dest=~/bin/playbooks/templates/ssh_config validate_certs=no
-    when: ssh_config_template.stat.exists == false
-  - template: src=~/bin/playbooks/templates/ssh_config dest=~/.ssh/config mode=0600
+  - template: src=ssh_config dest=~/.ssh/config mode=0600
     when: ssh_config_file.stat.exists == false
