@@ -1,0 +1,5 @@
+- include : setup_github.yml
+- include : dotfiles.yml
+- include : vim.yml
+- include : ag.yml
+- include : pcalc.yml
