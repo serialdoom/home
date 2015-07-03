@@ -12,62 +12,8 @@
     sudo: yes
 
 
-  - stat: path=/home/mc42/.ssh/github
-    register: github_private_keys
-  - stat: path=/home/mc42/.ssh/config
-    register: ssh_config_file
-  - name: Generate github keys
-    shell: ssh-keygen -t rsa -b 8192 -f ~/.ssh/github -N ''
-    when: github_private_keys.stat.exists == false
-  - name: Cat github pub key
-    shell: cat ~/.ssh/github.pub
-  - pause: prompt="Manually add the github key to github"
-    when: github_private_keys.stat.exists == false
-  - stat: path=~/bin/playbooks/templates/ssh_config
-    register: ssh_config_template
-  - file: path=/home/mc42/bin/playbooks/templates state=directory
-  - get_url: url=https://raw.githubusercontent.com/serialdoom/home/master/bin/playbooks/templates/ssh_config dest=~/bin/playbooks/templates/ssh_config validate_certs=no
-    when: ssh_config_template.stat.exists == false
-  - template: src=~/bin/playbooks/templates/ssh_config dest=~/.ssh/config mode=0600
-    when: ssh_config_file.stat.exists == false
-
-
-  - name: Clone dotfiles
-    git: repo=git@github.com:serialdoom/home.git dest=/tmp/home accept_hostkey=yes
-  - stat: path=/home/mc42/.git
-    register: home_git_folder
-  - name: Rsync git to home
-    synchronize: src=/tmp/home/ dest=/home/mc42/
-    when: home_git_folder.stat.exists == false
-  - name: Create directories
-    file: path=/home/mc42/{{ item }} state=directory
-    with_items: [.backup, .backup/vim, tmp, .repo]
-
-
-
-  - name: Vim bundle
-    git: repo=https://github.com/gmarik/Vundle.vim.git dest=~/.vim/bundle/Vundle.vim
-  - name: Install vim plugins
-    shell: vim +PluginInstall +qall
-
-
-  - name: Clone ag
-    git: repo=git@github.com:ggreer/the_silver_searcher.git dest=~/.repo/the_silver_searcher accept_hostkey=yes
-  - name: apt-get for ag
-    apt: pkg={{ item }} state=installed
-    with_items: [pkg-config, liblzma-dev, make, gcc, automake, libpcre3, libpcre3-dev]
-    sudo: yes
-  - name: Compule ag
-    shell: ./build.sh chdir=~/.repo/the_silver_searcher/
-  - file: src=~/.repo/the_silver_searcher/ag dest=~/bin/ag state=link
-
-
-  - name: Clone pcalc
-    git: repo=git@github.com:serialdoom/pcalc.git dest=~/.repo/pcalc
-  - name: apt-get for pcalc
-    apt: pkg={{ item }} state=installed
-    with_items: [bison, flex, make]
-    sudo: yes
-  - name: Build pcalc
-    shell: make chdir=~/.repo/pcalc/
-  - file: src=~/.repo/pcalc/pcalc dest=~/bin/pcalc state=link
+  - include : setup_github.yml
+  - include : dotfiles.yml
+  - include : vim.yml
+  - include : ag.yml
+  - include : pcalc.yml

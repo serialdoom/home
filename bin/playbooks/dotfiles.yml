@@ -1,0 +1,26 @@
+---
+
+  - stat: path=/home/mc42/.git
+    register: home_git_folder
+    tags: dotfiles
+
+ ## new repo
+  - name: New dotfiles clonning
+    git: repo=git@github.com:serialdoom/home.git dest=/tmp/home accept_hostkey=yes
+    when: home_git_folder.stat.exists == false
+  - name: Rsync git to home
+    synchronize: src=/tmp/home/ dest=/home/mc42/
+    when: home_git_folder.stat.exists == false
+    tags: dotfiles
+
+ ## update existing repo
+  - name: dotfiles updating
+    git: repo=git@github.com:serialdoom/home.git dest=~/
+    when: home_git_folder.stat.exists == true
+    tags: dotfiles
+
+  - name: Create directories
+    file: path=/home/mc42/{{ item }} state=directory
+    with_items: [.backup, .backup/vim, tmp, .repo]
+    tags: dotfiles
+

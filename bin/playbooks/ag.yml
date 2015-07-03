@@ -1,0 +1,12 @@
+# install ag 
+---
+
+- name: Clone ag
+  git: repo=git@github.com:ggreer/the_silver_searcher.git dest=~/.repo/the_silver_searcher accept_hostkey=yes
+- name: apt-get for ag
+  apt: pkg={{ item }} state=installed
+  with_items: [pkg-config, liblzma-dev, make, gcc, automake, libpcre3, libpcre3-dev]
+  sudo: yes
+- name: Compule ag
+  shell: ./build.sh chdir=~/.repo/the_silver_searcher/
+- file: src=~/.repo/the_silver_searcher/ag dest=~/bin/ag state=link
