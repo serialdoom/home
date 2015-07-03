@@ -1,4 +1,4 @@
-#ansible-playbook -v -i "localhost," -c local  ubuntu-vm-setup.yml --ask-sudo-pass
+#sudo apt-get install ansible -y && wget thttps://raw.githubusercontent.com/serialdoom/home/master/bin/playbooks/ubuntu-vm-setup.yml && ansible-playbook -v -i "localhost," -c local  ubuntu-vm-setup.yml --ask-sudo-pass
 ---
 
 - name: Installing core stuff
