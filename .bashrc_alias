@@ -1,0 +1,43 @@
+alias v='vim -X'
+alias le='less -R --ignore-case'
+alias ls='ls --color=auto'
+alias ll='ls --color=yes | le'
+alias lt="find ./ -maxdepth 1 -printf '%T+ %p\n' | sort -r"
+alias lt2="find ./ -maxdepth 2 -printf '%T+ %p\n' | sort -r"
+alias lt3="find ./ -maxdepth 3 -printf '%T+ %p\n' | sort -r"
+alias ..='c ../'
+alias ...='c ../../'
+alias ....='c ../../../'
+alias .....='c ../../../../'
+alias brc="$EDITOR ~/.bashrc && . ~/.bashrc"
+alias vrc="$EDITOR ~/.vimrc"
+alias vst='$EDITOR $(hg status -m | hg status -m | cut -d " " -f2 | tr -s "\n" " ")'
+alias vsto='$EDITOR -O $(hg status -m | hg status -m | cut -d " " -f2 | tr -s "\n" " ")'
+alias history_populate="history | tr -s ' ' | cut -d ' ' -f3 | sort | uniq -c | sort -rn  | head"
+alias l='ls -al'
+alias k='ls'
+alias vtest="cd ~/tmp/ && $EDITOR $RANDOM$RANDOM.c; cd -"
+alias grep='grep --color=auto'
+alias df='df -h'
+alias acl='ag'
+alias acc='ag --cc'
+alias accx='ag --cc --xml'
+alias acx='ag --xml'
+alias acm='ag --make'
+alias acs='ag --asm'
+alias ctmp='export CTMP=$(date +"%Y%m%d_%H%M%S") && cd ~/tmp/ && mkdir $CTMP && cd $CTMP'
+alias h='hg'
+alias tm='tmux -2'
+alias forig='find ./ -name "*\.orig"'
+alias fpm='find ./output -name "*pm"'
+alias felf='find ./output -name "*elf"'
+alias f='find'
+#alias cmake="make -s RELEASE=amber_d02_off_chip_apps -C src/"
+alias dl='hg cdiff | less -R'
+alias rl='readlink -f'
+alias tjen='tmux -2 attach-session -t jenkins'
+alias hcim='hg commit -m "branch merge"'
+alias ff='find . -type f -printf "%T@ %p\n" | sort -n | tail -5 | cut -f2- -d" "'
+alias fff='find . -type f -printf "%T@ %p\n" | sort -n | tail -10 | cut -f2- -d" "'
+alias mplayer-audio-sync='mplayer -lavdopts threads=4 00006.MTS'
+alias ansible-local='ansible-playbook -v -i "localhost," -c local'

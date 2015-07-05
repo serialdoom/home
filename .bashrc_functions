@@ -1,0 +1,156 @@
+
+function setup_xdbus {
+    local dbus="$HOME/.dbus/Xdbus"
+    if [[ ! -f "$dbus" ]]; then
+        touch $dbus
+        chmod 600 $dbus
+        env | grep DBUS_SESSION_BUS_ADDRESS > $dbus
+        echo 'export DBUS_SESSION_BUS_ADDRESS' >> $dbus
+    fi
+}
+
+function d {
+    #alias d='hg cdiff'
+    local directory="$1"
+    if [[ ! -e "$directory" ]]; then
+        directory="."
+    fi
+    hg id &> /dev/null
+    if [[ "$?" -eq 0 ]]; then
+        hg cdiff "$directory"
+        return
+    fi
+    p4 diff
+
+}
+
+function s {
+    #alias s='hg st'
+    local directory="$1"
+    if [[ ! -d "$directory" ]]; then
+        directory="."
+    fi
+    hg st "$directory"
+}
+
+function hgp {
+    HGP_BACKUP_DIR=$HOME/.backup/patch/
+    local name=""
+    if [[ $1 ]]; then
+        name="_$(echo $* | tr -s ' ' '_')_"
+    fi
+    local outfile="$(date +'%Y%m%d_%H%M%S')$name.patch"
+    hg diff . > $outfile
+    [[ -d $HGP_BACKUP_DIR ]] || mkdir -p $HGP_BACKUP_DIR
+    cp $outfile $HGP_BACKUP_DIR;
+    echo "cp $outfile $HGP_BACKUP_DIR;"
+}
+
+HISTORY_TMP=/home/$USER/.backup/.history-$(hostname).txt
+function save_last_command {
+    [ -f $HISTORY_TMP ] && history | tail -1 >> $HISTORY_TMP
+}
+
+function get_username_color {
+    local hhash=$(whoami| md5sum | grep "[0-9]" -o | paste -s -d+ - |bc)
+    local peos=$[ $hhash % 14 ]
+    #echo "username $(whoami) hash $hhash peos $peos"
+    case $peos in
+         0) echo "\[\e[00;37m\]\u\[\e[0m\]";; ## username_white
+         1) echo "\[\e[00;31m\]\u\[\e[0m\]";; ## username_red
+         2) echo "\[\e[00;32m\]\u\[\e[0m\]";; ## username_green
+         3) echo "\[\e[00;33m\]\u\[\e[0m\]";; ## username_yellow
+         4) echo "\[\e[00;31m\]\u\[\e[0m\]";; ## username_red
+         #4) echo "\[\e[00;34m\]\u\[\e[0m\]";; ## username_blue # not readable
+         5) echo "\[\e[00;35m\]\u\[\e[0m\]";; ## username_purple
+         6) echo "\[\e[00;35m\]\u\[\e[0m\]";; ## username_cyan
+         ## bold colors
+         7) echo "\[\e[01;37m\]\u\[\e[0m\]";; ## username_white
+         8) echo "\[\e[01;31m\]\u\[\e[0m\]";; ## username_red
+         9) echo "\[\e[01;32m\]\u\[\e[0m\]";; ## username_green
+        10) echo "\[\e[01;33m\]\u\[\e[0m\]";; ## username_yellow
+        11) echo "\[\e[01;31m\]\u\[\e[0m\]";; ## username_red
+        #11) echo "\[\e[01;34m\]\u\[\e[0m\]";; ## username_blue # not readable
+        12) echo "\[\e[01;35m\]\u\[\e[0m\]";; ## username_purple
+        13) echo "\[\e[01;35m\]\u\[\e[0m\]";; ## username_cyan
+    esac
+}
+function get_hostname_color {
+    local hhash=$PROMPT_HOSTNAME_COLOR_HASH
+    if [[ -z $hhash ]]; then
+        hhash=$(hostname | md5sum | grep "[0-9]" -o | paste -s -d+ - |bc)
+        export PROMPT_HOSTNAME_COLOR_HASH=$hhash
+    fi
+    local peos=$[ $hhash % 14 ]
+    case $peos in
+         0) echo "\[\e[00;37m\]\h\[\e[0m\]";; ## hostname_white
+         1) echo "\[\e[00;31m\]\h\[\e[0m\]";; ## hostname_red
+         2) echo "\[\e[00;32m\]\h\[\e[0m\]";; ## hostname_green
+         3) echo "\[\e[00;33m\]\h\[\e[0m\]";; ## hostname_yellow
+         4) echo "\[\e[00;31m\]\h\[\e[0m\]";; ## hostname_red
+         #4) echo "\[\e[00;34m\]\h\[\e[0m\]";; ## hostname_blue # not readable
+         5) echo "\[\e[00;35m\]\h\[\e[0m\]";; ## hostname_purple
+         6) echo "\[\e[00;35m\]\h\[\e[0m\]";; ## hostname_cyan
+         ## bold colors
+         7) echo "\[\e[01;37m\]\h\[\e[0m\]";; ## hostname_white
+         8) echo "\[\e[01;31m\]\h\[\e[0m\]";; ## hostname_red
+         9) echo "\[\e[01;32m\]\h\[\e[0m\]";; ## hostname_green
+        10) echo "\[\e[01;33m\]\h\[\e[0m\]";; ## hostname_yellow
+        11) echo "\[\e[01;31m\]\h\[\e[0m\]";; ## hostname_red
+        #11) echo "\[\e[01;34m\]\h\[\e[0m\]";; ## hostname_blue # not readable
+        12) echo "\[\e[01;35m\]\h\[\e[0m\]";; ## hostname_purple
+        13) echo "\[\e[01;35m\]\h\[\e[0m\]";; ## hostname_cyan
+    esac
+}
+
+function set_prompt {
+    local PROMPT_DATE="\[\033[38;5;10m\]\d\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;10m\]\t\[$(tput sgr0)\]"
+    local PROMPT_USER_NAME="$(get_username_color)"
+    local PROMPT_AT="\[\e[00;37m\]@\[\e[0m\]"
+    local PROMPT_HOST="$(get_hostname_color)"
+    local PROMPT_PATH="\[\e[00;37m\]\w\[\e[0m\]"
+    local EXIT_STATUS_GOOD="\[\e[00;32m\]#\[\e[0m\]"
+    local EXIT_STATUS_BAD="\[\e[00;31m\]#\[\e[0m\]"
+    local prompt_text="$PROMPT_DATE\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
+    if [[ $1 -eq 0 ]]; then
+        export PS1="$prompt_text\n$EXIT_STATUS_GOOD"
+    else
+        export PS1="$prompt_text\n$EXIT_STATUS_BAD"
+    fi
+}
+
+function prompt {
+    set_prompt $?
+    save_last_command
+}
+
+function c () {
+    [ ! $1 ] && cd ~ && ls && return 0;
+    cd "$1" && ls
+}
+
+function backup {
+    local name="$(date +'%Y%m%d_%H%M%S')"
+    local delete=0;
+    local source="";
+    if [[ "$@" =~ " -d" ]]; then
+        source=$(echo $@ | perl -p -i -e 's/ \-d//')
+        delete=1;
+    elif [[ "$@" =~ "-d " ]]; then
+        source=$(echo $@ | perl -p -i -e 's/\-d/ /')
+        delete=1;
+    else
+        source="$1";
+    fi
+    source=$(echo $source | perl -p -i -e 's/^\s*//' | perl -p -i -e 's/\s*$//');
+
+    source=$(echo $source | perl -p -i -e 's!/$!!')
+    if [[ $delete -eq 1 ]]; then
+        echo "mv \"$source\" \"$source.$name\"";
+        mv "$source" "$source.$name";
+    else
+        echo "cp -r \"$source\" \"$source.$name\"";
+        cp -r "$source" "$source.$name";
+    fi
+}
+
