@@ -24,3 +24,4 @@ export LESSOPEN='|~/.lessfilter %s'
 export PROMPT_COMMAND=prompt
 
 [ -d $TMPDIR ] || mkdir $TMPDIR; chmod 700 $TMPDIR
+[ -d ~/.backup ] && chmod 700 ~/.backup
