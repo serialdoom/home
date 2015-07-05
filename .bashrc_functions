@@ -52,6 +52,10 @@ function save_last_command {
 }
 
 function get_username_color {
+    if [[ "$(whoami)" == "root" ]]; then
+        echo "\[\e[00;31m\]<><><> ROOT <><><>\[\e[0m\]"
+        return
+    fi
     local hhash=$(whoami| md5sum | grep "[0-9]" -o | paste -s -d+ - |bc)
     local peos=$[ $hhash % 14 ]
     #echo "username $(whoami) hash $hhash peos $peos"
