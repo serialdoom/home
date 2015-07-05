@@ -46,9 +46,9 @@ function hgp {
     echo "cp $outfile $HGP_BACKUP_DIR;"
 }
 
-HISTORY_TMP=/home/$USER/.backup/.history-$(hostname).txt
+HISTORY_TMP=/home/$USER/.backup/history.txt
 function save_last_command {
-    [ -f $HISTORY_TMP ] && history | tail -1 >> $HISTORY_TMP
+    echo "$(date) $(hostname) [$(pwd)] $(history | tail -1)" >> $HISTORY_TMP
 }
 
 function get_username_color {
