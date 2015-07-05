@@ -95,10 +95,22 @@ fi
 
 [[ -x /home/$USER/.autojump/etc/profile.d/autojump.sh ]] && source /home/$USER/.autojump/etc/profile.d/autojump.sh
 [[ -x /home/$USER/bin/bash/autocomplete.sh ]] && source /home/$USER/bin/bash/autocomplete.sh 
+[[ "$(ps uxa | grep [a]wesome | wc -l)" -gt 0 ]] && setup_xdbus
 
 #############################################
 #### FUNCTIONS ##############################
 #############################################
+
+function setup_xdbus {
+    local dbus="~/.dbus/xdbus"
+    if [[ -f $dbus ]]; then
+        return
+    fi
+    touch $dbus
+    chmod 600 $dbus
+    env | grep dbus_session_bus_address > $dbus
+    echo 'export dbus_session_bus_address' >> $dbus
+}
 
 function d {
     #alias d='hg cdiff'
