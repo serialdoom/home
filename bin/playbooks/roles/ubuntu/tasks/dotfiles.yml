@@ -9,7 +9,7 @@
     git: repo=git@github.com:serialdoom/home.git dest={{ home_checkout }} accept_hostkey=yes
     when: home_git_folder.stat.exists == false
   - name: Rsync git to home
-    synchronize: src={{ home_checkout }} dest=~/
+    synchronize: src={{ home_checkout }} dest=~/ rsync_opts="-avl"
     when: home_git_folder.stat.exists == false
     tags: dotfiles
 
