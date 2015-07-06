@@ -1,0 +1,7 @@
+---
+
+# set local if you dont have sudo access.
+local: true
+repo_dir: ~/.repo/
+#   --with-features=TYPE    tiny, small, normal, big or huge (default: normal)
+vim_features: huge

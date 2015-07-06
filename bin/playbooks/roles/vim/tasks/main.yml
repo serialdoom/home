@@ -1,0 +1,6 @@
+---
+  - include : apt_vim.yml
+    when: not local
+  - include : git_vim.yml
+    when: local
+

@@ -1,0 +1,12 @@
+---
+  - name: Fetching vim repo
+    git: repo=git@github.com:vim/vim.git dest={{ repo_dir }}/vim
+
+  - name: configure
+    shell: ./configure --with-features {{ vim_features }} chdir={{ repo_dir }}/vim
+
+  - name: make
+    shell: make chdir={{ repo_dir }}/vim
+
+  - name: link
+    file: src={{ repo_dir }}/vim/src/vim dest=~/bin/vim state=link
