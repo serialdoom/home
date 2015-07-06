@@ -1,0 +1,26 @@
+---
+
+  - stat: path=~/.git
+    register: home_git_folder
+    tags: dotfiles
+
+ ## new repo
+  - name: dotfiles | Creating new checkout
+    git: repo=git@github.com:serialdoom/home.git dest={{ home_checkout }} accept_hostkey=yes
+    when: home_git_folder.stat.exists == false
+  - name: Rsync git to home
+    synchronize: src={{ home_checkout }} dest=~/
+    when: home_git_folder.stat.exists == false
+    tags: dotfiles
+
+ ## update existing repo
+  - name: dotfiles | Updating
+    git: repo=git@github.com:serialdoom/home.git dest=~/
+    when: home_git_folder.stat.exists == true
+    tags: dotfiles
+
+  - name: dotfiles | Creating directories
+    file: path=~/{{ item }} state=directory
+    with_items: [.backup, .backup/vim, tmp, .repo]
+    tags: dotfiles
+

@@ -1,0 +1,15 @@
+# install vim and setup all plugins
+---
+
+- name: Vim | apt-get
+  apt: pkg={{ item }} state=installed
+  with_items: [vim]
+  sudo: yes
+  tags: vim
+
+- name: Vim | cloning Vundle
+  git: repo=git@github.com:gmarik/Vundle.vim.git dest=~/.vim/bundle/Vundle.vim
+  tags: vim
+- name: Vim | installing plugins
+  shell: vim +PluginInstall +qall
+  tags: vim

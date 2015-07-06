@@ -1,0 +1,18 @@
+# sudo apt-get install ansible unzip -y && wget https://github.com/serialdoom/home/archive/master.zip && unzip master.zip && ansible-playbook -v -i "localhost," -c local  $(find ./ -name ubuntu-vm-setup.yml) --ask-sudo-pass; rm -rf home-master* master.zip*---
+
+- name: Installing core stuff
+  hosts: all
+
+  tasks:
+
+  - name: install default packages
+    apt: pkg={{ item }} state=installed update_cache=yes cache_valid_time=3600
+    with_items: [binutils, git, tmux]
+    sudo: yes
+
+
+  - include : setup_github.yml
+  - include : dotfiles.yml
+  - include : vim.yml
+  - include : ag.yml
+  - include : pcalc.yml

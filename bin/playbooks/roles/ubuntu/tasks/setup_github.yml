@@ -1,0 +1,18 @@
+# setup github keys
+---
+
+  - stat: path=~/.ssh/github
+    register: github_private_keys
+  - stat: path=~/.ssh/config
+    register: ssh_config_file
+  - name: Generate github keys
+    shell: ssh-keygen -t rsa -b 8192 -f ~/.ssh/github -N ''
+    when: github_private_keys.stat.exists == false
+  - name: Cat github pub key
+    shell: cat ~/.ssh/github.pub
+  - pause: prompt="Manually add the github key to github"
+    when: github_private_keys.stat.exists == false
+  - stat: path=~/bin/playbooks/templates/ssh_config
+    register: ssh_config_template
+  - template: src=ssh_config dest=~/.ssh/config mode=0600
+    when: ssh_config_file.stat.exists == false
