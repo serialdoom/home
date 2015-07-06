@@ -10,7 +10,7 @@
     when: home_git_folder.stat.exists == false
   - name: Rsync git to home
     # synchronize: src={{ home_checkout }} dest=~/ rsync_opts="-avl" ## rsync_opts is new in 1.6.
-    shell: rsync -avl {{ home_checkout }} ~/
+    shell: rsync -avl {{ home_checkout }}/ ~/
     when: home_git_folder.stat.exists == false
     tags: dotfiles
 
