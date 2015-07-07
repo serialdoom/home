@@ -2,4 +2,5 @@ before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq ansible git
 script:
-  - ping www.google.com -c 4
+  - git clone https://github.com/serialdoom/home.git /tmp/home.$(date +'%s')
+  - ansible-playbook -v -i "localhost," -c local $_/bin/playbooks/coding.yml
