@@ -1,2 +1,2 @@
 script:
-  - bundle exec ping www.google.com -c 4
+  - ping www.google.com -c 4
