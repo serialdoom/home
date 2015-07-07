@@ -1,0 +1,2 @@
+script:
+  - bundle exec ping www.google.com
