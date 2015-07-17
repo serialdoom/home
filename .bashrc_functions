@@ -15,6 +15,11 @@ function d {
     if [[ ! -e "$directory" ]]; then
         directory="."
     fi
+    git rev-parse --show-toplevel &> /dev/null
+    if [[ "$?" -eq 0 ]]; then
+        git diff "$directory"
+        return
+    fi
     hg id &> /dev/null
     if [[ "$?" -eq 0 ]]; then
         hg cdiff "$directory"
@@ -29,6 +34,11 @@ function s {
     local directory="$1"
     if [[ ! -d "$directory" ]]; then
         directory="."
+    fi
+    git rev-parse --show-toplevel &> /dev/null
+    if [[ "$?" -eq 0 ]]; then
+        git status "$directory"
+        return
     fi
     hg st "$directory"
 }
