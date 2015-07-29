@@ -6,3 +6,7 @@ Travis CI status: [![Build Status](https://travis-ci.org/serialdoom/home.svg?bra
 ```
 sudo apt-get install awesome xinit firefox xchat -y && echo "awesome" >> ~/.xinitrc
 ```
+
+
+# todo
+[] gist the public key on setup and provide a short url (when copy pasting is difficult)
