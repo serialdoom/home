@@ -1,3 +1,6 @@
+
+
+- include : apt.yml
 - include : setup_github.yml
 - include : dotfiles.yml
 - include : vim.yml
