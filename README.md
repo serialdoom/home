@@ -9,4 +9,4 @@ sudo apt-get install awesome xinit firefox xchat -y && echo "awesome" >> ~/.xini
 
 
 # todo
-[] gist the public key on setup and provide a short url (when copy pasting is difficult)
+ - [ ] gist the public key on setup and provide a short url (when copy pasting is difficult)
