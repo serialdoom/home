@@ -5,8 +5,11 @@ FILE=~/.fortunes
 
 
 if [[ ! -f $FILE ]]; then
-    echo "Error, fortune file [$FILE] not found";
-    exit 1;
+    which fortune &> /dev/null
+    if [[ "$?" -eq 0 ]]; then
+        fortune -o
+    fi
+    exit 0
 fi
 
 

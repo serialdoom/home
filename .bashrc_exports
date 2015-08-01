@@ -21,7 +21,7 @@ export LS_COLORS
 export LESS='-R'
 export LESSOPEN='|~/.lessfilter %s'
 
-export PROMPT_COMMAND=prompt
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} prompt"
 
 [ -d $TMPDIR ] || mkdir $TMPDIR; chmod 700 $TMPDIR
 [ -d ~/.backup ] && chmod 700 ~/.backup

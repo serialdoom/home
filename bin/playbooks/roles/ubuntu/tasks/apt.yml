@@ -1,0 +1,14 @@
+
+  - name: apt-get stuff
+    apt: name={{ item }}
+    with_items:
+      - xterm
+      - awesome
+      - xinit
+      - firefox
+      - flashplugin-installer
+      - gcc
+      - make
+      - gcc
+      - make
+      - xchat

@@ -40,7 +40,7 @@ end
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "x-terminal-emulator"
+terminal = "xterm -bg black -fg white"
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -372,7 +372,7 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.add_signal("focus", function(c) c.border_color = "#66FF33" end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
@@ -404,3 +404,5 @@ run_once("nm-applet")
 run_once("firefox")
 run_once("gnome-sound-applet")
 run_once("SpiderOakONE")
+run_once("pkill VBoxClient")
+run_once("VBoxClient-all")
