@@ -403,4 +403,4 @@ end
 run_once("nm-applet")
 run_once("firefox")
 run_once("gnome-sound-applet")
-run_once("SpiderOak")
+run_once("SpiderOakONE")
