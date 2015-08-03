@@ -14,4 +14,5 @@ if [[ $- == *i* ]]; then
 fi
 
 [[ -f $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+[[ -f /usr/share/autojump/autojump.sh ]] && source /usr/share/autojump/autojump.sh
 [[ "$(ps uxa | grep [a]wesome | wc -l)" -gt 0 ]] && setup_xdbus
