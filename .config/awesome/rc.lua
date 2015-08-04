@@ -403,7 +403,7 @@ function run_once(cmd)
 end
 
 run_once("nm-applet")
-run_once("chromium")
+run_once("chromium-browser")
 run_once("gnome-sound-applet")
 run_once("SpiderOakONE")
 run_once("pkill VBoxClient")
