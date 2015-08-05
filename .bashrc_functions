@@ -117,7 +117,33 @@ function get_hostname_color {
     esac
 }
 
+function update_git_prompt {
+    local git_root="$(basename `git rev-parse --show-toplevel`)"
+    if [[ "$?" -ne "0" ]]; then
+        GIT_PROMPT=""
+        return
+    fi
+
+    GIT_ROOT=$git_root
+    local current_branch="$(git branch | grep "^*" | sed 's/^\* //')"
+    CURRENT_BRANCH="\[\033[38;5;160m\][$current_branch]\[$(tput sgr0)\]"
+
+
+    FILE_STATUS=""
+    local untracked=$(git ls-files --others --exclude-standard | wc -l)
+    if [[ "$untracked" -ne "0" ]]; then
+        FILE_STATUS="\[\033[38;5;11m\]?\[$(tput sgr0)\]"
+    fi
+    local changed="$(git status | grep "modified:" | wc -l)"
+    if [[ "$changed" -ne "0" ]]; then
+        FILE_STATUS="$FILE_STATUS\[\033[38;5;208m\]++\[$(tput sgr0)\]"
+    fi
+
+    GIT_PROMPT="$FILE_STATUS  $CURRENT_BRANCH $GIT_ROOT"
+}
+
 function set_prompt {
+    update_git_prompt
     local PROMPT_DATE="\[\033[38;5;10m\]\d\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;10m\]\t\[$(tput sgr0)\]"
     local PROMPT_USER_NAME="$(get_username_color)"
     local PROMPT_AT="\[\e[00;37m\]@\[\e[0m\]"
@@ -125,7 +151,7 @@ function set_prompt {
     local PROMPT_PATH="\[\e[00;37m\]\w\[\e[0m\]"
     local EXIT_STATUS_GOOD="\[\e[00;32m\]#\[\e[0m\]"
     local EXIT_STATUS_BAD="\[\e[00;31m\]#\[\e[0m\]"
-    local prompt_text="$PROMPT_DATE\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
+    local prompt_text="$PROMPT_DATE  $GIT_PROMPT\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
     if [[ $1 -eq 0 ]]; then
         export PS1="$prompt_text\n$EXIT_STATUS_GOOD"
     else
