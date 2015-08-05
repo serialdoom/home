@@ -177,3 +177,13 @@ function mkrole {
         [[ -f "$f" ]] || echo "---" > "$f"
     done
 }
+
+function hist {
+    if [[ -f ~/.backup/history.txt ]]; then
+        uniq ~/.backup/history.txt > ~/.backup/history.txt.back
+        mv ~/.backup/history.txt.back ~/.backup/history.txt
+        grep "$1" ~/.backup/history.txt
+    else
+        history | grep "$1"
+    fi
+}
