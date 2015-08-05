@@ -139,7 +139,7 @@ function update_git_prompt {
         FILE_STATUS="$FILE_STATUS\[\033[38;5;208m\]++\[$(tput sgr0)\]"
     fi
 
-    local outgoing="$(git log ..@{u} | wc -l)"
+    local outgoing="$(git log --branches --not --remotes=origin | wc -l)"
     if [[ "$outgoing"  -ne "0" ]]; then
         git_changes=">>>>"
     fi
