@@ -139,7 +139,12 @@ function update_git_prompt {
         FILE_STATUS="$FILE_STATUS\[\033[38;5;208m\]++\[$(tput sgr0)\]"
     fi
 
-    GIT_PROMPT="$FILE_STATUS  $CURRENT_BRANCH $GIT_ROOT"
+    local outgoing="$(git log ..@{u} | wc -l)"
+    if [[ "$outgoing"  -ne "0" ]]; then
+        git_changes=">>>>"
+    fi
+
+    GIT_PROMPT="$FILE_STATUS  $git_changes $CURRENT_BRANCH $GIT_ROOT"
 }
 
 function set_prompt {
