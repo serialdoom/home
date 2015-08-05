@@ -1,20 +1,31 @@
-[ -f ~/.bashrc_exports ] && source ~/.bashrc_exports
-[ -f ~/.bashrc_functions ] && source ~/.bashrc_functions
-[ -f ~/.bashrc_alias ] && source ~/.bashrc_alias
-[ -f ~/.bashrc_aws ] && source ~/.bashrc_aws
+function source_file {
+    if [[ -f $i ]]; then
+        if [ -f /tmp/verbose ]; then
+            echo "sourcing $i"
+            source $i
+        else
+            source $i &> /dev/null
+        fi
+    fi
+}
 
-if [[ -d $HOME/bin/autocomplete.d ]]; then
-    for f in $HOME/bin/autocomplete.d/*; do
-        source $f
-    done
-fi
+SOURCE_LIST=(
+    ~/.bashrc_alias
+    ~/.bashrc_functions
+    ~/.bashrc_exports
+    ~/.bashrc_aws
+    ~/bin/autocomplete.d/*
+    /usr/share/autojump/autojump.sh
+    ~/.autojump/etc/profile.d/autojump.sh 
+    /usr/local/src/ansible/hacking/env-setup 
+)
+
+for i in "${SOURCE_LIST[@]}"; do
+    source_file $i
+done
 
 if [[ $- == *i* ]]; then
     [ -x ~/bin/fortune.sh ] && ~/bin/fortune.sh
 fi
 
-[[ -f $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
-[[ -f /usr/share/autojump/autojump.sh ]] && source /usr/share/autojump/autojump.sh
 [[ "$(ps uxa | grep [a]wesome | wc -l)" -gt 0 ]] && setup_xdbus
-
-[[ -f /usr/local/src/ansible/hacking/env-setup ]] && source /usr/local/src/ansible/hacking/env-setup &> /dev/null
