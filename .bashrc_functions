@@ -118,13 +118,13 @@ function get_hostname_color {
 }
 
 function update_git_prompt {
-    local git_root="$(basename `git rev-parse --show-toplevel`)"
+    git rev-parse --git-dir &> /dev/null
     if [[ "$?" -ne "0" ]]; then
         GIT_PROMPT=""
         return
     fi
 
-    GIT_ROOT=$git_root
+    local git_root="$(basename `git rev-parse --show-toplevel`)"
     local current_branch="$(git branch | grep "^*" | sed 's/^\* //')"
     CURRENT_BRANCH="\[\033[38;5;160m\][$current_branch]\[$(tput sgr0)\]"
 
@@ -145,7 +145,7 @@ function update_git_prompt {
         git_changes=">>>>"
     fi
 
-    GIT_PROMPT="$FILE_STATUS  $git_changes $CURRENT_BRANCH $GIT_ROOT"
+    GIT_PROMPT="$FILE_STATUS  $git_changes $CURRENT_BRANCH $git_root"
 }
 
 function set_prompt {
@@ -227,5 +227,5 @@ function tm {
     tmux new-window -t default
     tmux new-window -t default
     tmux kill-window -t default:0
-    tmux attach-session -t default:1
+    tmux -2 attach-session -t default:1
 }
