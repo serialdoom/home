@@ -140,6 +140,7 @@ function update_git_prompt {
     fi
 
     local outgoing="$(git log --branches --not --remotes=origin | wc -l)"
+    local git_changes=""
     if [[ "$outgoing"  -ne "0" ]]; then
         git_changes=">>>>"
     fi
