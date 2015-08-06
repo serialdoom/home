@@ -219,3 +219,13 @@ function hist {
         history | grep "$1"
     fi
 }
+
+function tm {
+    tmux new-session -s default -d
+    tmux new-window -t default
+    tmux new-window -t default
+    tmux new-window -t default
+    tmux new-window -t default
+    tmux kill-window -t default:0
+    tmux attach-session -t default:1
+}
