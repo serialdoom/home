@@ -8,7 +8,8 @@ if [[ ! -f $TMUX_COMPLETE ]]; then
         [[ ! -f /home/mc42/bin/bash/man_tmux.txt  ]] && return
     fi
 
-    cat $TMUX_COMPLETE | strings | grep "[[:alpha:]]+-[[:alpha:]]+" -oP | sort -u > $TMUX_COMPLETE
+    cat $TMUX_COMPLETE | strings | grep "[[:alpha:]]+-[[:alpha:]]+" -oP | sort -u > ${TMUX_COMPLETE}.sorted
+    mv $TMUX_COMPLETE.sorted $TMUX_COMPLETE
 fi
 
 function _tmux_complete_()
