@@ -13,3 +13,6 @@
 - name: Vim | installing plugins
   shell: vim +PluginInstall +qall
   tags: vim
+
+- name: create session dir
+  file: path=~/.vim_sessions/ state=directory mode=0700
