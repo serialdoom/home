@@ -6,3 +6,12 @@
 - include : vim.yml
 - include : ag.yml
 - include : pcalc.yml
+
+
+- name: checking if this is ubuntu server installation
+  shell: dpkg -l ubuntu-desktop 
+  register: server
+
+- include: setup_server.yml
+  when: server.rc == 1
+
