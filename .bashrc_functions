@@ -229,3 +229,26 @@ function tm {
     tmux kill-window -t default:0
     tmux -2 attach-session -t default:1
 }
+
+function vm {
+    case "$1" in
+        new)
+            local name=test.$(date +'%m-%d-%H-%M')
+            vboxmanage clonevm "ubuntu-server" --register --name $name
+            vboxmanage startvm $name
+            sleep 5
+            local ip=""
+            while [[ -z "$ip" ]]; do
+                ip="$(vboxmanage guestproperty enumerate $name | grep "/VirtualBox/GuestInfo/Net/0/V4/IP" | cut -d ':' -f3 | cut -d ',' -f1)"
+            done
+            ssh -oStrictHostKeyChecking=no $ip "sudo hostnamectl set-hostname $name"
+            ;;
+        list)
+            local running="$(vboxmanage list runningvms | grep -o '{.*}' | tr -s '\n' '|')"
+            vboxmanage list vms | GREP_COLOR='1;32' grep -E "$running"
+            ;;
+        del)
+            vboxmanage controlvm "$2" poweroff;
+            ;;
+    esac
+}
