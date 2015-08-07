@@ -13,3 +13,4 @@
       - gcc
       - make
       - xchat
+      - bc
