@@ -17,12 +17,20 @@ SOURCE_LIST=(
     ~/bin/autocomplete.d/*
     /usr/share/autojump/autojump.sh
     ~/.autojump/etc/profile.d/autojump.sh 
+)
+
+SOURCE_LIST_NON_ROOT=(
     /usr/local/src/ansible/hacking/env-setup 
 )
 
 for i in "${SOURCE_LIST[@]}"; do
     source_file $i
 done
+if [[ $UID -ne 0 ]]; then
+    for i in "${SOURCE_LIST_NON_ROOT[@]}"; do
+        source_file $i
+    done
+fi
 
 if [[ $- == *i* ]]; then
     [ -x ~/bin/fortune.sh ] && ~/bin/fortune.sh
