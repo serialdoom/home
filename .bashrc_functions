@@ -230,6 +230,10 @@ function tm {
     tmux -2 attach-session -t default:1
 }
 
+function vm_get_ip {
+    vboxmanage guestproperty enumerate $1 2>&1 | grep "/VirtualBox/GuestInfo/Net/0/V4/IP" | perl -p -e 's/.*value: ([0-9\.]*).*/$1/'
+}
+
 function vm {
     case "$1" in
         new)
@@ -242,7 +246,7 @@ function vm {
             sleep 5
             local ip=""
             while [[ -z "$ip" ]]; do
-                ip="$(vboxmanage guestproperty enumerate $name | grep "/VirtualBox/GuestInfo/Net/0/V4/IP" | cut -d ':' -f3 | cut -d ',' -f1)"
+                ip="$(vm_get_ip $name)"
             done
             ssh -oStrictHostKeyChecking=no $ip "sudo hostnamectl set-hostname $name"
             ssh -oStrictHostKeyChecking=no $ip "sudo perl -p -i -e 's/minimal-server-template/$name/ /etc/hosts"
@@ -257,7 +261,11 @@ function vm {
                 if [[ $? -ne 0 ]]; then
                     ram="nada"
                 fi
-                echo "$f $ram" | GREP_COLOR='1;32' grep -E "$running"
+                local ip=$(vm_get_ip $name)
+                if [[ $? -ne 0 ]]; then
+                    ip=""
+                fi
+                echo "$f $ram $ip" | GREP_COLOR='1;32' grep -E "$running"
             done
             ;;
         del)
@@ -281,6 +289,15 @@ function vm {
                 vboxmanage modifyvm "$vm_name" --memory $new_ram
             fi
             vboxmanage startvm "$vm_name" --type headless
+            local ip=""
+            while [[ -z "$ip" ]]; do
+                ip=$(vm_get_ip $vm_name)
+            done
+            
+            # update ip in ssh/config
+            local old_ip=$(grep "$vm_name" -A1 ~/.ssh/config | tail -1 | perl -p -e 's/.*Hostname\s+//')
+            echo "new ip is $ip - old ip [$old_ip]"
+            perl -p -i -e "s/$old_ip/$ip/" ~/.ssh/config
             ;;
     esac
 }
