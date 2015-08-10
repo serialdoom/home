@@ -340,6 +340,8 @@ awful.rules.rules = {
     { rule = { class = "gimp" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
+    { rule = { class = "Google-chrome" },
+        properties = { tag = tags[1][2] } },
     { rule = { class = "Chromium-browser" },
         properties = { tag = tags[1][2] } },
     { rule = { class = "Firefox" },
@@ -403,7 +405,7 @@ function run_once(cmd)
 end
 
 run_once("nm-applet")
-run_once("chromium-browser")
+run_once("google-chrome")
 run_once("gnome-sound-applet")
 run_once("SpiderOakONE")
 run_once("pkill VBoxClient")
