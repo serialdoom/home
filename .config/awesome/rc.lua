@@ -227,6 +227,11 @@ globalkeys = awful.util.table.join(
             end
         end),
 
+    -- multimedia stuff
+    awful.key({ }, "XF86AudioRaiseVolume",    function () awful.util.spawn("amixer set Master 2+") end),
+    awful.key({ }, "XF86AudioLowerVolume",    function () awful.util.spawn("amixer set Master 2-") end),
+    awful.key({ }, "XF86AudioMute",           function () awful.util.spawn("amixer set Master 0") end),
+
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
