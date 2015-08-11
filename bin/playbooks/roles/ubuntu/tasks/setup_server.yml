@@ -12,3 +12,5 @@
   - name: add user to audio group
     user: name={{ ansible_env['USER'] }} append=yes groups=audio
 
+  - name: default to tty1 on boot
+    lineinfile: line="chvt 1" insertbefore="exit 0" dest=/etc/rc.local
