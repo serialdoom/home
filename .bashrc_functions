@@ -284,10 +284,6 @@ function vm {
                 ip=$(vm_get_ip $vm_name)
             done
             
-            # update ip in ssh/config
-            local old_ip=$(grep "$vm_name" -A1 ~/.ssh/config | tail -1 | perl -p -e 's/.*Hostname\s+//')
-            echo "new ip is $ip - old ip [$old_ip]"
-            perl -p -i -e "s/$old_ip/$ip/" ~/.ssh/config
             ;;
     esac
 }
