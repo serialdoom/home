@@ -238,7 +238,7 @@ function vm {
     case "$1" in
         up|update)
             cd ~/di/ansible
-            ansible-playbook new-virtualbox.yml -i "momi02, " --tags=update;;
+            ansible-playbook new-virtualbox.yml -i "momi02, " --tags=devel;;
         new)
             cd ~/di/ansible
             ansible-playbook new-virtualbox.yml -i "momi02, ";;
