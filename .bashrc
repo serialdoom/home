@@ -17,6 +17,7 @@ SOURCE_LIST=(
     ~/bin/autocomplete.d/*
     /usr/share/autojump/autojump.sh
     ~/.autojump/etc/profile.d/autojump.sh 
+    ~/.repo/pyvmomi-scripts/.vsphere_autocomplete.sh
 )
 
 SOURCE_LIST_NON_ROOT=(
