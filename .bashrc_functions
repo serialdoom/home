@@ -238,10 +238,10 @@ function vm {
     case "$1" in
         up|update)
             cd ~/di/ansible
-            ansible-playbook new-virtualbox.yml -i "momi02, " --tags=devel;;
+            ansible-playbook new-virtualbox.yml -i hosts --tags=devel;;
         new)
             cd ~/di/ansible
-            ansible-playbook new-virtualbox.yml -i "momi02, ";;
+            ansible-playbook new-virtualbox.yml -i hosts;;
         ls|list)
             local running="$(vboxmanage list runningvms | grep -o '{.*}' | tr -s '\n' '|')"
             IFS=$(echo -en "\n\b")
