@@ -1,7 +1,7 @@
 
 export EDITOR="vim -X"
 
-export PATH="~/bin:$PATH:/usr/local/bin:/sbin:~/.repo/pyvmomi-scripts"
+export PATH="~/bin:$PATH:/usr/local/bin:/sbin:~/.local/bin:~/.repo/pyvmomi-scripts"
 export PATH=$(echo -n $PATH | awk -v RS=: -v ORS=: '!arr[$0]++') # remove duplicates
 TMUX_LD_LIB_PATH="$HOME/tmp/install/lib"
 [ -d $TMUX_LD_LIB_PATH ] && export LD_LIBRARY_PATH="$TMUX_LD_LIB_PATH:$LD_LIBRARY_PATH" # tmux requires this
