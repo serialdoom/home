@@ -121,6 +121,7 @@ if has("autocmd")
     autocmd VimLeave * :call SessionCreate()
     autocmd BufWritePre * call SaveWithTS()
     autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
+    autocmd BufReadPost,WinEnter *.py :set makeprg=pep8\ %
     autocmd BufEnter *.mkf :set ft=make
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
