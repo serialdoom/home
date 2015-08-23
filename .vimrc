@@ -166,6 +166,7 @@ if has("user_commands")
     cabbrev Set set
     cabbrev ack Ack
     cabbrev acl Ack
+    cabbrev passgen PassGen 
     " map the damn :W so that you dont type it twice. Or even 3 times. Fucking noob.
     command! -bang Wqa wqa<bang>
     command! -bang Wa wa<bang>
@@ -193,6 +194,14 @@ function! FillLine( str )
         .s/$/\=(' '.repeat(a:str, reps))/
     endif
 endfunction
+
+function! GeneratePass()
+    exe ":r! < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-64};echo;"
+    normal k
+    normal J
+    normal x
+endfunction
+command PassGen  :call GeneratePass()
 
 nmap \f- :call FillLine("-")<cr>
 nmap \f* :call FillLine("*")<cr>
