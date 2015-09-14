@@ -150,7 +150,7 @@ function update_git_prompt {
 
 function update_battery_prompt {
     BATTERY_PROMPT=""
-    if [[ "$(acpi | grep Discharging -c)" -eq 1 ]]; then
+    if [[ "$(acpi 2>&1 | grep Discharging -c)" -eq 1 ]]; then
         BATTERY_PROMPT="$(acpi | grep Discharging | cut -d ' ' -f4 | tr -d ',') "
     fi
 }
