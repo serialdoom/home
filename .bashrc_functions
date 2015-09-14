@@ -221,11 +221,16 @@ function hist {
 }
 
 function tm {
-    tmux new-session -s default -d
-    tmux new-window -t default
-    tmux new-window -t default
-    tmux new-window -t default
-    tmux new-window -t default
+    if [[ "$@" ]]; then
+        local cmd="$@"
+    else
+        local cmd=""
+    fi
+    tmux new-session -s default -d 
+    tmux new-window -t default "$cmd"
+    tmux new-window -t default "$cmd"
+    tmux new-window -t default "$cmd"
+    tmux new-window -t default "$cmd"
     tmux kill-window -t default:0
     tmux -2 attach-session -t default:1
 }
