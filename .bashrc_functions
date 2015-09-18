@@ -219,6 +219,7 @@ function mkrole {
 }
 
 function hist {
+    cat ~/.backup/history_*.txt >> ~/.backup/history.txt
     uniq ~/.backup/history.txt > ~/.backup/history.txt.back
     mv ~/.backup/history.txt.back ~/.backup/history.txt
     if [[ -f ~/.backup/history.txt ]]; then
@@ -226,6 +227,7 @@ function hist {
     else
         history | grep "$1"
     fi
+    rm -rf ~/.backup/history_*.txt
 }
 
 function tm {
