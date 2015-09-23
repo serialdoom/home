@@ -56,7 +56,7 @@ function hgp {
     echo "cp $outfile $HGP_BACKUP_DIR;"
 }
 
-HISTORY_TMP=/home/mhristof/.backup/history.txt
+HISTORY_TMP=/home/$USER/.backup/history.txt
 function save_last_command {
     echo "$(date) $(hostname) [$(pwd)] $(history | tail -1)" >> $HISTORY_TMP
 }
