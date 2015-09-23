@@ -124,7 +124,7 @@ chatnets = {
 };
 
 channels = (
-  #{ name = "#ansible"; chatnet t= "Freenode"; autojoin = "yes"; },
+  { name = "#ansible"; chatnet t= "Freenode"; autojoin = "yes"; },
   { name = "#scratching"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#lobby"; chatnet = "EsperNet"; autojoin = "No"; },
   { name = "#freenode"; chatnet = "Freenode"; autojoin = "No"; },
