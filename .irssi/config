@@ -76,6 +76,7 @@ chatnets = {
     alternate_nick = "lapix";
     autosendcmd = "/msg nickserv identify password ;wait 2000; /wc 2";
     autosendcmd = "/script load nicklist.pl; wait 500; /nicklist screen";
+    autosendcmd = "/script load nickcolor.pl";
   };
   GameSurge = {
     type = "IRC";
