@@ -15,3 +15,7 @@
       - xchat
       - bc
       - tmux
+      - perl # irssi
+      - perl-base # irssi
+      - perl-modules # irssi
+      - system-tools-backends # irssi
