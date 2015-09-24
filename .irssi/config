@@ -74,9 +74,7 @@ chatnets = {
     max_whois = "1";
     nick = "apix";
     alternate_nick = "lapix";
-    autosendcmd = "/wait 500";
-    autosendcmd = "/msg nickserv identify password";
-    autosendcmd = "/wait 2000";
+    autosendcmd = "/wait 500; /msg nickserv identify password; /wait 2000; /wc 2";
   };
   GameSurge = {
     type = "IRC";
@@ -125,7 +123,7 @@ chatnets = {
 };
 
 channels = (
-  { name = "#ansible"; chatnet = "Freenode"; autojoin = "yes"; },
+  # { name = "#ansible"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#scratching"; chatnet = "Freenode"; autojoin = "yes"; },
   { name = "#lobby"; chatnet = "EsperNet"; autojoin = "No"; },
   { name = "#freenode"; chatnet = "Freenode"; autojoin = "No"; },
@@ -393,4 +391,8 @@ statusbar = {
 settings = {
   core = { real_name = "apix"; user_name = "apix"; nick = "apix"; };
   "fe-text" = { actlist_sort = "refnum"; };
+  "fe-common/core" = {
+    window_default_level = "ALL -JOINS -PARTS -QUITS";
+    window_check_level_first = "yes";
+  };
 };
