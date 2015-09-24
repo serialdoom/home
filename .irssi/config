@@ -8,7 +8,7 @@ servers = (
   { address = "irc.dal.net"; chatnet = "DALnet"; port = "6667"; },
   { address = "irc.efnet.org"; chatnet = "EFNet"; port = "6667"; },
   { address = "irc.esper.net"; chatnet = "EsperNet"; port = "6667"; },
-  { 
+  {
     address = "chat.freenode.net";
     chatnet = "Freenode";
     port = "6667";
@@ -74,9 +74,9 @@ chatnets = {
     max_whois = "1";
     nick = "apix";
     alternate_nick = "lapix";
-    autosendcmd = "/msg nickserv identify password ;wait 2000; /wc 2";
-    autosendcmd = "/script load nicklist.pl; wait 500; /nicklist screen";
-    autosendcmd = "/script load nickcolor.pl";
+    autosendcmd = "/wait 500";
+    autosendcmd = "/msg nickserv identify password";
+    autosendcmd = "/wait 2000";
   };
   GameSurge = {
     type = "IRC";
@@ -391,10 +391,6 @@ statusbar = {
   };
 };
 settings = {
-  core = {
-    real_name = "apix";
-    user_name = "apix";
-    nick = "apix";
-  };
+  core = { real_name = "apix"; user_name = "apix"; nick = "apix"; };
   "fe-text" = { actlist_sort = "refnum"; };
 };
