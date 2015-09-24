@@ -38,3 +38,7 @@ if [[ $- == *i* ]]; then
 fi
 
 [[ "$(ps uxa | grep [a]wesome | wc -l)" -gt 0 ]] && setup_xdbus
+
+if [[ "$(xrandr -q | grep -P "\bconnected\b" -c)" -eq 2 ]]; then
+    xrandr --output DP1 --right-of DP2
+fi
