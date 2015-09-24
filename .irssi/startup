@@ -1,3 +1,8 @@
-script load nickcolor.pl
-script load nicklist.pl
-nicklist screen
+/script load nickcolor.pl
+/script load nicklist.pl
+/nicklist screen
+
+/foreach window /window level ALL -JOINS -PARTS -QUITS
+/set window_default_level ALL -JOINS -PARTS -QUITS
+/window level -ALL JOINS PARTS QUITS
+/set window_check_level_first ON
