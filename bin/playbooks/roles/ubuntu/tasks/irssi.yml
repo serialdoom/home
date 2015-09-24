@@ -5,5 +5,5 @@
   # sudo cpan Term::ReadKey
   
   # and for update
-  # rm -rf master.zip; wget https://github.com/serialdoom/home/archive/master.zip; unzip master.zip; find ./home-master/ -name ".irssi" -type d -exec cp -r {\} ~/ \;
+  # rm -rf master.zip home-master; wget https://github.com/serialdoom/home/archive/master.zip; unzip master.zip; find ./home-master/ -name ".irssi" -type d -exec cp -r {\} ~/ \;
   
