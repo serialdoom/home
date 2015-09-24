@@ -354,6 +354,13 @@ awful.rules.rules = {
     { rule = { class = "Firefox" },
         properties = { tag = tags[1][2] } },
 }
+
+--if screen.count() > 1 then
+    --awful.rules.rules[#awful.rules.rules+1] = {
+        --{ rule = { class c "Google-chrome" },
+          --properties = { tag = tags[1][2] } }
+    --}
+--end
 -- }}}
 
 -- {{{ Signals
