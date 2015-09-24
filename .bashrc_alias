@@ -43,3 +43,4 @@ alias al='ansible-playbook -v -i "localhost," -c local'
 alias ap='ansible-playbook'
 alias bfg='java -jar ~/.repo/bfg-repo-cleaner/bfg.jar'
 alias pass-gen='< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-64};echo;'
+alias irssi="ssh -t -i ~/.ssh/mchristof-test.pem ubuntu@$(cat ~/.irssi.ip) screen -r"
