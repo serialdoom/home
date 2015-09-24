@@ -1,0 +1,3 @@
+script load nickcolor.pl
+script load nicklist.pl
+nicklist screen
