@@ -18,14 +18,15 @@ SOURCE_LIST=(
     /usr/share/autojump/autojump.sh
     ~/.autojump/etc/profile.d/autojump.sh 
     ~/.repo/pyvmomi-scripts/.vsphere_autocomplete.sh
+    /usr/share/bash-completion/completions/ssh
 )
 
 SOURCE_LIST_NON_ROOT=(
-    /usr/local/src/ansible/hacking/env-setup 
+    ~/.repo/ansible/hacking/env-setup
 )
 
 for i in "${SOURCE_LIST[@]}"; do
-    source_file $i
+    [ -f ] && source_file $i
 done
 if [[ $UID -ne 0 ]]; then
     for i in "${SOURCE_LIST_NON_ROOT[@]}"; do
