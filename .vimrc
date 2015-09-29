@@ -37,6 +37,7 @@ Plugin 'git@github.com:serialdoom/vim-snipmate.git'
 Plugin 'git@github.com:serialdoom/vcscommand.vim.git'
 Plugin 'git@github.com:serialdoom/VisIncr.git'
 Plugin 'git@github.com:chase/vim-ansible-yaml.git'
+Plugin 'hynek/vim-python-pep8-indent'
 
 
 " All of your Plugins must be added before the following line
