@@ -333,6 +333,7 @@ root.keys(globalkeys)
 -- {{{ Rules
 awful.rules.rules = {
     -- All clients will match this rule.
+    --  find window class with "xprop"
     { rule = { },
       properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
@@ -353,6 +354,13 @@ awful.rules.rules = {
     { rule = { class = "Firefox" },
         properties = { tag = tags[1][2] } },
 }
+
+--if screen.count() > 1 then
+    --awful.rules.rules[#awful.rules.rules+1] = {
+        --{ rule = { class c "Google-chrome" },
+          --properties = { tag = tags[1][2] } }
+    --}
+--end
 -- }}}
 
 -- {{{ Signals
