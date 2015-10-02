@@ -188,17 +188,17 @@ function backup {
     local delete=0;
     local source="";
     if [[ "$@" =~ " -d" ]]; then
-        source=$(echo $@ | perl -p -i -e 's/ \-d//')
+        source=$(echo $@ | perl -p  -e 's/ \-d//')
         delete=1;
     elif [[ "$@" =~ "-d " ]]; then
-        source=$(echo $@ | perl -p -i -e 's/\-d/ /')
+        source=$(echo $@ | perl -p  -e 's/\-d/ /')
         delete=1;
     else
         source="$1";
     fi
-    source=$(echo $source | perl -p -i -e 's/^\s*//' | perl -p -i -e 's/\s*$//');
+    source=$(echo $source | perl -p  -e 's/^\s*//' | perl -p  -e 's/\s*$//');
 
-    source=$(echo $source | perl -p -i -e 's!/$!!')
+    source=$(echo $source | perl -p  -e 's!/$!!')
     if [[ $delete -eq 1 ]]; then
         echo "mv \"$source\" \"$source.$name\"";
         mv "$source" "$source.$name";
@@ -237,12 +237,11 @@ function tm {
         local cmd=""
     fi
     tmux new-session -s default -d 
-    tmux new-window -t default "$cmd"
-    tmux new-window -t default "$cmd"
-    tmux new-window -t default "$cmd"
-    tmux new-window -t default "$cmd"
-    tmux kill-window -t default:0
-    tmux -2 attach-session -t default:1
+    tmux new-window -t default
+    tmux new-window -t default
+    tmux new-window -t default
+    tmux new-window -t default
+    tmux -2 attach-session -t default
 }
 
 function vm_get_ip {
@@ -301,4 +300,13 @@ function vm {
             
             ;;
     esac
+}
+
+function ash {
+    local ip=$(grep "ansible_ssh_host" host_vars/$1/public | cut -d ' ' -f2)
+    if [[ ! $ip ]]; then
+        echo "Error, could not find ip in host_vars folder"
+        return 1
+    fi
+    ssh $ip
 }
