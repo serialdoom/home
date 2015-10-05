@@ -8,6 +8,17 @@
 - include : pcalc.yml
 
 
+- name: clone autojump
+  git: repo=https://github.com/wting/autojump.git dest=~/.repo/autojump
+  tags:
+    - autojump
+
+- name: install autojump
+  shell: ./install.py chdir=~/.repo/autojump
+  tags:
+    - autojump
+
+
 - name: checking if this is ubuntu server installation
   shell: dpkg -l ubuntu-desktop 
   register: server
