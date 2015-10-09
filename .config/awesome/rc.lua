@@ -6,6 +6,7 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
+require("volume")
 
 -- Load Debian menu entries
 require("debian.menu")
@@ -72,7 +73,9 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
-for s = 1, screen.count() do
+tags[1] = awful.tag({ 1, 2, 3, 4, 5 }, 1, { layouts[2], layouts[1], layouts[1], layouts[1], layouts[1] })
+tags[2] = awful.tag({ 1, 2, 3, 4, 5 }, 2, { layouts[3], layouts[1], layouts[1], layouts[1], layouts[1] })
+for s = 3, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag({ 1, 2, 3, 4, 5 }, s, layouts[1])
 end
@@ -181,6 +184,7 @@ for s = 1, screen.count() do
         mylayoutbox[s],
         mytextclock,
         s == 1 and mysystray or nil,
+        volume_widget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -228,9 +232,16 @@ globalkeys = awful.util.table.join(
         end),
 
     -- multimedia stuff
-    awful.key({ }, "XF86AudioRaiseVolume",    function () awful.util.spawn("amixer set Master 2+") end),
-    awful.key({ }, "XF86AudioLowerVolume",    function () awful.util.spawn("amixer set Master 2-") end),
-    awful.key({ }, "XF86AudioMute",           function () awful.util.spawn("amixer set Master 0") end),
+    awful.key({ }, "XF86AudioRaiseVolume", function ()
+        awful.util.spawn("amixer set Master 9%+") end),
+    awful.key({ }, "XF86AudioLowerVolume", function ()
+        awful.util.spawn("amixer set Master 9%-") end),
+    awful.key({ }, "XF86AudioMute", function ()
+        awful.util.spawn("amixer sset Master toggle") end),
+
+    --awful.key({ }, "XF86AudioRaiseVolume",    function () awful.util.spawn("amixer set Master 2+") end),
+    --awful.key({ }, "XF86AudioLowerVolume",    function () awful.util.spawn("amixer set Master 2-") end),
+    --awful.key({ }, "XF86AudioMute",           function () awful.util.spawn("amixer set Master 0") end),
 
     -- Standard program
     awful.key({ "Mod4",           }, "l", function () awful.util.spawn("gnome-screensaver-command -l") end),
@@ -353,7 +364,18 @@ awful.rules.rules = {
         properties = { tag = tags[1][2] } },
     { rule = { class = "Firefox" },
         properties = { tag = tags[1][2] } },
+    { rule = { class = "hipchat" },
+        properties = { tag = tags[2][1] } },
 }
+
+--if screen.count() then
+    --table.insert( awful.rules.rules, 
+        --{ rule = { class = "slack" },
+            --properties = { tag = tags[2][1] } } )
+    --table.insert( awful.rules.rules,
+        --{ rule = { class = "hipchat" },
+            --properties = { tag = tags[2][1] } } )
+--end
 
 --if screen.count() > 1 then
     --awful.rules.rules[#awful.rules.rules+1] = {
@@ -424,3 +446,5 @@ run_once("gnome-sound-applet")
 run_once("SpiderOakONE")
 run_once("pkill VBoxClient")
 run_once("VBoxClient-all")
+run_once("slack")
+run_once("hipchat")
