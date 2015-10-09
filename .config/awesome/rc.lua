@@ -73,7 +73,7 @@ layouts =
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
 tags = {}
-tags[1] = awful.tag({ 1, 2, 3, 4, 5 }, 1, { layouts[2], layouts[1], layouts[1], layouts[1], layouts[1] })
+tags[1] = awful.tag({ 1, 2, 3, 4, 5 }, 1, { layouts[2], layouts[12], layouts[1], layouts[1], layouts[1] })
 tags[2] = awful.tag({ 1, 2, 3, 4, 5 }, 2, { layouts[3], layouts[1], layouts[1], layouts[1], layouts[1] })
 for s = 3, screen.count() do
     -- Each screen has its own tag table.
