@@ -318,3 +318,7 @@ function ash {
     fi
     ssh $ip -l $user
 }
+
+function light {
+    echo "$1" | sudo tee /sys/class/backlight/acpi_video0/brightness
+}
