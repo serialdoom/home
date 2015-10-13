@@ -303,10 +303,18 @@ function vm {
 }
 
 function ash {
-    local ip=$(grep "ansible_ssh_host" host_vars/$1/public | cut -d ' ' -f2)
-    if [[ ! $ip ]]; then
-        echo "Error, could not find ip in host_vars folder"
-        return 1
+    local host_var_file="host_vars/$1/public"
+    local docker_id=$(echo "$1" | cut -c1-12)
+    local user=$USER
+    if [[ -f $host_var_file ]]; then
+        local ip=$(grep "ansible_ssh_host" host_vars/$1/public | cut -d ' ' -f2)
+        if [[ ! $ip ]]; then
+            echo "Error, could not find ip in host_vars folder"
+            return 1
+        fi
+    elif [[ "$(docker ps | grep $docker_id -c)" -eq 1 ]]; then
+        local ip=$( docker inspect $docker_id | grep "\"IPAddress\"" | tr -s ' ' | cut -d ' ' -f3 | tr -d "\",")
+        local user=root
     fi
-    ssh $ip
+    ssh $ip -l $user
 }
