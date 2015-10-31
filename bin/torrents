@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+case "$1" in
+    start*)
+        vboxmanage startvm torrents --type headless
+        IP=$(vboxmanage guestproperty enumerate torrents | grep "/VirtualBox/GuestInfo/Net/0/V4/IP," | perl -p -e 's/.*value: (.*?),.*/$1/g')
+        while [ -z $IP ]; do
+            sleep 1s
+            IP=$(vboxmanage guestproperty enumerate torrents | grep "/VirtualBox/GuestInfo/Net/0/V4/IP," | perl -p -e 's/.*value: (.*?),.*/$1/g')
+        done
+        sudo perl -p -i -e "s/.*torrents/$IP torrents/" /etc/hosts
+        ;;
+    stop)
+        vboxmanage controlvm torrents acpipowerbutton
+        ;;
+esac
