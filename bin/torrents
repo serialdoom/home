@@ -9,8 +9,10 @@ case "$1" in
             IP=$(vboxmanage guestproperty enumerate torrents | grep "/VirtualBox/GuestInfo/Net/0/V4/IP," | perl -p -e 's/.*value: (.*?),.*/$1/g')
         done
         sudo perl -p -i -e "s/.*torrents/$IP torrents/" /etc/hosts
+        sshfs torrents:/var/lib/transmission-daemon/downloads ~/torrents/
         ;;
     stop)
+        fusermount -u ~/torrents/
         vboxmanage controlvm torrents acpipowerbutton
         ;;
 esac
