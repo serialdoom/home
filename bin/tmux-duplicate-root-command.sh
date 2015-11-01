@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# this does not work if window is '0'.
+# but i never use window '0'
+
 CURRENT_WINDOW=$(tmux display-message -p '#I')
 CURRENT_SESSION=$(tmux server-info | grep -P "$CURRENT_WINDOW:.*flags.*references" -A1)
 ROOT_DEV_PTS=$(echo $CURRENT_SESSION | grep -oP "/dev/pts/\d*")
