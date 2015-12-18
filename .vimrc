@@ -36,7 +36,8 @@ Plugin 'git@github.com:tomtom/tlib_vim.git'
 Plugin 'git@github.com:serialdoom/vim-snipmate.git'
 Plugin 'git@github.com:serialdoom/vcscommand.vim.git'
 Plugin 'git@github.com:serialdoom/VisIncr.git'
-Plugin 'git@github.com:chase/vim-ansible-yaml.git'
+"Plugin 'git@github.com:chase/vim-ansible-yaml.git'
+Plugin 'git@github.com:serialdoom/vim-ansible-yaml.git'
 Plugin 'hynek/vim-python-pep8-indent'
 
 
@@ -124,6 +125,7 @@ if has("autocmd")
     autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
     autocmd BufReadPost,WinEnter *.py :set makeprg=pep8\ %
     autocmd BufEnter *.mkf :set ft=make
+    autocmd BufEnter *.dsl :set ft=groovy
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
 
@@ -136,6 +138,7 @@ let g:ctrlp_custom_ignore = {
     \ 'dir':  '\v[\/](\.(git|hg|svn|pdiff)|output)$',
     \ 'file': '\v\.(exe|so|dll|pyc)$',
     \ }
+let g:ctrlp_max_files = 0
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
 nmap _a :Ack! <cword><cr>
