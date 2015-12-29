@@ -156,8 +156,8 @@ function update_battery_prompt {
 }
 
 function set_prompt {
-    update_git_prompt
-    update_battery_prompt
+    #update_git_prompt
+    #update_battery_prompt
     local PROMPT_DATE="\[\033[38;5;10m\]\d\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;10m\]\t\[$(tput sgr0)\]"
     local PROMPT_USER_NAME="$(get_username_color)"
     local PROMPT_AT="\[\e[00;37m\]@\[\e[0m\]"
@@ -165,7 +165,7 @@ function set_prompt {
     local PROMPT_PATH="\[\e[00;37m\]\w\[\e[0m\]"
     local EXIT_STATUS_GOOD="\[\e[00;32m\]#\[\e[0m\]"
     local EXIT_STATUS_BAD="\[\e[00;31m\]#\[\e[0m\]"
-    local prompt_text="$PROMPT_DATE   $BATTERY_PROMPT$GIT_PROMPT\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
+    local prompt_text="$PROMPT_DATE\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
     if [[ $1 -eq 0 ]]; then
         export PS1="$prompt_text\n$EXIT_STATUS_GOOD"
     else
