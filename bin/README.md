@@ -3,7 +3,7 @@ rss-gen.py
 
 1. install nginx with `sudo apt-get install nginx`
 2. verify installtion by visiting http://127.0.0.1
-2. Create folder link to the default nginx data dir `sudo ln -s ~/torrents /usr/share/nginx/html/`
+2. Create folder link to the default nginx data dir `sudo ln -s ~/folder /usr/share/nginx/html/`
 1. get the script with `wget https://raw.githubusercontent.com/serialdoom/home/master/bin/rss-gen.py`
 3. Run the script once to create the list `rss-gen.py -d . -o list.xml`
 3. verify that `list.xml` is generated
