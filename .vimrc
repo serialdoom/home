@@ -39,6 +39,8 @@ Plugin 'git@github.com:serialdoom/VisIncr.git'
 "Plugin 'git@github.com:chase/vim-ansible-yaml.git'
 Plugin 'git@github.com:serialdoom/vim-ansible-yaml.git'
 Plugin 'hynek/vim-python-pep8-indent'
+Plugin 'git://github.com/aperezdc/vim-template.git'
+Plugin 'ekalinin/Dockerfile.vim'
 
 
 " All of your Plugins must be added before the following line
