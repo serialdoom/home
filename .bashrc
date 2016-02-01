@@ -47,3 +47,10 @@ else
         xrandr --output DP1 --right-of DP2
     fi
 fi
+
+if [[ ! -d ~/.fzf ]]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
