@@ -363,7 +363,7 @@ awful.rules.rules = {
     { rule = { class = "google-chrome" },
         properties = { tag = tags[1][2] } },
     { rule = { class = "Chromium-browser" },
-        properties = { tag = tags[1][2] } },
+        properties = { tag = tags[1][4] } },
     { rule = { class = "Firefox" },
         properties = { tag = tags[1][2] } },
     { rule = { class = "hipchat" },
@@ -448,5 +448,5 @@ run_once("gnome-sound-applet")
 run_once("SpiderOakONE")
 run_once("pkill VBoxClient")
 run_once("VBoxClient-all")
---run_once("slack")
+run_once("slack")
 run_once("hipchat")
