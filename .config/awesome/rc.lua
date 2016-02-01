@@ -232,6 +232,8 @@ globalkeys = awful.util.table.join(
     awful.key({ }, "XF86AudioLowerVolume",    function () awful.util.spawn("amixer set Master 2-") end),
     awful.key({ }, "XF86AudioMute",           function () awful.util.spawn("amixer set Master 0") end),
 
+    -- screen-shot !
+    awful.key({                   }, "Print", function() awful.util.spawn("screen-capture.sh",false) end),
     -- Standard program
     awful.key({ "Mod4",           }, "l", function () awful.util.spawn("gnome-screensaver-command -l") end),
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
@@ -347,10 +349,10 @@ awful.rules.rules = {
     { rule = { class = "gimp" },
       properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
-    { rule = { class = "Google-chrome" },
+    { rule = { class = "google-chrome" },
         properties = { tag = tags[1][2] } },
     { rule = { class = "Chromium-browser" },
-        properties = { tag = tags[1][2] } },
+        properties = { tag = tags[1][4] } },
     { rule = { class = "Firefox" },
         properties = { tag = tags[1][2] } },
 }

@@ -9,40 +9,6 @@ function setup_xdbus {
     fi
 }
 
-function d {
-    #alias d='hg cdiff'
-    local directory="$1"
-    if [[ ! -e "$directory" ]]; then
-        directory="."
-    fi
-    git rev-parse --show-toplevel &> /dev/null
-    if [[ "$?" -eq 0 ]]; then
-        git diff "$directory"
-        return
-    fi
-    hg id &> /dev/null
-    if [[ "$?" -eq 0 ]]; then
-        hg cdiff "$directory"
-        return
-    fi
-    p4 diff
-
-}
-
-function s {
-    #alias s='hg st'
-    local directory="$1"
-    if [[ ! -d "$directory" ]]; then
-        directory="."
-    fi
-    git rev-parse --show-toplevel &> /dev/null
-    if [[ "$?" -eq 0 ]]; then
-        git status "$directory"
-        return
-    fi
-    hg st "$directory"
-}
-
 function hgp {
     HGP_BACKUP_DIR=$HOME/.backup/patch/
     local name=""
