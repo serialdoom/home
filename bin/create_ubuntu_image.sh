@@ -8,9 +8,20 @@
 
 TMP="/tmp/ubuntu_iso_$(date +%s)"
 
-while getopts "i:hv" OPTION
+while getopts "bi:hv" OPTION
 do
      case $OPTION in
+         b)
+            vboxmanage createvm --name test01 --register --ostype Ubuntu_64
+            vboxmanage modifyvm test01 --memory 256
+            vboxmanage storagectl test01 --add ide --name IDE --portcount 2
+            vboxmanage storagectl test01 --add sata --name SATA
+            vboxmanage createmedium disk --size 8192 --filename ~/VirtualBox\ VMs/test01/root.vdi
+            vboxmanage storageattach test01 --storagectl SATA --type hdd --medium ~/VirtualBox\ VMs/test01/root.vdi --port 0
+            vboxmanage storageattach test01 --medium $IMAGE --storagectl IDE --port 0 --device 0 --type dvddrive
+            exit 0;
+            ;;
+
          i) IMAGE=$(readlink -f $OPTARG);;
          h)
             cat << EOF
@@ -102,5 +113,3 @@ mkisofs -D -r -V "ATTENDLESS_UBUNTU" -cache-inodes -J -l -b isolinux/isolinux.bi
 umount $TMP/iso
 echo $(readlink -f $TMP/ubuntu.iso)
 
-#vboxmanage  createvm --name test01 --register --ostype Ubuntu_64
-#vboxmanage storagectl test01 --add ide --name cdrom
