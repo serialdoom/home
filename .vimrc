@@ -30,7 +30,9 @@ Plugin 'git@github.com:gmarik/Vundle.vim.git'
 Plugin 'git@github.com:vim-scripts/DirDiff.vim.git'
 Plugin 'git@github.com:mileszs/ack.vim.git'
 Plugin 'git@github.com:serialdoom/comments.vim.git'
-Plugin 'git@github.com:kien/ctrlp.vim.git'
+Plugin 'tpope/vim-fugitive'
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
 Plugin 'git@github.com:MarcWeber/vim-addon-mw-utils.git'
 Plugin 'git@github.com:tomtom/tlib_vim.git'
 Plugin 'git@github.com:serialdoom/vim-snipmate.git'
@@ -125,6 +127,7 @@ if has("autocmd")
     autocmd VimLeave * :call SessionCreate()
     autocmd BufWritePre * call SaveWithTS()
     autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
+    autocmd FileType python :set makeprg=pep8\ %
     autocmd BufReadPost,WinEnter *.py :set makeprg=pep8\ %
     autocmd BufEnter *.mkf :set ft=make
     autocmd BufEnter *.dsl :set ft=groovy
@@ -134,13 +137,15 @@ if has("autocmd")
 
 endif
 
-map \t :CtrlPCurWD<cr>
-map \b :CtrlPBuffer<cr>
-let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/](\.(git|hg|svn|pdiff)|output)$',
-    \ 'file': '\v\.(exe|so|dll|pyc)$',
-    \ }
-let g:ctrlp_max_files = 0
+map \t :FZF<cr>
+map \b :Buffers<cr>
+map \a :Ag<cr>
+"map \b :CtrlPBuffer<cr>
+"let g:ctrlp_custom_ignore = {
+    "\ 'dir':  '\v[\/](\.(git|hg|svn|pdiff)|output)$',
+    "\ 'file': '\v\.(exe|so|dll|pyc)$',
+    "\ }
+"let g:ctrlp_max_files = 0
 
 let g:ackprg = 'ag --nogroup --nocolor --column'
 nmap _a :Ack! <cword><cr>
