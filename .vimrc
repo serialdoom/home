@@ -138,6 +138,7 @@ if has("autocmd")
 endif
 
 map \t :FZF<cr>
+map \r :History:<cr>
 map \b :Buffers<cr>
 map \a :Ag<cr>
 "map \b :CtrlPBuffer<cr>
