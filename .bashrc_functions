@@ -141,7 +141,7 @@ function set_prompt {
 
 function prompt {
     set_prompt $?
-    save_last_command
+    #save_last_command
 }
 
 function c () {
