@@ -133,9 +133,9 @@ function set_prompt {
     local EXIT_STATUS_BAD="\[\e[00;31m\]#\[\e[0m\]"
     local prompt_text="$PROMPT_DATE\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
     if [[ $1 -eq 0 ]]; then
-        export PS1="$prompt_text\n$EXIT_STATUS_GOOD"
+        export PS1="$prompt_text $(__git_ps1)\n$EXIT_STATUS_GOOD"
     else
-        export PS1="$prompt_text\n$EXIT_STATUS_BAD"
+        export PS1="$prompt_text $(__git_ps1) \n$EXIT_STATUS_BAD"
     fi
 }
 
