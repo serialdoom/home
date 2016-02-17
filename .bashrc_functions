@@ -269,7 +269,7 @@ function vm {
 }
 
 function gb {
-    local url="https://$(git remote -v | grep fetch | awk '{ print $2 }' | perl -p -e 's/^(ssh|http|https):\/\///' | perl -p -e 's/git@(.*)(\.git)?$/$1/g')"
+    local url="https://$(git remote -v | grep fetch | awk '{ print $2 }' | perl -p -e 's/^(ssh|http|https):\/\///' | perl -p -e 's/git@(.*)$/$1/g' | perl -p -e 's/\.git$//g')"
     local extra=""
     case $1 in
         gl)
