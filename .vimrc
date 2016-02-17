@@ -85,7 +85,7 @@ set wrap " wrap the damn lines
 set lbr "wrap at character
 " set your on line break charactesr
 set breakat=\ ,(*;+=/|
-set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
+set statusline=%{fugitive#statusline()}%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 " backspace now moves to previous line 
 set backspace=indent,eol,start
 set hlsearch
@@ -141,6 +141,8 @@ map \t :FZF<cr>
 map \r :History:<cr>
 map \b :Buffers<cr>
 map \a :Ag<cr>
+map \e :GBrowse<cr>
+
 "map \b :CtrlPBuffer<cr>
 "let g:ctrlp_custom_ignore = {
     "\ 'dir':  '\v[\/](\.(git|hg|svn|pdiff)|output)$',
@@ -189,7 +191,6 @@ if has("user_commands")
     command! -bang Set set<bang>
     command! -bang Vs vs<bang>
 endif
-
 
 " fill rest of line with characters
 function! FillLine( str )
