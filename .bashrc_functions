@@ -268,3 +268,22 @@ function vm {
     esac
 }
 
+function gb {
+    local url="https://$(git remote -v | grep fetch | awk '{ print $2 }' | perl -p -e 's/^(ssh|http|https):\/\///' | perl -p -e 's/^git@(.*).git/$1/g' | tr -s ':' '/')"
+    local extra=""
+    case $1 in
+        gl)
+            extra="network/master"
+            ;;
+        new)
+            extra="issues/new"
+            ;;
+        iss*)
+            extra="issues"
+            ;;
+        *)
+            ;;
+    esac
+    echo "$url/$extra"
+    google-chrome $url/$extra
+}
