@@ -2,10 +2,10 @@
 function setup_xdbus {
     local dbus="$HOME/.dbus/Xdbus"
     if [[ ! -f "$dbus" ]]; then
-        touch $dbus
-        chmod 600 $dbus
-        env | grep DBUS_SESSION_BUS_ADDRESS > $dbus
-        echo 'export DBUS_SESSION_BUS_ADDRESS' >> $dbus
+        touch "$dbus"
+        chmod 600 "$dbus"
+        env | grep DBUS_SESSION_BUS_ADDRESS > "$dbus"
+        echo 'export DBUS_SESSION_BUS_ADDRESS' >> "$dbus"
     fi
 }
 
@@ -13,18 +13,18 @@ function hgp {
     HGP_BACKUP_DIR=$HOME/.backup/patch/
     local name=""
     if [[ $1 ]]; then
-        name="_$(echo $* | tr -s ' ' '_')_"
+        name="_$(echo "$*" | tr -s ' ' '_')_"
     fi
     local outfile="$(date +'%Y%m%d_%H%M%S')$name.patch"
-    hg diff . > $outfile
-    [[ -d $HGP_BACKUP_DIR ]] || mkdir -p $HGP_BACKUP_DIR
-    cp $outfile $HGP_BACKUP_DIR;
+    hg diff . > "$outfile"
+    [[ -d $HGP_BACKUP_DIR ]] || mkdir -p "$HGP_BACKUP_DIR"
+    cp "$outfile" "$HGP_BACKUP_DIR";
     echo "cp $outfile $HGP_BACKUP_DIR;"
 }
 
 HISTORY_TMP=/home/$USER/.backup/history.txt
 function save_last_command {
-    echo "$(date) $(hostname) [$(pwd)] $(history | tail -1)" >> $HISTORY_TMP
+    echo "$(date) $(hostname) [$(pwd)] $(history | tail -1)" >> "$HISTORY_TMP"
 }
 
 function get_username_color {
@@ -33,7 +33,7 @@ function get_username_color {
         return
     fi
     local hhash=$(whoami| md5sum | grep "[0-9]" -o | paste -s -d+ - |bc)
-    local hash_number=$[ $hhash % 14 ]
+    local hash_number=$(( "$hhash" % 14 ))
     #echo "username $(whoami) hash $hhash hash_number $hash_number"
     case $hash_number in
          0) echo "\[\e[00;37m\]\u\[\e[0m\]";; ## username_white
@@ -61,7 +61,7 @@ function get_hostname_color {
         hhash=$(hostname | md5sum | grep "[0-9]" -o | paste -s -d+ - |bc)
         export PROMPT_HOSTNAME_COLOR_HASH=$hhash
     fi
-    local hash_number=$[ $hhash % 14 ]
+    local hash_number=$(( "$hhash" % 14 ))
     case $hash_number in
          0) echo "\[\e[00;37m\]\h\[\e[0m\]";; ## hostname_white
          1) echo "\[\e[00;31m\]\h\[\e[0m\]";; ## hostname_red
@@ -86,12 +86,12 @@ function get_hostname_color {
 function update_git_prompt {
     git rev-parse --git-dir &> /dev/null
     if [[ "$?" -ne "0" ]]; then
-        GIT_PROMPT=""
+        export GIT_PROMPT=""
         return
     fi
 
-    local git_root="$(basename `git rev-parse --show-toplevel`)"
-    local current_branch="$(git branch | grep "^*" | sed 's/^\* //')"
+    local git_root="$(basename "$(git rev-parse --show-toplevel)")"
+    local current_branch="$(git branch | grep "^\*" | sed 's/^\* //')"
     CURRENT_BRANCH="\[\033[38;5;160m\][$current_branch]\[$(tput sgr0)\]"
 
 
@@ -100,7 +100,7 @@ function update_git_prompt {
     if [[ "$untracked" -ne "0" ]]; then
         FILE_STATUS="\[\033[38;5;11m\]?\[$(tput sgr0)\]"
     fi
-    local changed="$(git status | grep "modified:" | wc -l)"
+    local changed="$(git status | grep -c "modified:")"
     if [[ "$changed" -ne "0" ]]; then
         FILE_STATUS="$FILE_STATUS\[\033[38;5;208m\]++\[$(tput sgr0)\]"
     fi
@@ -115,7 +115,7 @@ function update_git_prompt {
 }
 
 function update_battery_prompt {
-    BATTERY_PROMPT=""
+    export BATTERY_PROMPT=""
     if [[ "$(acpi 2>&1 | grep Discharging -c)" -eq 1 ]]; then
         BATTERY_PROMPT="$(acpi | grep Discharging | cut -d ' ' -f4 | tr -d ',') "
     fi
@@ -145,7 +145,7 @@ function prompt {
 }
 
 function c () {
-    [ ! $1 ] && cd ~ && ls --color=auto && return 0;
+    [ ! "$1" ] && cd ~ && ls --color=auto && return 0;
     cd "$1" && ls --color=auto
 }
 
@@ -153,18 +153,18 @@ function backup {
     local name="$(date +'%Y%m%d_%H%M%S')"
     local delete=0;
     local source="";
-    if [[ "$@" =~ " -d" ]]; then
-        source=$(echo $@ | perl -p  -e 's/ \-d//')
+    if [[ "$@" =~ -d ]]; then
+        source=$(echo "$*" | perl -p  -e 's/ \-d//')
         delete=1;
-    elif [[ "$@" =~ "-d " ]]; then
-        source=$(echo $@ | perl -p  -e 's/\-d/ /')
+    elif [[ "$@" =~ -d ]]; then
+        source=$(echo "$*" | perl -p  -e 's/\-d/ /')
         delete=1;
     else
         source="$1";
     fi
-    source=$(echo $source | perl -p  -e 's/^\s*//' | perl -p  -e 's/\s*$//');
+    source=$(echo "$source" | perl -p  -e 's/^\s*//' | perl -p  -e 's/\s*$//');
 
-    source=$(echo $source | perl -p  -e 's!/$!!')
+    source=$(echo "$source" | perl -p  -e 's!/$!!')
     if [[ $delete -eq 1 ]]; then
         echo "mv \"$source\" \"$source.$name\"";
         mv "$source" "$source.$name";
@@ -197,11 +197,6 @@ function hist {
 }
 
 function tm {
-    if [[ "$@" ]]; then
-        local cmd="$@"
-    else
-        local cmd=""
-    fi
     tmux new-session -s default -d 
     tmux new-window -t default
     tmux new-window -t default
@@ -211,7 +206,7 @@ function tm {
 }
 
 function vm_get_ip {
-    vboxmanage guestproperty enumerate $1 2>&1 | grep "/VirtualBox/GuestInfo/Net/0/V4/IP" | perl -p -e 's/.*value: ([0-9\.]*).*/$1/'
+    vboxmanage guestproperty enumerate "$1" 2>&1 | grep "/VirtualBox/GuestInfo/Net/0/V4/IP" | perl -p -e 's/.*value: ([0-9\.]*).*/$1/'
 }
 
 function vm {
@@ -227,11 +222,11 @@ function vm {
             IFS=$(echo -en "\n\b")
             for f in $(vboxmanage list vms); do
                 local name=$(echo "$f" | grep -oP "{.*}")
-                local ram=$(vboxmanage showvminfo $name 2>&1 | grep "^Memory")
+                local ram=$(vboxmanage showvminfo "$name" 2>&1 | grep "^Memory")
                 if [[ $? -ne 0 ]]; then
                     ram="nada"
                 fi
-                local ip=$(vm_get_ip $name)
+                local ip=$(vm_get_ip "$name")
                 if [[ $? -ne 0 ]]; then
                     ip=""
                 fi
@@ -255,13 +250,13 @@ function vm {
                 # readjust ram
                 echo "readjusting"
                 local ram_01=$(vboxmanage showvminfo "$vm_name" | grep "^Memory" | cut -d ':' -f2 | perl -p -e 's/\s+//' | perl -p -e 's/MB//')
-                local new_ram=$[ $ram_01 + $ram_size_mod ]
+                local new_ram=$(( ram_01 + ram_size_mod ))
                 vboxmanage modifyvm "$vm_name" --memory $new_ram
             fi
             vboxmanage startvm "$vm_name" --type headless
             local ip=""
             while [[ -z "$ip" ]]; do
-                ip=$(vm_get_ip $vm_name)
+                ip=$(vm_get_ip "$vm_name")
             done
             
             ;;
@@ -285,7 +280,7 @@ function gb {
             ;;
     esac
     echo "$url/$extra"
-    google-chrome $url/$extra
+    google-chrome "$url/$extra"
 }
 
 function gst {
