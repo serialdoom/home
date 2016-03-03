@@ -287,3 +287,10 @@ function gb {
     echo "$url/$extra"
     google-chrome $url/$extra
 }
+
+function gst {
+    for f in $(find ./ -name .git -type d); do
+        echo "$f $(git --git-dir "$f" rev-parse HEAD)";
+        git --git-dir "$f" cherry -v | sed 's/^/    /g'
+    done
+}
