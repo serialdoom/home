@@ -43,6 +43,7 @@ Plugin 'git@github.com:serialdoom/vim-ansible-yaml.git'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'git://github.com/aperezdc/vim-template.git'
 Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'git@github.com:scrooloose/syntastic.git'
 
 
 " All of your Plugins must be added before the following line
@@ -167,6 +168,16 @@ let g:DirDiffExcludes = "*.pyc"
 
 nmap <leader>n :cnext<cr>
 nmap <leader>m :cprev<cr>
+
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
