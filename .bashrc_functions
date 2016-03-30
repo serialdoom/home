@@ -33,7 +33,7 @@ function get_username_color {
         return
     fi
     local hhash=$(whoami| md5sum | grep "[0-9]" -o | paste -s -d+ - |bc)
-    local hash_number=$(( "$hhash" % 14 ))
+    local hash_number=$(( hhash % 14 ))
     #echo "username $(whoami) hash $hhash hash_number $hash_number"
     case $hash_number in
          0) echo "\[\e[00;37m\]\u\[\e[0m\]";; ## username_white
@@ -61,7 +61,7 @@ function get_hostname_color {
         hhash=$(hostname | md5sum | grep "[0-9]" -o | paste -s -d+ - |bc)
         export PROMPT_HOSTNAME_COLOR_HASH=$hhash
     fi
-    local hash_number=$(( "$hhash" % 14 ))
+    local hash_number=$(( hhash % 14 ))
     case $hash_number in
          0) echo "\[\e[00;37m\]\h\[\e[0m\]";; ## hostname_white
          1) echo "\[\e[00;31m\]\h\[\e[0m\]";; ## hostname_red
@@ -149,30 +149,6 @@ function c () {
     cd "$1" && ls --color=auto
 }
 
-function backup {
-    local name="$(date +'%Y%m%d_%H%M%S')"
-    local delete=0;
-    local source="";
-    if [[ "$@" =~ -d ]]; then
-        source=$(echo "$*" | perl -p  -e 's/ \-d//')
-        delete=1;
-    elif [[ "$@" =~ -d ]]; then
-        source=$(echo "$*" | perl -p  -e 's/\-d/ /')
-        delete=1;
-    else
-        source="$1";
-    fi
-    source=$(echo "$source" | perl -p  -e 's/^\s*//' | perl -p  -e 's/\s*$//');
-
-    source=$(echo "$source" | perl -p  -e 's!/$!!')
-    if [[ $delete -eq 1 ]]; then
-        echo "mv \"$source\" \"$source.$name\"";
-        mv "$source" "$source.$name";
-    else
-        echo "cp -r \"$source\" \"$source.$name\"";
-        cp -r "$source" "$source.$name";
-    fi
-}
 
 function mkrole {
     mkdir -p roles/"$1"/tasks
