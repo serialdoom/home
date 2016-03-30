@@ -7,10 +7,11 @@ import time
 import os
 import shutil
 
+
 def main():
     """docstring for main"""
     parser = argparse.ArgumentParser(description='Backups a directory/file')
-    
+
     parser.add_argument('-d', '--delete',
                         action='store_true',
                         help='Move the file instead of copying it')
@@ -34,11 +35,15 @@ def main():
             dest = os.path.basename(os.path.abspath(fyle))
         dest = "{}.{}".format(dest, ts)
         if args.delete:
-            if args.verbose: print "mv", path, dest
-            if not args.dry: os.rename(path, dest)
+            if args.verbose:
+                print "mv", path, dest
+            if not args.dry:
+                os.rename(path, dest)
         else:
-            if args.verbose: print "cp", path, dest
-            if not args.dry: shutil.copy(path, dest)
+            if args.verbose:
+                print "cp", path, dest
+            if not args.dry:
+                shutil.copy(path, dest)
 
 if __name__ == '__main__':
     main()
