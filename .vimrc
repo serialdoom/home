@@ -41,7 +41,7 @@ Plugin 'git@github.com:serialdoom/VisIncr.git'
 "Plugin 'git@github.com:chase/vim-ansible-yaml.git'
 Plugin 'git@github.com:serialdoom/vim-ansible-yaml.git'
 Plugin 'hynek/vim-python-pep8-indent'
-Plugin 'git@github.com:mhristof/vim-template.git'
+Plugin 'git@github.com:serialdoom/vim-template.git'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'git@github.com:scrooloose/syntastic.git'
 
