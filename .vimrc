@@ -44,6 +44,7 @@ Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'git@github.com:serialdoom/vim-template.git'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'git@github.com:scrooloose/syntastic.git'
+Plugin 'git@github.com:tomasr/molokai.git'
 
 
 " All of your Plugins must be added before the following line
