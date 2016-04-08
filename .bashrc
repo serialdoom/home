@@ -54,9 +54,5 @@ if [[ ! -d ~/.fzf ]]; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-if [[ ! -f ~/.git-prompt.sh ]]; then
-    curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > ~/.git-prompt.sh
-    chmod +x ~/.git-prompt.sh
-fi
-source ~/.git-prompt.sh
+[ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
+[ -f /etc/bash_completion.d/git-prompt ] && source /etc/bash_completion.d/git-prompt
