@@ -56,3 +56,4 @@ fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 [ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
 [ -f /etc/bash_completion.d/git-prompt ] && source /etc/bash_completion.d/git-prompt
+[ -f /etc/bash_completion ] && source /etc/bash_completion
