@@ -10,15 +10,19 @@ function source_file {
 }
 
 SOURCE_LIST=(
-    ~/.bashrc_alias
-    ~/.bashrc_functions
-    ~/.bashrc_exports
-    ~/.bashrc_aws
+    ~/.bash/alias
+    ~/.bash/functions
+    ~/.bash/exports
+    ~/.bash/aws
     ~/bin/autocomplete.d/*
     /usr/share/autojump/autojump.sh
     ~/.autojump/etc/profile.d/autojump.sh 
     ~/.repo/pyvmomi-scripts/.vsphere_autocomplete.sh
     /usr/share/bash-completion/completions/ssh
+    ~/.fzf.bash
+    ~/.git-prompt.sh
+    /etc/bash_completion.d/git-prompt
+    /etc/bash_completion
 )
 
 SOURCE_LIST_NON_ROOT=(
@@ -52,8 +56,3 @@ if [[ ! -d ~/.fzf ]]; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
 fi
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-[ -f ~/.git-prompt.sh ] && source ~/.git-prompt.sh
-[ -f /etc/bash_completion.d/git-prompt ] && source /etc/bash_completion.d/git-prompt
-[ -f /etc/bash_completion ] && source /etc/bash_completion
