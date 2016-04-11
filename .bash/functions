@@ -149,7 +149,6 @@ function c () {
     cd "$1" && ls --color=auto
 }
 
-
 function mkrole {
     mkdir -p roles/"$1"/tasks
     mkdir -p roles/"$1"/vars

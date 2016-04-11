@@ -3,7 +3,8 @@
 function ash {
     local host_var_file="host_vars/$1/public"
     local docker_id=$(echo "$1" | cut -c1-12)
-    local user=$(cat ~/.ash-username)
+    local user=$(whoami)
+    [ -f ~/.ash-username ] && user=$(cat ~/.ash-username)
     if [[ -f $host_var_file ]]; then
         local ip=$(grep "ansible_ssh_host" host_vars/$1/public | cut -d ' ' -f2 | tr -d '"')
         if [[ ! $ip ]]; then
