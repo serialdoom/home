@@ -23,6 +23,7 @@ SOURCE_LIST=(
     ~/.git-prompt.sh
     /etc/bash_completion.d/git-prompt
     /etc/bash_completion
+    ~/.bash/vagrant_autocomplete.sh
 )
 
 SOURCE_LIST_NON_ROOT=(
