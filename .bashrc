@@ -24,11 +24,15 @@ SOURCE_LIST=(
     /etc/bash_completion.d/git-prompt
     /etc/bash_completion
     ~/.bash/vagrant_autocomplete.sh
+    ~/.bash/make_autocomplete.sh
 )
 
 SOURCE_LIST_NON_ROOT=(
     ~/.repo/ansible/hacking/env-setup
 )
+
+
+[ ! -f ~/.bash/make_autocomplete.sh ] && wget https://raw.githubusercontent.com/scop/bash-completion/master/completions/make -o ~/.bash/make_autocomplete.sh
 
 for i in "${SOURCE_LIST[@]}"; do
     [ -f ] && source_file $i
