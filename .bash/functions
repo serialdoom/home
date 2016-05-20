@@ -260,7 +260,11 @@ function gb {
 
 function gst {
     for f in $(find ./ -name .git -type d); do
-        echo "$f $(git --git-dir "$f" rev-parse HEAD)";
-        git --git-dir "$f" cherry -v | sed 's/^/    /g'
+        local git_cherry
+        git_cherry=$(git --git-dir "$f" cherry -v | sed 's/^/    /g')
+        if [[ "$git_cherry" != "" ]]; then
+            echo "$f $(git --git-dir "$f" rev-parse HEAD)";
+            echo "$git_cherry"
+        fi
     done
 }
