@@ -16,6 +16,11 @@ import ConfigParser
 import os
 
 
+def red(text):
+    """ format a string with red color for awesome """
+    return '<span foreground="red">{}</span>'.format(text)
+
+
 def get_url():
     """docstring for get_url"""
     config = ConfigParser.ConfigParser()
@@ -23,16 +28,27 @@ def get_url():
     return config.get('elasticsearch_status', 'url')
 
 
-def main():
+def elasticsearch_status():
     """ print out elasticsearch cluster status with lua colored format """
-    response = urllib2.urlopen(get_url())
+    response = urllib2.urlopen(get_url(), timeout=3)
     health = json.loads(response.read())
-    if 'red' in health['status']:
-        widget_text = '<span foreground="red">{}</span>'.format(
-            health['cluster_name'])
+    widget_text = '<span foreground="{}">{}</span>'.format(
+        health['status'],
+        health['cluster_name'])
+    if health['active_shards_percent_as_number'] != 100:
         widget_text += "[{}]".format(int(
             health['active_shards_percent_as_number']))
-    print widget_text
+    return widget_text
+
+
+def main():
+    """ construct the string and print it """
+    ret = ''
+    try:
+        ret += elasticsearch_status()
+    except urllib2.URLError:
+        ret += red('vpnc')
+    print ret
 
 if __name__ == '__main__':
     main()

@@ -103,7 +103,7 @@ mytextclock = awful.widget.textclock({ align = "right" })
 -- Set up a timer to refresh every hour. Useful for ADSL connections.
 
 function get_di_status()
-    local fd = io.popen("~/bin/elasticsearch_status.py")
+    local fd = io.popen("~/bin/awesome_status_text.py")
     local str = fd:read("*all")
     return str
 end
