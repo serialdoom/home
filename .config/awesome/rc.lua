@@ -100,9 +100,20 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
+-- Set up a timer to refresh every hour. Useful for ADSL connections.
 
+function get_di_status()
+    local fd = io.popen("~/bin/elasticsearch_status.py")
+    local str = fd:read("*all")
+    return str
+end
 -- Create a systray
 mysystray = widget({ type = "systray" })
+di_uk_cluster_status = widget({ type = "textbox" })
+di_uk_cluster_status.text = get_di_status()
+di_uk_cluster_status_timer = timer({ timeout = 60 })
+di_uk_cluster_status_timer:add_signal("timeout", function () di_uk_cluster_status.text = get_di_status() end)
+di_uk_cluster_status_timer:start()
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -176,11 +187,12 @@ for s = 1, screen.count() do
             mylauncher,
             mytaglist[s],
             mypromptbox[s],
-            layout = awful.widget.layout.horizontal.leftright
+            layout = awful.widget.layout.horizontal.leftright,
         },
         mylayoutbox[s],
         mytextclock,
         s == 1 and mysystray or nil,
+        di_uk_cluster_status,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
