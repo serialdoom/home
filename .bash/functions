@@ -139,7 +139,7 @@ function set_prompt {
     local PROMPT_AT="\[\e[00;37m\]@\[\e[0m\]"
     local PROMPT_HOST="$(get_hostname_color)"
     local PROMPT_PATH="\[\e[00;37m\]\w\[\e[0m\]"
-    local prompt_text="$PROMPT_DATE\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
+    local prompt_text="$PROMPT_DATE $(__git_ps1)\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
     echo $prompt_text
 }
 
