@@ -145,10 +145,8 @@ function set_prompt {
 
 function prompt {
     if [[ $? -eq 0 ]]; then
-        echo "command true $(history | tail -1)"
         set_prompt_good
     else
-        echo "command false"
         set_prompt_bad
     fi
 }
