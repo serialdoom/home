@@ -121,6 +121,16 @@ function update_battery_prompt {
     fi
 }
 
+function set_prompt_good {
+    local EXIT_STATUS_GOOD="\[\e[00;32m\]#\[\e[0m\]"
+    export PS1="$(set_prompt)\n$EXIT_STATUS_GOOD"
+}
+
+function set_prompt_bad {
+    local EXIT_STATUS_BAD="\[\e[00;31m\]#\[\e[0m\]"
+    export PS1="$(set_prompt)\n$EXIT_STATUS_BAD"
+}
+
 function set_prompt {
     #update_git_prompt
     #update_battery_prompt
@@ -129,19 +139,18 @@ function set_prompt {
     local PROMPT_AT="\[\e[00;37m\]@\[\e[0m\]"
     local PROMPT_HOST="$(get_hostname_color)"
     local PROMPT_PATH="\[\e[00;37m\]\w\[\e[0m\]"
-    local EXIT_STATUS_GOOD="\[\e[00;32m\]#\[\e[0m\]"
-    local EXIT_STATUS_BAD="\[\e[00;31m\]#\[\e[0m\]"
     local prompt_text="$PROMPT_DATE\n$PROMPT_USER_NAME$PROMPT_AT$PROMPT_HOST $PROMPT_PATH"
-    if [[ $1 -eq 0 ]]; then
-        export PS1="$prompt_text $(__git_ps1)\n$EXIT_STATUS_GOOD"
-    else
-        export PS1="$prompt_text $(__git_ps1) \n$EXIT_STATUS_BAD"
-    fi
+    echo $prompt_text
 }
 
 function prompt {
-    set_prompt $?
-    #save_last_command
+    if [[ $? -eq 0 ]]; then
+        echo "command true $(history | tail -1)"
+        set_prompt_good
+    else
+        echo "command false"
+        set_prompt_bad
+    fi
 }
 
 function c () {

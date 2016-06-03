@@ -17,7 +17,7 @@ export LS_COLORS
 export LESS='-R'
 export LESSOPEN='|~/.lessfilter %s'
 
-export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} prompt"
+#export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} prompt"
 
 [ -d $TMPDIR ] || mkdir $TMPDIR; chmod 700 $TMPDIR
 [ -d ~/.backup ] && chmod 700 ~/.backup
@@ -29,7 +29,7 @@ export HISTCONTROL=ignoredups:erasedups
 shopt -s histappend
 
 # After each command, append to the history file and reread it
-export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+export PROMPT_COMMAND="prompt; history -a; history -c; history -r"
 export HISTSIZE=
 export HISTFILESIZE=
 export HISTTIMEFORMAT='%F %T '
