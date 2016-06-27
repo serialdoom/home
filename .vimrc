@@ -112,8 +112,7 @@ hi Search ctermbg=134 ctermfg=0
 
 nmap ed :e %:h<cr>
 nmap <Space> <PageDown>
-nmap :! q:?
-nmap <leader>pe :!p4 edit %<cr>
+nmap <leader>g :execute ":silent !gitlab show " . expand('%') . " -l " . line(".") . " -g"<cr>:redr!<cr>
 map <c-j> :call Start_ts_diff_next(+1)<cr>
 map <c-k> :call Start_ts_diff_next(-1)<cr>
 map <c-l> :unlet g:save_with_ts_flist <bar> diffoff <bar> q <bar> diffoff<cr>
@@ -164,7 +163,7 @@ nmap + :ts <C-R>=expand("<cword>")<cr><cr>
 
 let g:VCSCommandDeleteOnHide=66
 let g:CommandTMaxCachedDirectories=0
-let VCSCommandVCSTypePreference='p4'
+let VCSCommandVCSTypePreference='git'
 let g:DirDiffExcludes = "*.pyc"
 
 nmap <leader>n :cnext<cr>
