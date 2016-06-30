@@ -1,3 +1,4 @@
+# vi: ft=sh
 
 function setup_xdbus {
     local dbus="$HOME/.dbus/Xdbus"
@@ -7,19 +8,6 @@ function setup_xdbus {
         env | grep DBUS_SESSION_BUS_ADDRESS > "$dbus"
         echo 'export DBUS_SESSION_BUS_ADDRESS' >> "$dbus"
     fi
-}
-
-function hgp {
-    HGP_BACKUP_DIR=$HOME/.backup/patch/
-    local name=""
-    if [[ $1 ]]; then
-        name="_$(echo "$*" | tr -s ' ' '_')_"
-    fi
-    local outfile="$(date +'%Y%m%d_%H%M%S')$name.patch"
-    hg diff . > "$outfile"
-    [[ -d $HGP_BACKUP_DIR ]] || mkdir -p "$HGP_BACKUP_DIR"
-    cp "$outfile" "$HGP_BACKUP_DIR";
-    echo "cp $outfile $HGP_BACKUP_DIR;"
 }
 
 HISTORY_TMP=/home/$USER/.backup/history.txt
@@ -156,16 +144,6 @@ function c () {
     cd "$1" && ls --color=auto
 }
 
-function mkrole {
-    mkdir -p roles/"$1"/tasks
-    mkdir -p roles/"$1"/vars
-    mkdir -p roles/"$1"/handlers
-    mkdir -p roles/"$1"/templates
-    for f in roles/"$1"/handlers/main.yml roles/"$1"/tasks/main.yml ; do
-        [[ -f "$f" ]] || echo "---" > "$f"
-    done
-}
-
 function hist {
     cat ~/.backup/history_*.txt >> ~/.backup/history.txt
     uniq ~/.backup/history.txt > ~/.backup/history.txt.back
@@ -185,84 +163,6 @@ function tm {
     tmux new-window -t default
     tmux new-window -t default
     tmux -2 attach-session -t default
-}
-
-function vm_get_ip {
-    vboxmanage guestproperty enumerate "$1" 2>&1 | grep "/VirtualBox/GuestInfo/Net/0/V4/IP" | perl -p -e 's/.*value: ([0-9\.]*).*/$1/'
-}
-
-function vm {
-    case "$1" in
-        up|update)
-            cd ~/di/ansible
-            ansible-playbook new-virtualbox.yml -i hosts --tags=devel;;
-        new)
-            cd ~/di/ansible
-            ansible-playbook new-virtualbox.yml -i hosts;;
-        ls|list)
-            local running="$(vboxmanage list runningvms | grep -o '{.*}' | tr -s '\n' '|')"
-            IFS=$(echo -en "\n\b")
-            for f in $(vboxmanage list vms); do
-                local name=$(echo "$f" | grep -oP "{.*}")
-                local ram=$(vboxmanage showvminfo "$name" 2>&1 | grep "^Memory")
-                if [[ $? -ne 0 ]]; then
-                    ram="nada"
-                fi
-                local ip=$(vm_get_ip "$name")
-                if [[ $? -ne 0 ]]; then
-                    ip=""
-                fi
-                echo "$f $ram $ip" | GREP_COLOR='1;32' grep -E "$running"
-            done
-            ;;
-        del)
-            if [[ -z "$2" ]]; then
-                for f in $(vboxmanage list runningvms | cut -d\  -f2); do
-                    vboxmanage controlvm "$f" poweroff;
-                done
-            else
-                vboxmanage controlvm "$2" poweroff;
-            fi
-            ;;
-        st)
-            local ram_size_mod=$(echo "$@" | grep -oP "\s(\+|\-){0,1}\d*" | tr -d '\n' | tr -d ' ')
-            local vm_name="$2"
-            echo "$vm_name [$ram_size_mod]"
-            if [[ "$ram_size_mod" ]]; then
-                # readjust ram
-                echo "readjusting"
-                local ram_01=$(vboxmanage showvminfo "$vm_name" | grep "^Memory" | cut -d ':' -f2 | perl -p -e 's/\s+//' | perl -p -e 's/MB//')
-                local new_ram=$(( ram_01 + ram_size_mod ))
-                vboxmanage modifyvm "$vm_name" --memory $new_ram
-            fi
-            vboxmanage startvm "$vm_name" --type headless
-            local ip=""
-            while [[ -z "$ip" ]]; do
-                ip=$(vm_get_ip "$vm_name")
-            done
-            
-            ;;
-    esac
-}
-
-function gb {
-    local url="https://$(git remote -v | grep fetch | awk '{ print $2 }' | perl -p -e 's/^(ssh|http|https):\/\///' | perl -p -e 's/git@(.*)$/$1/g' | perl -p -e 's/\.git$//g')"
-    local extra=""
-    case $1 in
-        gl)
-            extra="network/master"
-            ;;
-        new)
-            extra="issues/new"
-            ;;
-        iss*)
-            extra="issues"
-            ;;
-        *)
-            ;;
-    esac
-    echo "$url/$extra"
-    google-chrome "$url/$extra"
 }
 
 function gst {
