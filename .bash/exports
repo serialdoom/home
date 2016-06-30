@@ -1,5 +1,4 @@
-
-export EDITOR="vim -X"
+# vi: ft=sh
 
 export PATH=~/.cabal/bin/:~/bin:$PATH:/usr/local/bin:/sbin:~/.local/bin:~/.repo/pyvmomi-scripts:~/.gem/ruby/2.1.0/bin
 export PATH=$PATH:~/bin/tools/ec2-api-tools-1.7.5.1/bin
@@ -23,7 +22,6 @@ export LESSOPEN='|~/.lessfilter %s'
 [ -d $TMPDIR ] || mkdir $TMPDIR; chmod 700 $TMPDIR
 [ -d ~/.backup ] && chmod 700 ~/.backup
 
-
 # Avoid duplicates
 export HISTCONTROL=ignoredups:erasedups  
 # When the shell exits, append to the history file instead of overwriting it
@@ -34,3 +32,8 @@ export PROMPT_COMMAND="prompt; history -a; history -c; history -r"
 export HISTSIZE=
 export HISTFILESIZE=
 export HISTTIMEFORMAT='%F %T '
+
+if [[ -f /usr/share/applications/google-chrome.desktop ]] && [[ "$(xdg-mime query default x-scheme-handler/http)" != *"google"* ]]; then
+    xdg-mime default google-chrome.desktop x-scheme-handler/https
+    xdg-mime default google-chrome.desktop x-scheme-handler/http
+fi
