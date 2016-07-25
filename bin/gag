@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+for repo in $(find ./ -name .git -type d); do
+    pushd "$repo/.." > /dev/null
+    if [[ $(git --no-pager log --all --grep="$*" | wc -l) -ge 1 ]]; then
+        echo "## $(pwd)"
+        git --no-pager log --all --grep="$*"
+    fi
+    popd > /dev/null
+done
+
+    
