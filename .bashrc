@@ -11,6 +11,7 @@ function source_file {
 
 SOURCE_LIST=(
     ~/.bash/alias
+    ~/.bash/alias.$(uname)
     ~/.bash/functions
     ~/.bash/exports
     ~/.bash/aws
@@ -52,10 +53,8 @@ fi
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
     :
-else
-    if [[ "$(xrandr -q | grep -P "\bconnected\b" -c)" -eq 2 ]]; then
+elif [[ "$(uname)" == 'Linux' ]] && [[ "$(xrandr -q | grep -P "\bconnected\b" -c)" -eq 2 ]]; then
         xrandr --output DP1 --right-of DP2
-    fi
 fi
 
 if [[ ! -d ~/.fzf ]]; then

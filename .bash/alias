@@ -1,7 +1,5 @@
 alias v='vim -X'
 alias le='less -R --ignore-case'
-alias ls='ls --color=auto'
-alias ll='ls --color=yes | le'
 alias lt="find ./ -maxdepth 1 -printf '%T+ %p\n' | sort -r"
 alias lt2="find ./ -maxdepth 2 -printf '%T+ %p\n' | sort -r"
 alias lt3="find ./ -maxdepth 3 -printf '%T+ %p\n' | sort -r"

@@ -1,0 +1,3 @@
+echo 'sourcing mac os'
+alias ls='ls -G'
+alias ll='ls -G | le'
