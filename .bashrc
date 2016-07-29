@@ -19,6 +19,7 @@ SOURCE_LIST=(
     /usr/share/autojump/autojump.sh
     ~/.autojump/etc/profile.d/autojump.sh
     ~/.local/etc/profile.d/autojump.sh
+    $(brew --prefix)/etc/profile.d/autojump.sh
     ~/.repo/pyvmomi-scripts/.vsphere_autocomplete.sh
     /usr/share/bash-completion/completions/ssh
     ~/.fzf.bash
