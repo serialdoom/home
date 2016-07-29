@@ -64,6 +64,8 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+let s:uname = system("uname -s")
+
 let mapleader = ","
 set t_Co=256
 set bg=dark
@@ -138,11 +140,19 @@ if has("autocmd")
 
 endif
 
-map \t :FZF<cr>
-map \r :History:<cr>
-map \b :Buffers<cr>
-map \a :Ag<cr>
-map \e :GBrowse<cr>
+if s:uname == "Darwin\n"
+    map `t :FZF<cr>
+    map `r :History:<cr>
+    map `b :Buffers<cr>
+    map `a :Ag<cr>
+    map `e :GBrowse<cr>
+"else
+    "map \t :FZF<cr>
+    "map \r :History:<cr>
+    "map \b :Buffers<cr>
+    "map \a :Ag<cr>
+    "map \e :GBrowse<cr>
+endif
 
 "map \b :CtrlPBuffer<cr>
 "let g:ctrlp_custom_ignore = {
