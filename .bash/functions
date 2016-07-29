@@ -152,8 +152,8 @@ function prompt {
 }
 
 function c () {
-    [ ! "$1" ] && cd ~ && ls --color=auto && return 0;
-    cd "$1" && ls --color=auto
+    [ ! "$1" ] && cd ~ && ls && return 0;
+    cd "$1" && ls
 }
 
 function mkrole {
