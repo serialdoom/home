@@ -1,2 +1,4 @@
 alias ls='ls --color=auto'
 alias ll='ls --color=yes | le'
+alias irssi='ssh -t -i ~/.ssh/mchristof-test.pem ubuntu@$(cat ~/.irssi.ip) screen -r'
+alias irssi-ssh='ssh -i ~/.ssh/mchristof-test.pem ubuntu@$(cat ~/.irssi.ip)'
