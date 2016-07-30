@@ -128,7 +128,6 @@ if has("autocmd")
     autocmd WinLeave * setlocal nocursorcolumn
     autocmd WinLeave * setlocal cc=0
     autocmd VimLeave * :call SessionCreate()
-    autocmd BufWritePre * call SaveWithTS()
     autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
     autocmd FileType python :set makeprg=pep8\ %
     autocmd BufReadPost,WinEnter *.py :set makeprg=pep8\ %
@@ -291,47 +290,3 @@ function! FunctionCommentOut()
     exe "normal k"
     exe "normal ,if"
 endfunction
-
-function! Calculate_ts_base_path(path)
-    return "~/.backup/vim/" . substitute(a:path, "/", "__", "g")
-endfunction
-
-function! SaveWithTS()
-    let backup_path = Calculate_ts_base_path(expand("%:p")) . strftime("___%Y-%m-%d_%H-%M-%S") . "." . expand("%:e")
-    exe ":write " . backup_path
-    exe ":bw " . backup_path
-    "exe ":q"
-endfunction
-
-function! StartTSDiff()
-    let g:save_with_ts_current_file = expand("%:p")
-    if !exists("g:save_with_ts_flist")
-        "first time
-        exe ":diffthis"
-        let g:save_with_ts_flist = split(system("ls " . Calculate_ts_base_path(g:save_with_ts_current_file) . "*"), "\n")
-        let g:save_with_ts_cnt = len(g:save_with_ts_flist) - 1
-        exe ":rightb vs view" . g:save_with_ts_flist[g:save_with_ts_cnt]
-        exe ":diffthis"
-    elseif g:save_with_ts_current_file == g:save_with_ts_flist[g:save_with_ts_cnt]
-        "we just need to change version
-        echo "changing version"
-        Start_ts_diff_next(-1)
-    endif
-endfunction
-
-function! Start_ts_diff_next(offset)
-    if !exists("g:save_with_ts_current_file") || !exists("g:save_with_ts_flist")
-        call StartTSDiff()
-    endif
-    if g:save_with_ts_cnt + a:offset < 0 || g:save_with_ts_cnt + a:offset > len(g:save_with_ts_flist) - 1
-        echo "reached the end/start of the available versions (" .  g:save_with_ts_cnt . ")"
-        return
-    endif
-    let g:save_with_ts_cnt = g:save_with_ts_cnt + a:offset
-    exe ":diffoff"
-    let current_file = expand("%p")
-    exe ":view " . g:save_with_ts_flist[g:save_with_ts_cnt]
-    exe ":diffthis"
-    exe ":bwipe " . current_file
-endfunction
-
