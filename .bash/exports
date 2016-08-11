@@ -1,8 +1,10 @@
 
 export EDITOR="vim -X"
 
+export PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
 export PATH=~/.cabal/bin/:~/bin:$PATH:/usr/local/bin:/sbin:~/.local/bin:~/.repo/pyvmomi-scripts:~/.gem/ruby/2.1.0/bin
 export PATH="$PATH:~/bin/tools/ec2-api-tools-1.7.5.1/bin"
+export PATH=~/Library/Python/2.7/bin:$PATH
 export EC2_HOME="$(readlink -f ~/bin/tools/ec2-api-tools-1.7.5.1)"
 export JAVA_HOME=/opt/jdk/jdk1.8.0_65
 export PATH=$(echo -n $PATH | awk -v RS=: -v ORS=: '!arr[$0]++') # remove duplicates
@@ -33,3 +35,4 @@ export PROMPT_COMMAND="prompt; history -a; history -c; history -r"
 export HISTSIZE=
 export HISTFILESIZE=
 export HISTTIMEFORMAT='%F %T '
+[ -f ~/.pythonrc.py ] && export PYTHONSTARTUP=~/.pythonrc.py
