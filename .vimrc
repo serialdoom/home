@@ -84,7 +84,7 @@ set so=999
 set sw=4
 set incsearch
 set modeline
-set viminfo='10,\"100,:20,%,n~/.viminfo " what to save for each file
+set viminfo='10,\"100,:20,% " what to save for each file
 set wrap " wrap the damn lines
 set lbr "wrap at character
 " set your on line break charactesr
