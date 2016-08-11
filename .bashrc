@@ -66,3 +66,7 @@ fi
 if [[ -f ~/.bashrc_local ]]; then
     source ~/.bashrc_local
 fi
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
