@@ -45,6 +45,7 @@ Plugin 'git@github.com:serialdoom/vim-template.git'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'git@github.com:scrooloose/syntastic.git'
 Plugin 'git@github.com:tomasr/molokai.git'
+Plugin 'git@github.com:hashivim/vim-terraform.git'
 
 
 " All of your Plugins must be added before the following line
@@ -65,6 +66,9 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 let s:uname = system("uname -s")
+if has('nvim')
+    set mouse=r
+endif
 
 let mapleader = ","
 set t_Co=256
@@ -160,7 +164,7 @@ endif
     "\ }
 "let g:ctrlp_max_files = 0
 
-let g:ackprg = 'ag --nogroup --nocolor --column'
+let g:ackprg = 'ag --skip-vcs-ignores --nogroup --nocolor --column'
 nmap _a :Ack! <cword><cr>
 nmap _c :Ack! --cc <cword><cr>
 nmap _x :Ack! --xml <cword><cr>

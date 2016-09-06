@@ -14,6 +14,7 @@ SOURCE_LIST=(
     ~/.bash/alias.$(uname)
     ~/.bash/functions
     ~/.bash/exports
+    ~/.bash/exports.$(uname)
     ~/.bash/aws
     ~/bin/autocomplete.d/*
     /usr/share/autojump/autojump.sh

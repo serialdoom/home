@@ -1,4 +1,9 @@
-alias v='vim -X'
+which nvim &> /dev/null
+if [ $? -eq 0 ]; then
+    alias v="$(which nvim)"
+else
+    alias v='vim -X'
+fi
 alias le='less -R --ignore-case'
 alias lt="find ./ -maxdepth 1 -printf '%T+ %p\n' | sort -r"
 alias lt2="find ./ -maxdepth 2 -printf '%T+ %p\n' | sort -r"
@@ -43,6 +48,7 @@ alias pass-gen='< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-64};echo;'
 alias gg='git pull'
 alias ggr='git pull --rebase'
 alias gp='git push'
+alias gmas='git checkout master'
 alias s='git status'
 alias d='git diff'
 alias gc='git commit'
@@ -50,5 +56,7 @@ alias ga='git add'
 alias gs='git stash'
 alias gsa='git stash apply'
 alias dr='git diff --cached'
+alias go='git checkout'
 alias wget100='wget -O /dev/null http://speedtest.london.linode.com/100MB-london.bin'
 alias dc='docker-compose'
+alias tf='terraform'
