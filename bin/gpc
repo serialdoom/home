@@ -1,0 +1,8 @@
+#! /usr/bin/env bash
+# vi: ft=bash
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+remote=$(git remote)
+git push --set-upstream "$remote" "$current_branch"
+
+
