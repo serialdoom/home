@@ -60,3 +60,7 @@ alias go='git checkout'
 alias wget100='wget -O /dev/null http://speedtest.london.linode.com/100MB-london.bin'
 alias dc='docker-compose'
 alias tf='terraform'
+which thefuck &> /dev/null
+if [[  $? -eq 0 ]]; then
+    eval "$(thefuck --alias)"
+fi
