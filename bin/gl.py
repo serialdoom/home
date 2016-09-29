@@ -20,14 +20,20 @@ import re
 
 
 def get_current_vim_file(server=None):
+    ret = {}
+    servers = []
     if server is None:
-        server = str(vim('--serverlist')).rstrip()
-        if server is '':
-            return None
-    return (str(vim('--servername', server,
-                    '--remote-expr', 'expand("%:p")')).rstrip(),
-            str(vim('--servername', server,
-                    '--remote-expr', 'line(".")')).rstrip())
+        servers = str(vim('--serverlist')).rstrip().split('\n')
+    for srv in servers:
+        fname = str(vim('--servername', srv,
+                    '--remote-expr', 'expand("%:p")')).rstrip()
+        fline = str(vim('--servername', srv,
+                    '--remote-expr', 'line(".")')).rstrip()
+        ret.update({
+            fname: fline
+        })
+
+    return ret
 
 
 class Gitlab():
@@ -41,35 +47,40 @@ class Gitlab():
             os.makedirs(self.cache)
 
     def file(self, path, vim=False, vim_server=None):
-        line = None
+        ret = []
         if vim:
-            path, line = get_current_vim_file(vim_server)
-        if path is None:
+            paths = get_current_vim_file(vim_server)
+        if paths is None:
             return None
-        # print 'finding', path, len(path.split('/')), line
-        for i in range(len(path.split('/')), 0, -1):
-            current = os.path.join("/".join(path.split('/')[0:i]), '.git')
-            fname = "/".join(path.split('/')[i:])
-            if os.path.exists(current):
-                # print current
-                break
-        # sample line
-        # deploy-git         ssh://git@deploy-git.decibelinsight.net/ansible/logstash (fetch) # NOQA
-        #         ->         <- this is a tab
-        remote = str(git('--git-dir', current, 'remote', '-v')).split('\n')[0]
-        remote = remote.split('\t')[1]
-        remote = remote.split(' ')[0]
-        remote = re.sub('^ssh://git@', '', remote)
-        remote = re.sub('^git@', '', remote)
-        remote = re.sub(':', '/', remote)
-        remote = re.sub('.git$', '', remote)
-        # print remote
-        branch = str(git('--git-dir', current,
-                         'rev-parse', '--abbrev-ref', 'HEAD')).rstrip()
-        url = 'https://{}/blob/{}/{}'.format(remote, branch, fname)
-        if line is not None:
-            url = url + '#L' + line
-        return (url, fname)
+        for path, line in paths.iteritems():
+            for i in range(len(path.split('/')), 0, -1):
+                current = os.path.join("/".join(path.split('/')[0:i]), '.git')
+                fname = "/".join(path.split('/')[i:])
+                if os.path.exists(current):
+                    # print current
+                    break
+            # sample line
+            # deploy-git         ssh://git@deploy-git.decibelinsight.net/ansible/logstash (fetch) # NOQA
+            #         ->         <- this is a tab
+            remote = str(git('--git-dir', current,
+                             'remote', '-v')).split('\n')[0]
+            remote = remote.split('\t')[1]
+            remote = remote.split(' ')[0]
+            remote = re.sub('^ssh://git@', '', remote)
+            remote = re.sub('^git@', '', remote)
+            remote = re.sub(':', '/', remote)
+            remote = re.sub('.git$', '', remote)
+            # print remote
+            branch = str(git('--git-dir', current,
+                             'rev-parse', '--abbrev-ref', 'HEAD')).rstrip()
+            url = 'https://{}/blob/{}/{}'.format(remote, branch, fname)
+            if line is not None:
+                url = url + '#L' + line
+            ret += [{
+                'title': fname,
+                'arg': url
+            }]
+        return ret
 
     def curl(self, url):
         url = '{u}/api/v3/{url}'.format(
@@ -192,11 +203,7 @@ def main():
             'items': []
         }
         try:
-            (url, fyle) = gl.file(args.file, True, args.vim_server)
-            res['items'] = [{
-                'title': fyle,
-                'arg': url,
-            }]
+            res['items'] = gl.file(args.file, True, args.vim_server)
         except TypeError:
             pass
     print json.dumps(res, indent=4)
