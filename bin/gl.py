@@ -14,6 +14,18 @@ import os
 import json
 import requests
 import hashlib
+from sh import git
+from sh import vim
+import re
+
+
+def get_current_vim_file(server=None):
+    if server is None:
+        server = str(vim('--serverlist')).rstrip()
+    return (str(vim('--servername', server,
+                    '--remote-expr', 'expand("%:p")')).rstrip(),
+            str(vim('--servername', server,
+                    '--remote-expr', 'line(".")')).rstrip())
 
 
 class Gitlab():
@@ -25,6 +37,35 @@ class Gitlab():
         self.enable_cache = cache
         if not os.path.exists(self.cache):
             os.makedirs(self.cache)
+
+    def file(self, path, vim=False, vim_server=None):
+        line = None
+        if vim:
+            path, line = get_current_vim_file(vim_server)
+        # print 'finding', path, len(path.split('/')), line
+        for i in range(len(path.split('/')), 0, -1):
+            current = os.path.join("/".join(path.split('/')[0:i]), '.git')
+            fname = "/".join(path.split('/')[i:])
+            if os.path.exists(current):
+                # print current
+                break
+        # sample line
+        # deploy-git         ssh://git@deploy-git.decibelinsight.net/ansible/logstash (fetch) # NOQA
+        #         ->         <- this is a tab
+        remote = str(git('--git-dir', current, 'remote', '-v')).split('\n')[0]
+        remote = remote.split('\t')[1]
+        remote = remote.split(' ')[0]
+        remote = re.sub('^ssh://git@', '', remote)
+        remote = re.sub('^git@', '', remote)
+        remote = re.sub(':', '/', remote)
+        remote = re.sub('.git$', '', remote)
+        # print remote
+        branch = str(git('--git-dir', current,
+                         'rev-parse', '--abbrev-ref', 'HEAD')).rstrip()
+        url = 'https://{}/blob/{}/{}'.format(remote, branch, fname)
+        if line is not None:
+            url = url + '#L' + line
+        return (url, fname)
 
     def curl(self, url):
         url = '{u}/api/v3/{url}'.format(
@@ -80,7 +121,9 @@ class Gitlab():
             pass
         return None
 
-    def search(self, query, postfix=''):
+    def search(self, query=None, postfix=''):
+        if query is None:
+            return None
         ret = self.load_from_cache(query+postfix)
         if not self.enable_cache or ret is None:
             ret = {'items': []}
@@ -120,6 +163,14 @@ def main():
                         default='',
                         help='Add something to the url results (for '
                         'getting branches/pipelines/etc)')
+    parser.add_argument('--vim',
+                        action='store_true',
+                        help='Enable vim mode for file (query vim for current '
+                        'file)')
+    parser.add_argument('-s', '--vim-server',
+                        help='Vim server to query for a file name')
+    parser.add_argument('-f', '--file',
+                        help='Specific file to go to')
 
     args = parser.parse_args()
 
@@ -131,8 +182,17 @@ def main():
         exit(1)
 
     gl = Gitlab(args.gitlab_url, args.private_token, args.cache)
-    print json.dumps(gl.search(args.query, args.postfix),
-                     indent=4)
+    res = gl.search(args.query, args.postfix)
+    if res is None:
+        (url, fyle) = gl.file(args.file, True, args.vim_server)
+        res = {
+            'items': [{
+                'title': fyle,
+                'arg': url,
+            }]
+        }
+
+    print json.dumps(res, indent=4)
 
 
 if __name__ == '__main__':
