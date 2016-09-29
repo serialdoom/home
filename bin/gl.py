@@ -22,6 +22,8 @@ import re
 def get_current_vim_file(server=None):
     if server is None:
         server = str(vim('--serverlist')).rstrip()
+        if server is '':
+            return None
     return (str(vim('--servername', server,
                     '--remote-expr', 'expand("%:p")')).rstrip(),
             str(vim('--servername', server,
@@ -42,6 +44,8 @@ class Gitlab():
         line = None
         if vim:
             path, line = get_current_vim_file(vim_server)
+        if path is None:
+            return None
         # print 'finding', path, len(path.split('/')), line
         for i in range(len(path.split('/')), 0, -1):
             current = os.path.join("/".join(path.split('/')[0:i]), '.git')
@@ -184,14 +188,17 @@ def main():
     gl = Gitlab(args.gitlab_url, args.private_token, args.cache)
     res = gl.search(args.query, args.postfix)
     if res is None:
-        (url, fyle) = gl.file(args.file, True, args.vim_server)
         res = {
-            'items': [{
+            'items': []
+        }
+        try:
+            (url, fyle) = gl.file(args.file, True, args.vim_server)
+            res['items'] = [{
                 'title': fyle,
                 'arg': url,
             }]
-        }
-
+        except TypeError:
+            pass
     print json.dumps(res, indent=4)
 
 
