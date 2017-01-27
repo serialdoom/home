@@ -11,7 +11,6 @@ alias vrc='$EDITOR ~/.vimrc'
 alias vst='$EDITOR $(hg status -m | hg status -m | cut -d " " -f2 | tr -s "\n" " ")'
 alias vsto='$EDITOR -O $(hg status -m | hg status -m | cut -d " " -f2 | tr -s "\n" " ")'
 alias history_populate="history | tr -s ' ' | cut -d ' ' -f3 | sort | uniq -c | sort -rn  | head"
-alias l='ls -al'
 alias k='ls'
 alias vtest='cd ~/tmp/ && $EDITOR $RANDOM$RANDOM.c; cd -'
 alias grep='grep --color=auto'
@@ -27,8 +26,9 @@ alias h='hg'
 alias forig='find ./ -name "*\.orig"'
 alias fpm='find ./output -name "*pm"'
 alias felf='find ./output -name "*elf"'
+alias m='make'
+#complete -F _make m
 alias f='find'
-#alias cmake="make -s RELEASE=amber_d02_off_chip_apps -C src/"
 alias dl='hg cdiff | less -R'
 alias rl='readlink -f'
 alias tjen='tmux -2 attach-session -t jenkins'
@@ -45,7 +45,7 @@ alias gp='git push'
 alias gmas='git checkout master'
 alias s='git status'
 alias d='git diff'
-alias gc='git commit'
+##alias gc='git commit'
 alias ga='git add'
 alias gs='git stash'
 alias gsa='git stash apply'
@@ -58,3 +58,5 @@ which thefuck &> /dev/null
 if [[  $? -eq 0 ]]; then
     eval "$(thefuck --alias)"
 fi
+alias curl-git='curl --header "PRIVATE-TOKEN: $GIT_TOKEN"'
+alias fix-pyvmomi-ssl="perl -p -i -e 's/import argparse/import argparse; import ssl; ssl._create_default_https_context = ssl._create_unverified_context/'"
