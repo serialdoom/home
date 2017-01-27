@@ -12,21 +12,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'git@github.com:gmarik/Vundle.vim.git'
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-" Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-" Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-" Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Avoid a name conflict with L9
-" Plugin 'user/L9', {'name': 'newL9'}
 Plugin 'git@github.com:vim-scripts/DirDiff.vim.git'
 Plugin 'git@github.com:mileszs/ack.vim.git'
 Plugin 'git@github.com:serialdoom/comments.vim.git'
@@ -38,7 +23,6 @@ Plugin 'git@github.com:tomtom/tlib_vim.git'
 Plugin 'git@github.com:serialdoom/vim-snipmate.git'
 Plugin 'git@github.com:serialdoom/vcscommand.vim.git'
 Plugin 'git@github.com:serialdoom/VisIncr.git'
-"Plugin 'git@github.com:chase/vim-ansible-yaml.git'
 Plugin 'git@github.com:serialdoom/vim-ansible-yaml.git'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'git@github.com:serialdoom/vim-template.git'
@@ -80,26 +64,25 @@ set ignorecase
 set nocompatible
 set nowrap
 set history=9999
-imap jj <esc>
+inoremap jk <esc>
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 set modeline
 set ls=2
-" center the window 
-set so=999
+set so=999 " center the window
 set sw=4
 set incsearch
 set modeline
 set viminfo='10,\"100,:20,% " what to save for each file
 set wrap " wrap the damn lines
 set lbr "wrap at character
-" set your on line break charactesr
-set breakat=\ ,(*;+=/|
+set breakat=\ ,(*;+=/| " set your on line break charactesr
 set statusline=%{fugitive#statusline()}%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
-" backspace now moves to previous line 
-set backspace=indent,eol,start
+set backspace=indent,eol,start " backspace now moves to previous line 
 set hlsearch
-" when pressing enter, use the last good indent level
 set autoindent
-"enable syntax.. Doh
 syntax enable
 set wildignore +=*.d,*.o,*.dox,*.a,*.clean,*.bin,*.elf,*.i,*.back
 set expandtab "use spaces instead of tabs
@@ -118,10 +101,6 @@ hi Search ctermbg=134 ctermfg=0
 
 nmap ed :e %:h<cr>
 nmap <Space> <PageDown>
-nmap <leader>g :execute ":silent !gitlab show " . expand('%') . " -l " . line(".") . " -g"<cr>:redr!<cr>
-map <c-j> :call Start_ts_diff_next(+1)<cr>
-map <c-k> :call Start_ts_diff_next(-1)<cr>
-map <c-l> :unlet g:save_with_ts_flist <bar> diffoff <bar> q <bar> diffoff<cr>
 
 if has("autocmd")
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -132,7 +111,6 @@ if has("autocmd")
     autocmd WinLeave * setlocal nocursorcolumn
     autocmd WinLeave * setlocal cc=0
     autocmd VimLeave * :call SessionCreate()
-    autocmd BufReadPost,WinEnter *.[ch] :set makeprg=/home/mc42/bin/nake
     autocmd FileType python :set makeprg=pep8\ %
     autocmd BufReadPost,WinEnter *.py :set makeprg=pep8\ %
     autocmd BufEnter *.mkf :set ft=make
@@ -149,20 +127,7 @@ if s:uname == "Darwin\n"
     map `b :Buffers<cr>
     map `a :Ag<cr>
     map `e :GBrowse<cr>
-"else
-    "map \t :FZF<cr>
-    "map \r :History:<cr>
-    "map \b :Buffers<cr>
-    "map \a :Ag<cr>
-    "map \e :GBrowse<cr>
 endif
-
-"map \b :CtrlPBuffer<cr>
-"let g:ctrlp_custom_ignore = {
-    "\ 'dir':  '\v[\/](\.(git|hg|svn|pdiff)|output)$',
-    "\ 'file': '\v\.(exe|so|dll|pyc)$',
-    "\ }
-"let g:ctrlp_max_files = 0
 
 let g:ackprg = 'ag --skip-vcs-ignores --nogroup --nocolor --column'
 nmap _a :Ack! <cword><cr>
@@ -217,33 +182,6 @@ if has("user_commands")
     command! -bang Vs vs<bang>
 endif
 
-" fill rest of line with characters
-function! FillLine( str )
-    " set tw to the desired total length
-    let tw = &textwidth
-    if tw==0 | let tw = 80 | endif
-    " strip trailing spaces first
-    .s/[[:space:]]*$//
-    " calculate total number of 'str's to insert
-    let reps = (tw - col("$")) / len(a:str)
-    " insert them, if there's room, removing trailing spaces (though forcing
-    " there to be one)
-    if reps > 0
-        .s/$/\=(' '.repeat(a:str, reps))/
-    endif
-endfunction
-
-function! GeneratePass()
-    exe ":r! < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-64};echo;"
-    normal k
-    normal J
-    normal x
-endfunction
-command PassGen  :call GeneratePass()
-
-nmap \f- :call FillLine("-")<cr>
-nmap \f* :call FillLine("*")<cr>
-
 function! SessionCreate()
     let r_name = $HOME . "/.vim_sessions/" . substitute(getcwd(), "\/", "_", "g") . ".vim"
     exe "mksession! " . r_name
@@ -255,43 +193,3 @@ function! SessionRestore()
 endfunction
 command! -nargs=* RS call SessionRestore()
 
-"
-" Wrap visual selection in an #if 0/#endif tag.
-vmap <Leader>if <Esc>:call VisualHTMLTagWrap()<CR>
-function! VisualHTMLTagWrap()
-  let tag = "#if 0"
-  if len(tag) > 0
-    normal `>
-    if &selection == 'exclusive'
-      exe "normal i\n#endif"
-    else
-      exe "normal a\n#endif"
-    endif
-    normal `<
-    exe "normal i#if 0\n"
-    normal `<
-    exe ":'<,'>+1normal =="
-  endif
-endfunction
-
-"
-" Reverse the lines of the whole file or a visually highlighted block.
-" :Rev is a shorter prefix you can use.
-" Adapted from http://tech.groups.yahoo.com/group/vim/message/34305
-command! -nargs=0 -bar -range=% Reverse
-\       let save_mark_t = getpos("'t")
-\<bar>      <line2>kt
-\<bar>      exe "<line1>,<line2>g/^/m't"
-\<bar>  call setpos("'t", save_mark_t)
-
-
-nmap <leader>o :call FunctionCommentOut()<cr>
-function! FunctionCommentOut()
-    exe "normal! ?^{\n"
-    exe "normal j"
-    exe "normal V"
-    exe "normal k"
-    exe "normal %"
-    exe "normal k"
-    exe "normal ,if"
-endfunction
