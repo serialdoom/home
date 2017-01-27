@@ -43,7 +43,7 @@ def main():
             if args.verbose:
                 print "cp", path, dest
             if not args.dry:
-                shutil.copy(path, dest)
+                shutil.copytree(path, dest)
 
 if __name__ == '__main__':
     main()

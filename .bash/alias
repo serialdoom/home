@@ -1,9 +1,3 @@
-which nvim &> /dev/null
-if [ $? -eq 0 ]; then
-    alias v="$(which nvim)"
-else
-    alias v='vim -X'
-fi
 alias le='less -R --ignore-case'
 alias lt="find ./ -maxdepth 1 -printf '%T+ %p\n' | sort -r"
 alias lt2="find ./ -maxdepth 2 -printf '%T+ %p\n' | sort -r"

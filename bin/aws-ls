@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# vi: ft=sh
+
+regions=$(aws ec2 describe-regions | grep RegionName | awk '{print $2}' | tr -d '"')
+
+for region in $regions; do
+    servers=$(aws ec2 describe-instances --region $region)
+    for (( i = 0; ; i++ )); do
+        name=$(echo $servers | python -c 'import sys, json; print json.load(sys.stdin)["Reservations"]['$i']["Instances"][0]["Tags"][0]["Value"]' 2> /dev/null)
+        if [[ -z $name ]]; then
+            break
+        fi
+        dns=$(echo $servers | python -c 'import sys, json; print json.load(sys.stdin)["Reservations"]['$i']["Instances"][0]["PublicDnsName"]')
+        state=$(echo $servers | python -c 'import sys, json; print json.load(sys.stdin)["Reservations"]['$i']["Instances"][0]["State"]["Name"]')
+        echo "$region $name $dns $state"
+    done
+done
