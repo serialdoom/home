@@ -1,0 +1,129 @@
+#!/usr/bin/env python
+# vi: ft=python
+
+"""
+ansible-playbook splitter
+"""
+
+import signal
+from sh import ansible_playbook
+
+
+def main():
+    """docstring for main"""
+    import argparse
+    parser = argparse.ArgumentParser(
+        description='split ansible command into multiple chunks based on servers and execute it')
+    # subparsers = parser.add_subparsers(help='commands')
+
+    parser.add_argument('-i', '--inventory',
+                        help='Inventory file')
+
+    parser.add_argument('-l', '--limit',
+                        help='Limit to the hosts')
+
+    parser.add_argument('-t', '--tags',
+                        help='Tags to execute')
+
+    parser.add_argument('-b', '--become',
+                        action='store_true',
+                        help='Use sudo')
+
+    parser.add_argument('-T', '--timeout',
+                        default=120,
+                        type=int,
+                        help='Timeout for each run')
+
+    parser.add_argument('-c', '--count',
+                        default=10,
+                        type=int,
+                        help='Number of hosts for each iteration')
+
+    parser.add_argument('-n', '--dry-ryn',
+                        action='store_true',
+                        help='Dry run mode')
+    parser.add_argument('-v', '--verbose',
+                        action='count',
+                        default=0,
+                        help='Increase verbosity')
+
+    args, playbooks = parser.parse_known_args()
+
+    ap_args = [
+        ' '.join(playbooks)
+    ]
+    if args.inventory is not None:
+        ap_args += [
+            '-i', args.inventory
+        ]
+    if args.limit is not None:
+        ap_args += [
+            '-l', args.limit
+        ]
+    if args.become:
+        ap_args += [
+            '-b'
+        ]
+    if args.tags is not None:
+        ap_args += [
+            '-t', args.tags
+        ]
+    hosts_all = [x.strip() for x in ansible_playbook(ap_args + ['--list-hosts']).split('\n')
+                 if x.strip() != '' and not x.strip().startswith('playbook:')
+                 and not x.strip().startswith('play ')
+                 and not x.strip().startswith('pattern: ')
+                 and not x.strip().startswith('hosts ')]
+
+
+    for dummy_i in range(0, 5):
+        count = len(hosts_all)/10
+        errors = apply_command(hosts_all, count, ap_args, args.timeout)
+        if len(errors) == 0:
+            break
+        if len(errors) == count:
+            print 'Cowardly refusing to continue as all hosts failed in the last run'
+            exit(1)
+        print 'Retrying', errors
+        hosts_all = errors
+
+
+def apply_command(hosts_all, count, ap_args, timeout_secs):
+    """ perform the actuall command """
+    errors = []
+    for hosts in chunks(hosts_all, count):
+        exec_args = ap_args + ['-l', ','.join(hosts), '-f', str(count)]
+        print 'ansible-playbook', ' '.join(exec_args)
+        try:
+            with timeout(seconds=timeout_secs):
+                for line in ansible_playbook(exec_args, _iter=True):
+                    print line.strip()
+        except StandardError:
+            errors += hosts
+    return errors
+
+
+
+class timeout:
+    def __init__(self, seconds=1, error_message='Timeout'):
+        self.seconds = seconds
+        self.error_message = error_message
+    def handle_timeout(self, signum, frame):
+        raise StandardError(self.error_message)
+    def __enter__(self):
+        signal.signal(signal.SIGALRM, self.handle_timeout)
+        signal.alarm(self.seconds)
+    def __exit__(self, type, value, traceback):
+        signal.alarm(0)
+
+
+def chunks(table, size):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(table), size):
+        yield table[i:i + size]
+
+
+
+
+
+if __name__ == '__main__':
+    main()
