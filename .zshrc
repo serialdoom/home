@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:~/Library/Python/2.7/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:$PATH
+export PATH=$HOME/bin:~/Library/Python/2.7/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:~/.fzf/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
