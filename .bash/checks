@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 [ ! -d ~/.vim/bundle/molokai ] && {
-    echo "Vim plugin molokai not found - run 'vim +PluginInstall +qall' to install'
+    echo "Vim plugin molokai not found - run 'vim +PluginInstall +qall' to install"
 }
