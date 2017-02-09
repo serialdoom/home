@@ -85,6 +85,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/.bash/alias
+[ -f ~/.bash/checks ] && source ~/.bash/checks
 [ -f ~/.bash/alias.$(uname) ] && source ~/.bash/alias.$(uname)
 [ -f ~/.bashrc_local ] && source ~/.bashrc_local
 [ -f /usr/local/etc/autojump.sh ] && source /usr/local/etc/autojump.sh

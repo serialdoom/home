@@ -49,7 +49,6 @@
 .viminfo
 .viminfo.tmp.a
 .wget-hsts
-.zshrc
 Applications/
 Desktop/
 Documents/
@@ -65,3 +64,15 @@ VirtualBox VMs/
 di/
 tmp/
 transmission/
+.serverauth.*
+Blizzard/
+.pylint.d/
+.pgadmin/
+.ipython/
+.node-gyp/
+.npm/
+.gitlab-runner/ 
+.oh-my-zsh/
+.zsh-update
+.zsh_history
+.zshrc.pre-oh-my-zsh
