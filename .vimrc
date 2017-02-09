@@ -10,26 +10,26 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'git@github.com:gmarik/Vundle.vim.git'
+Plugin 'gmarik/Vundle.vim.git'
 
-Plugin 'git@github.com:vim-scripts/DirDiff.vim.git'
-Plugin 'git@github.com:mileszs/ack.vim.git'
-Plugin 'git@github.com:serialdoom/comments.vim.git'
+Plugin 'vim-scripts/DirDiff.vim.git'
+Plugin 'mileszs/ack.vim.git'
+Plugin 'serialdoom/comments.vim.git'
 Plugin 'tpope/vim-fugitive'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
-Plugin 'git@github.com:MarcWeber/vim-addon-mw-utils.git'
-Plugin 'git@github.com:tomtom/tlib_vim.git'
-Plugin 'git@github.com:serialdoom/vim-snipmate.git'
-Plugin 'git@github.com:serialdoom/vcscommand.vim.git'
-Plugin 'git@github.com:serialdoom/VisIncr.git'
-Plugin 'git@github.com:serialdoom/vim-ansible-yaml.git'
+Plugin 'MarcWeber/vim-addon-mw-utils.git'
+Plugin 'tomtom/tlib_vim.git'
+Plugin 'serialdoom/vim-snipmate.git'
+Plugin 'serialdoom/vcscommand.vim.git'
+Plugin 'serialdoom/VisIncr.git'
+Plugin 'serialdoom/vim-ansible-yaml.git'
 Plugin 'hynek/vim-python-pep8-indent'
-Plugin 'git@github.com:serialdoom/vim-template.git'
+Plugin 'serialdoom/vim-template.git'
 Plugin 'ekalinin/Dockerfile.vim'
-Plugin 'git@github.com:scrooloose/syntastic.git'
-Plugin 'git@github.com:tomasr/molokai.git'
-Plugin 'git@github.com:hashivim/vim-terraform.git'
+Plugin 'scrooloose/syntastic.git'
+Plugin 'tomasr/molokai.git'
+Plugin 'hashivim/vim-terraform.git'
 
 
 " All of your Plugins must be added before the following line
