@@ -115,6 +115,7 @@ if has("autocmd")
     autocmd BufReadPost,WinEnter *.py :set makeprg=pep8\ %
     autocmd BufEnter *.mkf :set ft=make
     autocmd BufEnter *.dsl :set ft=groovy
+    autocmd BufEnter Vagrantfile :set ft=ruby
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
 

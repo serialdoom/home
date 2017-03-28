@@ -1,51 +1,26 @@
 alias le='less -R --ignore-case'
-alias lt="find ./ -maxdepth 1 -printf '%T+ %p\n' | sort -r"
-alias lt2="find ./ -maxdepth 2 -printf '%T+ %p\n' | sort -r"
-alias lt3="find ./ -maxdepth 3 -printf '%T+ %p\n' | sort -r"
 alias ..='c ../'
 alias ...='c ../../'
 alias ....='c ../../../'
 alias .....='c ../../../../'
-alias brc='$EDITOR -O $(for f in ~/.bashrc*; do echo "$(git log $f | grep commit | wc -l) $f"; done | sort -uh | tail -2 | cut -d " " -f2 | tr -s "\n" " ") && . ~/.bashrc'
 alias vrc='$EDITOR ~/.vimrc'
-alias vst='$EDITOR $(hg status -m | hg status -m | cut -d " " -f2 | tr -s "\n" " ")'
-alias vsto='$EDITOR -O $(hg status -m | hg status -m | cut -d " " -f2 | tr -s "\n" " ")'
 alias history_populate="history | tr -s ' ' | cut -d ' ' -f3 | sort | uniq -c | sort -rn  | head"
 alias k='ls'
-alias vtest='cd ~/tmp/ && $EDITOR $RANDOM$RANDOM.c; cd -'
 alias grep='grep --color=auto'
 alias df='df -h'
-alias acl='ag'
-alias acc='ag --cc'
-alias accx='ag --cc --xml'
-alias acx='ag --xml'
-alias acm='ag --make'
-alias acs='ag --asm'
-alias ctmp='export CTMP=$(date +"%Y%m%d_%H%M%S") && cd ~/tmp/ && mkdir $CTMP && cd $CTMP'
-alias h='hg'
-alias forig='find ./ -name "*\.orig"'
-alias fpm='find ./output -name "*pm"'
-alias felf='find ./output -name "*elf"'
+alias ctmp='mkdir -p ~/tmp/$(date +"%Y%m%d_%H%M%S") && cd $_'
 alias m='make'
-#complete -F _make m
 alias f='find'
-alias dl='hg cdiff | less -R'
 alias rl='readlink -f'
-alias tjen='tmux -2 attach-session -t jenkins'
-alias hcim='hg commit -m "branch merge"'
 alias ff='find . -type f -printf "%T@ %p\n" | sort -n | tail -5 | cut -f2- -d" "'
 alias fff='find . -type f -printf "%T@ %p\n" | sort -n | tail -10 | cut -f2- -d" "'
-alias mplayer-audio-sync='mplayer -lavdopts threads=4 00006.MTS'
-alias al='ansible-playbook -v -i "localhost," -c local'
+alias al='ansible-playbook -i "localhost," -c local'
 alias ap='ansible-playbook'
-alias pass-gen='< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-64};echo;'
 alias gg='git pull'
 alias ggr='git pull --rebase'
 alias gp='git push'
-alias gmas='git checkout master'
 alias s='git status'
 alias d='git diff'
-##alias gc='git commit'
 alias ga='git add'
 alias gs='git stash'
 alias gsa='git stash apply'
@@ -58,5 +33,4 @@ which thefuck &> /dev/null
 if [[  $? -eq 0 ]]; then
     eval "$(thefuck --alias)"
 fi
-alias curl-git='curl --header "PRIVATE-TOKEN: $GIT_TOKEN"'
-alias fix-pyvmomi-ssl="perl -p -i -e 's/import argparse/import argparse; import ssl; ssl._create_default_https_context = ssl._create_unverified_context/'"
+alias v=vim
