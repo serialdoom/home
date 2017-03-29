@@ -30,7 +30,7 @@ Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'scrooloose/syntastic.git'
 Plugin 'tomasr/molokai.git'
 Plugin 'hashivim/vim-terraform.git'
-
+Plugin 'tpope/vim-commentary.git'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -88,6 +88,7 @@ set wildignore +=*.d,*.o,*.dox,*.a,*.clean,*.bin,*.elf,*.i,*.back
 set expandtab "use spaces instead of tabs
 set tabstop=4
 set shiftwidth=4
+set clipboard=unnamed
 let g:netrw_sort_sequence = '[\/]$,\<core\%(\.\d\+\)\=\>,\.h$,\.c$,\.cpp$,\~\=\*$,*,\.o$,\.obj$,\.info$,\.swp$,\.bak$,\.clean$,\.rej,\.orig,\~$'
 
 colorscheme molokai
