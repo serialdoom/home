@@ -34,3 +34,7 @@ if [[  $? -eq 0 ]]; then
     eval "$(thefuck --alias)"
 fi
 alias v=vim
+which hub &> /dev/null
+if [[ $? -eq 0 ]]; then
+    eval "$(hub alias -s)"
+fi
