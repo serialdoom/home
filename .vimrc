@@ -27,10 +27,11 @@ Plugin 'serialdoom/vim-ansible-yaml.git'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'serialdoom/vim-template.git'
 Plugin 'ekalinin/Dockerfile.vim'
-Plugin 'scrooloose/syntastic.git'
+Plugin 'vim-syntastic/syntastic.git'
 Plugin 'tomasr/molokai.git'
 Plugin 'hashivim/vim-terraform.git'
 Plugin 'tpope/vim-commentary.git'
+Plugin 'tpope/vim-surround'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
