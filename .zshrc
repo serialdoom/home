@@ -96,3 +96,5 @@ function c() {
 }
 unalias gl
 unalias gc
+
+ssh-add -l | grep id_rsa &> /dev/null || ssh-add ~/.ssh/id_rsa
