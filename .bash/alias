@@ -38,3 +38,5 @@ which hub &> /dev/null
 if [[ $? -eq 0 ]]; then
     eval "$(hub alias -s)"
 fi
+alias vdu='vagrant destroy -f; vagrant up'
+alias vss='vagrant ssh'
