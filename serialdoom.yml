@@ -1,4 +1,5 @@
 ---
+# vi: ft=ansible:
   - hosts: all
 
     tasks:
@@ -18,5 +19,12 @@
         git:
           repo: https://github.com/VundleVim/Vundle.vim.git
           dest: ~/.vim/bundle/Vundle.vim
+          version: master
 
+      - name: deploy tmux template
+        template:
+          src: .tmux.conf
+          dest: ~/.tmux.conf
+        tags:
+          - tmux
       - debug: msg="vim +PluginInstall +qall"
