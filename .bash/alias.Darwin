@@ -2,3 +2,6 @@
 #alias ll='ls -G  --color=auto | le'
 alias vinfo-fix="sudo chown $USER ~/.viminfo"
 alias make='gmake'
+alias ls='ls --color=auto'
+alias l='ls -lah'
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

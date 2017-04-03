@@ -1,6 +1,8 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:~/Library/Python/2.7/bin:/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:~/.fzf/bin:$PATH
+export PATH=$HOME/bin:~/Library/Python/2.7/bin:/usr/local/bin:~/.fzf/bin:$PATH
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+export PATH=/usr/local/sbin:$PATH
+export PATH=~/umbrella/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -85,7 +87,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source ~/.bash/alias
+[ -f ~/.bash/alias ] && source ~/.bash/alias
 [ -f ~/.bash/checks ] && source ~/.bash/checks
 [ -f ~/.bash/alias.$(uname) ] && source ~/.bash/alias.$(uname)
 [ -f ~/.bashrc_local ] && source ~/.bashrc_local
@@ -97,4 +99,5 @@ function c() {
 unalias gl
 unalias gc
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 ssh-add -l | grep id_rsa &> /dev/null || ssh-add ~/.ssh/id_rsa
