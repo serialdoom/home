@@ -27,4 +27,13 @@
           dest: ~/.tmux.conf
         tags:
           - tmux
+
+      - name: pip install some stuff
+        pip:
+          name: '{{ item }}'
+          state: present
+          extra_args: '--user'
+        with_items:
+          - sh
+
       - debug: msg="vim +PluginInstall +qall"

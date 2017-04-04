@@ -1,2 +1,38 @@
-echo git commit "$@"
-git commit "$@"
+#! /usr/bin/env python
+# vi: ft=python:
+
+from sh import git
+from sh import ErrorReturnCode_1
+
+def main():
+    """docstring for fname"""
+    import argparse
+    parser = argparse.ArgumentParser(description='Git commit wrapper')
+
+    parser.add_argument('-a', '--all',
+                        action='store_true',
+                        help='Commit all messages')
+
+    parser.add_argument('-m', '--message',
+                        default=None,
+                        help='Commit message')
+
+    args, extra_args = parser.parse_known_args()
+
+    if args.all:
+        extra_args += ['-a']
+    if args.message is not None:
+        ticket = git('rev-parse', '--abbrev-ref', 'HEAD').split('/')[0]
+        print 'Adding ticket number', ticket, 'to commit message', args.message
+        if not ticket.startswith('master'):
+            extra_args += ['-m', '{}: {}'.format(ticket, args.message)]
+        else:
+            extra_args += ['-m', args.message]
+
+    print git.commit(extra_args)
+    
+
+if __name__ == '__main__':
+    main()
+
+
