@@ -3,6 +3,7 @@ export PATH=$HOME/bin:~/Library/Python/2.7/bin:/usr/local/bin:~/.fzf/bin:$PATH
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH=/usr/local/sbin:$PATH
 export PATH=~/umbrella/bin:$PATH
+export LESSOPEN="| highlight %s -O xterm256"
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
