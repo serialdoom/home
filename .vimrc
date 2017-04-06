@@ -98,7 +98,7 @@ set cursorcolumn
 hi CursorLine   cterm=NONE ctermbg=232 guibg=#050505
 hi CursorColumn cterm=NONE ctermbg=232 guibg=#050505
 hi Folded ctermbg=234 ctermfg=red
-hi ColorColumn ctermbg=233
+hi ColorColumn ctermbg=256
 hi Search ctermbg=134 ctermfg=0
 
 nmap ed :e %:h<cr>
@@ -121,9 +121,10 @@ if has("autocmd")
     autocmd BufEnter Vagrantfile :set ft=ruby
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
-
-
+    autocmd WinEnter *.rb call SetupRuby()
 endif
+
+
 
 if s:uname == "Darwin\n"
     map `t :FZF<cr>
@@ -199,4 +200,10 @@ function! SessionRestore()
     exe "source " . r_name
 endfunction
 command! -nargs=* RS call SessionRestore()
+
+function! SetupRuby()
+    setlocal tabstop=2
+    setlocal shiftwidth=2
+    setlocal cc=100
+endfunction
 
