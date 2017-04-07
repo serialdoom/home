@@ -122,6 +122,7 @@ if has("autocmd")
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
     autocmd WinEnter *.rb call SetupRuby()
+    autocmd VimResized * wincmd =
 endif
 
 
