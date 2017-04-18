@@ -51,9 +51,15 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 let s:uname = system("uname -s")
+set mouse=a
 if has('nvim')
     set mouse=r
-endif
+elseif has("mouse_sgr")
+    set ttymouse=sgr
+else
+    set ttymouse=xterm2
+end
+
 
 let mapleader = ","
 set t_Co=256
@@ -65,7 +71,7 @@ set ignorecase
 set nocompatible
 set nowrap
 set history=9999
-inoremap jk <esc>
+inoremap j<space> <esc>
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
@@ -124,8 +130,6 @@ if has("autocmd")
     autocmd BufEnter,WinEnter *.rb call SetupRuby()
     autocmd VimResized * wincmd =
 endif
-
-
 
 if s:uname == "Darwin\n"
     map `t :FZF<cr>
