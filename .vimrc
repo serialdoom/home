@@ -51,16 +51,6 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 let s:uname = system("uname -s")
-set mouse=a
-if has('nvim')
-    set mouse=r
-elseif has("mouse_sgr")
-    set ttymouse=sgr
-else
-    set ttymouse=xterm2
-end
-
-
 let mapleader = ","
 set t_Co=256
 set bg=dark
@@ -106,6 +96,14 @@ hi CursorColumn cterm=NONE ctermbg=232 guibg=#050505
 hi Folded ctermbg=234 ctermfg=red
 hi ColorColumn ctermbg=256
 hi Search ctermbg=134 ctermfg=0
+hi clear SpellBad
+hi SpellBad term=standout ctermfg=1 term=underline cterm=underline
+hi clear SpellCap
+hi SpellCap term=underline cterm=underline
+hi clear SpellRare
+hi SpellRare term=underline cterm=underline
+hi clear SpellLocal
+hi SpellLocal term=underline cterm=underline
 
 nmap ed :e %:h<cr>
 nmap <Space> <PageDown>
@@ -124,7 +122,7 @@ if has("autocmd")
     autocmd BufEnter *.mkf :set ft=make
     autocmd BufEnter *.dsl :set ft=groovy
     autocmd BufEnter *.yml :set ft=ansible
-    autocmd BufEnter Vagrantfile :set ft=ruby
+    autocmd BufEnter Vagrantfile call SetupRuby()
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
     autocmd BufEnter,WinEnter *.rb call SetupRuby()
