@@ -121,7 +121,7 @@ if has("autocmd")
     autocmd BufEnter Vagrantfile :set ft=ruby
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
-    autocmd WinEnter *.rb call SetupRuby()
+    autocmd BufEnter,WinEnter *.rb call SetupRuby()
     autocmd VimResized * wincmd =
 endif
 
