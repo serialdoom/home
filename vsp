@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+# vi :ft=python:
+
+
+import os
+import re
+import yaml
+from sh import vagrant
+from sh import which
+
+
+def generate_tmuxinattor(servers):
+    config = {
+        'name': 'vagrant',
+        'root': os.getcwd(),
+        'windows': [
+            {
+                'vagrant': {
+                    'layout': 'main-horizontal',
+                    'synchronize': 'after',
+                    'panes': ['vagrant ssh ' + x for x in servers]
+                }
+            }
+        ]
+    }
+    with open('.tmuxinator.yml', 'w') as stream:
+        stream.write(yaml.dump(config, default_flow_style=False))
+
+
+def main():
+    """docstring for main"""
+    pre_script = [
+        '''tell application "iTerm2"''',
+        '''tell current session of current window''',
+        '''split vertically with default profile command "bash -c \\"source ~/.zshrc && tmuxinator\\""''',
+        '''end tell''',
+        '''end tell'''
+    ]
+    servers = []
+    for line in vagrant('status').split('\n'):
+        search = re.search('(\w*)\s*running \(virtualbox\)', line)
+        if search:
+            servers += [search.group(1)]
+            #print(search.groups())
+
+    generate_tmuxinattor(servers)
+    print('\n'.join(pre_script))
+
+if __name__ == '__main__':
+    main()
