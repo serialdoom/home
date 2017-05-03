@@ -88,6 +88,13 @@ set shiftwidth=4
 set clipboard=unnamed
 let g:netrw_sort_sequence = '[\/]$,\<core\%(\.\d\+\)\=\>,\.h$,\.c$,\.cpp$,\~\=\*$,*,\.o$,\.obj$,\.info$,\.swp$,\.bak$,\.clean$,\.rej,\.orig,\~$'
 
+" delete text without entering the registers. Usefull when you what to replace
+" something
+nmap X "_d
+nmap XX "_dd
+vmap X "_d
+vmap x "_d
+
 colorscheme molokai
 set cursorline
 set cursorcolumn
@@ -154,6 +161,7 @@ let g:DirDiffExcludes = "*.pyc"
 
 nmap <leader>n :cnext<cr>
 nmap <leader>m :cprev<cr>
+nmap <leader>b :Gbrowse<cr>
 
 
 set statusline+=%#warningmsg#
@@ -181,7 +189,8 @@ if has("user_commands")
     cabbrev Set set
     cabbrev ack Ack
     cabbrev acl Ack
-    cabbrev passgen PassGen 
+    cabbrev acl Ack
+    cabbrev ag Ack
     " map the damn :W so that you dont type it twice. Or even 3 times. Fucking noob.
     command! -bang Wqa wqa<bang>
     command! -bang Wa wa<bang>
@@ -209,4 +218,3 @@ function! SetupRuby()
     setlocal shiftwidth=2
     setlocal cc=100
 endfunction
-
