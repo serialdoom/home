@@ -16,7 +16,7 @@ def generate_tmuxinattor(servers):
         'windows': [
             {
                 'vagrant': {
-                    'layout': 'main-horizontal',
+                    'layout': 'even-vertical',
                     'synchronize': 'after',
                     'panes': ['vagrant ssh ' + x for x in servers]
                 }
