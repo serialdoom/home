@@ -134,6 +134,7 @@ if has("autocmd")
     autocmd WinEnter * :setlocal rnu
     autocmd BufEnter,WinEnter *.rb call SetupRuby()
     autocmd VimResized * wincmd =
+    autocmd BufEnter,WinEnter *.tf nnoremap <buffer> <silent> K :silent !help-terraform <cword><cr>:redraw!<cr>
 endif
 
 if s:uname == "Darwin\n"
