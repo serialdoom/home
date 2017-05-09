@@ -3,6 +3,9 @@ export PATH=$HOME/bin:~/Library/Python/2.7/bin:/usr/local/bin:~/.fzf/bin:$PATH
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH=/usr/local/sbin:$PATH
 export PATH=~/umbrella/bin:$PATH
+brew --prefix cookiecutter &> /dev/null && {
+    export PATH=$(brew --prefix cookiecutter):$PATH
+}
 export LESSOPEN="| highlight %s -O xterm256"
 
 # Path to your oh-my-zsh installation.
@@ -100,5 +103,7 @@ function c() {
 unalias gl
 unalias gc
 
+[ -f ~/.bash/functions ] && source ~/.bash/functions
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 ssh-add -l | grep id_rsa &> /dev/null || ssh-add ~/.ssh/id_rsa
+[ -f ~/.bamboorc ] && source ~/.bamboorc
