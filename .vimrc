@@ -32,6 +32,9 @@ Plugin 'tomasr/molokai.git'
 Plugin 'hashivim/vim-terraform.git'
 Plugin 'tpope/vim-commentary.git'
 Plugin 'tpope/vim-surround'
+Plugin 'vim-scripts/DrawIt'
+Plugin 'godlygeek/tabular'
+Plugin 'ngmy/vim-rubocop'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -133,6 +136,7 @@ if has("autocmd")
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
     autocmd BufEnter,WinEnter *.rb call SetupRuby()
+    autocmd BufWritePost *.rb :RuboCop
     autocmd VimResized * wincmd =
     autocmd BufEnter,WinEnter *.tf nnoremap <buffer> <silent> K :silent !help-terraform <cword><cr>:redraw!<cr>
 endif
