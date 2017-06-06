@@ -7,6 +7,8 @@ brew --prefix cookiecutter &> /dev/null && {
     export PATH=$(brew --prefix cookiecutter):$PATH
 }
 export LESSOPEN="| highlight %s -O xterm256"
+export GOPATH=$(go env GOPATH)
+export PATH=$GOPATH/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
