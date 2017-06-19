@@ -27,7 +27,6 @@ Plugin 'serialdoom/vim-ansible-yaml.git'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'serialdoom/vim-template.git'
 Plugin 'ekalinin/Dockerfile.vim'
-Plugin 'vim-syntastic/syntastic.git'
 Plugin 'tomasr/molokai.git'
 Plugin 'hashivim/vim-terraform.git'
 Plugin 'tpope/vim-commentary.git'
@@ -36,6 +35,7 @@ Plugin 'vim-scripts/DrawIt'
 Plugin 'godlygeek/tabular'
 Plugin 'ngmy/vim-rubocop'
 Plugin 'tommcdo/vim-lion'
+Plugin 'w0rp/ale'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -141,7 +141,6 @@ if has("autocmd")
     autocmd WinLeave * :setlocal rnu!
     autocmd WinEnter * :setlocal rnu
     autocmd BufEnter,WinEnter *.rb call SetupRuby()
-    autocmd BufWritePost *.rb :RuboCop
     autocmd VimResized * wincmd =
     autocmd BufEnter,WinEnter *.tf nnoremap <buffer> <silent> K :silent !help-terraform <cword><cr>:redraw!<cr>
 endif
@@ -175,14 +174,7 @@ nmap <leader>b :Gbrowse<cr>
 
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['flake8', 'pylint']
 
 " hide vim swap files from the file browser
 let g:netrw_list_hide= '.*\.swp$,\~$,\.orig$'
