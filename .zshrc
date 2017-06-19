@@ -3,6 +3,7 @@ export PATH=$HOME/bin:~/Library/Python/2.7/bin:/usr/local/bin:~/.fzf/bin:$PATH
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH=/usr/local/sbin:$PATH
 export PATH=~/umbrella/bin:$PATH
+export PATH=~/.global-modules/bin/:$PATH
 brew --prefix cookiecutter &> /dev/null && {
     export PATH=$(brew --prefix cookiecutter):$PATH
 }
