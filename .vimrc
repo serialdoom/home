@@ -35,6 +35,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'vim-scripts/DrawIt'
 Plugin 'godlygeek/tabular'
 Plugin 'ngmy/vim-rubocop'
+Plugin 'tommcdo/vim-lion'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -97,6 +98,10 @@ nmap X "_d
 nmap XX "_dd
 vmap X "_d
 vmap x "_d
+
+cnoremap mk. !mkdir -p <c-r>=expand("%:h")<cr>/
+let g:lion_squeeze_spaces = 1
+
 
 colorscheme molokai
 set cursorline
@@ -196,6 +201,7 @@ if has("user_commands")
     cabbrev acl Ack
     cabbrev acl Ack
     cabbrev ag Ack
+    cabbrev Ag Ack
     " map the damn :W so that you dont type it twice. Or even 3 times. Fucking noob.
     command! -bang Wqa wqa<bang>
     command! -bang Wa wa<bang>
