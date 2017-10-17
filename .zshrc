@@ -1,4 +1,5 @@
 # If you come from bash you might have to change your $PATH.
+export PATH=/usr/local/opt/python/bin:$PATH
 export PATH=$HOME/bin:~/Library/Python/2.7/bin:/usr/local/bin:~/.fzf/bin:$PATH
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 export PATH=/usr/local/sbin:$PATH
@@ -62,7 +63,7 @@ HYPHEN_INSENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker python vagrant aws)
+plugins=(git docker python vagrant aws kubectl heml bam)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -83,8 +84,7 @@ source $ZSH/oh-my-zsh.sh
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
+# ssh # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -110,3 +110,14 @@ unalias gc
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 ssh-add -l | grep id_rsa &> /dev/null || ssh-add ~/.ssh/id_rsa
 [ -f ~/.bamboorc ] && source ~/.bamboorc
+source ~/.zsh-kubectl-prompt.git/kubectl.zsh
+source ~/.oh-my-zsh/plugins/shrink-path/shrink-path.plugin.zsh
+RPROMPT='%{$fg[blue]%}($ZSH_KUBECTL_PROMPT)%{$reset_color%}'
+
+if [[ ! -z "$ITERM_SESSION_ID" ]]; then
+    function precmd {
+        echo $PWD >> /tmp/pwd-$(echo $ITERM_SESSION_ID | cut -d: -f2)
+    }
+fi
+#setopt prompt_subst
+PS1='${ret_status} %{$fg[cyan]%}$(shrink_path -f)%{$reset_color%} $(git_prompt_info)'
