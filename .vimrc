@@ -36,6 +36,9 @@ Plugin 'godlygeek/tabular'
 Plugin 'ngmy/vim-rubocop'
 Plugin 'tommcdo/vim-lion'
 Plugin 'w0rp/ale'
+Plugin 'elzr/vim-json'
+Plugin 'scrooloose/nerdtree'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -99,13 +102,16 @@ nmap XX "_dd
 vmap X "_d
 vmap x "_d
 
+cnoremap rf. :call FailedRake()<cr>
 cnoremap mk. !mkdir -p <c-r>=expand("%:h")<cr>/
 let g:lion_squeeze_spaces = 1
+let g:ale_lint_on_text_changed = 'never'
+
 
 
 colorscheme molokai
-set cursorline
-set cursorcolumn
+"set cursorline
+"set cursorcolumn
 hi CursorLine   cterm=NONE ctermbg=232 guibg=#050505
 hi CursorColumn cterm=NONE ctermbg=232 guibg=#050505
 hi Folded ctermbg=234 ctermfg=red
@@ -125,11 +131,11 @@ nmap <Space> <PageDown>
 
 if has("autocmd")
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    autocmd WinEnter * setlocal cursorline
-    autocmd WinEnter * setlocal cursorcolumn
+    "autocmd WinEnter * setlocal cursorline
+    "autocmd WinEnter * setlocal cursorcolumn
     autocmd WinEnter * setlocal cc=80
-    autocmd WinLeave * setlocal nocursorline
-    autocmd WinLeave * setlocal nocursorcolumn
+    "autocmd WinLeave * setlocal nocursorline
+    "autocmd WinLeave * setlocal nocursorcolumn
     autocmd WinLeave * setlocal cc=0
     autocmd VimLeave * :call SessionCreate()
     autocmd FileType python :set makeprg=pep8\ %
@@ -138,15 +144,16 @@ if has("autocmd")
     autocmd BufEnter *.dsl :set ft=groovy
     autocmd BufEnter *.yml :set ft=ansible
     autocmd BufEnter Vagrantfile call SetupRuby()
-    autocmd WinLeave * :setlocal rnu!
-    autocmd WinEnter * :setlocal rnu
-    autocmd BufEnter,WinEnter *.rb call SetupRuby()
+    "autocmd WinLeave * :setlocal rnu!
+    "autocmd WinEnter * :setlocal rnu
+    autocmd BufEnter *.rb call SetupRuby()
+    autocmd FileType ruby call SetupRuby()
     autocmd VimResized * wincmd =
     autocmd BufEnter,WinEnter *.tf nnoremap <buffer> <silent> K :silent !help-terraform <cword><cr>:redraw!<cr>
 endif
 
 if s:uname == "Darwin\n"
-    map `t :FZF<cr>
+    map <tab>t :FZF<cr>
     map `r :History:<cr>
     map `b :Buffers<cr>
     map `a :Ag<cr>
@@ -193,6 +200,7 @@ if has("user_commands")
     cabbrev acl Ack
     cabbrev acl Ack
     cabbrev ag Ack
+    cabbrev AG Ack
     cabbrev Ag Ack
     " map the damn :W so that you dont type it twice. Or even 3 times. Fucking noob.
     command! -bang Wqa wqa<bang>
@@ -220,4 +228,12 @@ function! SetupRuby()
     setlocal tabstop=2
     setlocal shiftwidth=2
     setlocal cc=100
+endfunction
+
+function! FailedRake()
+    let oldro=&makeprg
+    set makeprg=cat\ ~/.rake-failure.txt\ |\ exit 1
+    silent make
+    copen
+    let &makeprg=oldro
 endfunction
