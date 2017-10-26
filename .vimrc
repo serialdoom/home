@@ -110,8 +110,8 @@ let g:ale_lint_on_text_changed = 'never'
 
 
 colorscheme molokai
-"set cursorline
-"set cursorcolumn
+set cursorline
+set cursorcolumn
 hi CursorLine   cterm=NONE ctermbg=232 guibg=#050505
 hi CursorColumn cterm=NONE ctermbg=232 guibg=#050505
 hi Folded ctermbg=234 ctermfg=red
@@ -131,11 +131,11 @@ nmap <Space> <PageDown>
 
 if has("autocmd")
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    "autocmd WinEnter * setlocal cursorline
-    "autocmd WinEnter * setlocal cursorcolumn
+    autocmd WinEnter * setlocal cursorline
+    autocmd WinEnter * setlocal cursorcolumn
     autocmd WinEnter * setlocal cc=80
-    "autocmd WinLeave * setlocal nocursorline
-    "autocmd WinLeave * setlocal nocursorcolumn
+    autocmd WinLeave * setlocal nocursorline
+    autocmd WinLeave * setlocal nocursorcolumn
     autocmd WinLeave * setlocal cc=0
     autocmd VimLeave * :call SessionCreate()
     autocmd FileType python :set makeprg=pep8\ %
@@ -144,8 +144,8 @@ if has("autocmd")
     autocmd BufEnter *.dsl :set ft=groovy
     autocmd BufEnter *.yml :set ft=ansible
     autocmd BufEnter Vagrantfile call SetupRuby()
-    "autocmd WinLeave * :setlocal rnu!
-    "autocmd WinEnter * :setlocal rnu
+    autocmd WinLeave * :setlocal rnu!
+    autocmd WinEnter * :setlocal rnu
     autocmd BufEnter *.rb call SetupRuby()
     autocmd FileType ruby call SetupRuby()
     autocmd VimResized * wincmd =
@@ -228,6 +228,9 @@ function! SetupRuby()
     setlocal tabstop=2
     setlocal shiftwidth=2
     setlocal cc=100
+    setlocal nocursorline
+    setlocal nocursorcolumn
+    setlocal nornu
 endfunction
 
 function! FailedRake()
