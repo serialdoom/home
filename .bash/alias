@@ -6,6 +6,7 @@ alias .....='c ../../../../'
 alias vrc='$EDITOR ~/.vimrc'
 alias history_populate="history | tr -s ' ' | cut -d ' ' -f3 | sort | uniq -c | sort -rn  | head"
 alias k='ls'
+alias lt='ls -alt'
 alias grep='grep --color=auto'
 alias df='df -h'
 alias ctmp='mkdir -p ~/tmp/$(date +"%Y%m%d_%H%M%S") && cd $_'
