@@ -1,4 +1,4 @@
-alias le='less -R --ignore-case'
+alias le='$(brew --prefix vim)/share/vim/vim80/macros/less.sh --noplugin'
 alias ..='c ../'
 alias ...='c ../../'
 alias ....='c ../../../'
@@ -33,7 +33,7 @@ which thefuck &> /dev/null
 if [[  $? -eq 0 ]]; then
     eval "$(thefuck --alias)"
 fi
-alias v=vim
+alias v='vim --servername $RANDOM'
 which hub &> /dev/null
 if [[ $? -eq 0 ]]; then
     eval "$(hub alias -s)"
@@ -43,3 +43,6 @@ alias vss='vagrant ssh'
 alias rtags='ctags -R --languages=ruby --exclude=.git .'
 alias agh='ag --hidden'
 alias tfp='terraform plan'
+alias work='cd $(find-most-changed-git-dir.rb)'
+alias kcc='kubectl create'
+alias kcd='kubectl delete'
